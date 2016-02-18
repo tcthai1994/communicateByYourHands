@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <servlet>
+        <servlet-name>TestServlet</servlet-name>
+        <servlet-class>fpt.myo.servlet.TestServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProcessServlet</servlet-name>
+        <servlet-class>fpt.myo.servlet.ProcessServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TranslateServlet</servlet-name>
+        <servlet-class>fpt.myo.servlet.TranslateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TestServlet</servlet-name>
+        <url-pattern>/TestServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProcessServlet</servlet-name>
+        <url-pattern>/ProcessServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TranslateServlet</servlet-name>
+        <url-pattern>/TranslateServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
