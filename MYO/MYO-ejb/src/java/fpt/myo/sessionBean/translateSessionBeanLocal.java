@@ -6,6 +6,10 @@
 package fpt.myo.sessionBean;
 
 import fpt.myo.emg.EmgData;
+import fpt.myo.entityBean.LeftSignal;
+import fpt.myo.entityBean.RightSignal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -15,4 +19,11 @@ import javax.ejb.Local;
 @Local
 public interface translateSessionBeanLocal {
     double distanceCalculation(EmgData streamData, EmgData compareData);
+    ArrayList<EmgData> convert(ArrayList emgList);
+    ArrayList<RightSignal> getAllRightEmg();
+    ArrayList<LeftSignal> getAllLeftEmg();
+    int getMeaningRight(String emgRight);
+    int getMeaningLeft(String emgLeft);
+    int getMeaningCode(int meaningRight, int meaningLeft);
+    String getMeaning(int meaningCode);
 }

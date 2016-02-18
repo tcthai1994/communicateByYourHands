@@ -4,13 +4,14 @@
  * and open the template in the editor.
  */
 package fpt.myo.emg;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 /**
  *
  * @author Thai
  */
-public class EmgData {
+public class EmgData implements Serializable{
     private ArrayList<Double> emgData = new ArrayList<Double>();
 
     public EmgData() {

@@ -38,19 +38,19 @@ class ByteReader {
         return this.bbf.getInt();
     }
 
-    public String getByteDataString() {
-        final StringBuilder stringBuilder = new StringBuilder(byteData.length);
-        for (byte byteChar : byteData) {
-            stringBuilder.append(String.format("%02X ", byteChar));
-        }
-        return stringBuilder.toString();
-    }
-
-    public String getIntDataString() {
-        final StringBuilder stringBuilder = new StringBuilder(byteData.length);
-        for (byte byteChar : byteData) {
-            stringBuilder.append(String.format("%5d,", byteChar));
-        }
-        return stringBuilder.toString();
-    }
+//    public String getByteDataString() {
+//        final StringBuilder stringBuilder = new StringBuilder(byteData.length);
+//        for (byte byteChar : byteData) {
+//            stringBuilder.append(String.format("%02X ", byteChar));
+//        }
+//        return stringBuilder.toString();
+//    }
+//
+//    public String getIntDataString() {
+//        final StringBuilder stringBuilder = new StringBuilder(byteData.length);
+//        for (byte byteChar : byteData) {
+//            stringBuilder.append(String.format("%5d,", byteChar));
+//        }
+//        return stringBuilder.toString();
+//    }
 }
