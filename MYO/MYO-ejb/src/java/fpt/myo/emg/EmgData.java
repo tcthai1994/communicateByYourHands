@@ -4,9 +4,11 @@
  * and open the template in the editor.
  */
 package fpt.myo.emg;
+import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+
 /**
  *
  * @author Thai
@@ -42,6 +44,7 @@ public class EmgData implements Serializable{
         emgData = data;
     }
 
+    
     public void addElement(double element) {
         emgData.add(element);
     }
@@ -84,5 +87,16 @@ public class EmgData implements Serializable{
             norm += Math.pow( emgData.get(i_element) ,2.0);
         }
         return Math.sqrt(norm);
+    }
+    
+    @Override
+    public String toString(){
+        String result = "";
+        StringBuilder stb = new StringBuilder();
+        for(int i = 0; i<8; i++){
+            stb.append(emgData.get(i).toString() + ",");
+        }
+        result = stb.toString();
+        return result;
     }
 }
