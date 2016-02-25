@@ -17,10 +17,10 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class WordSignalPK implements Serializable {
     @Basic(optional = false)
-    @Column(name = "meaningLeft", nullable = false)
+    @Column(name = "meaningLeft")
     private int meaningLeft;
     @Basic(optional = false)
-    @Column(name = "meaningRight", nullable = false)
+    @Column(name = "meaningRight")
     private int meaningRight;
 
     public WordSignalPK() {

@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Thai
  */
 @Entity
-@Table(name = "wordSignal", catalog = "Myo01", schema = "dbo")
+@Table(name = "wordSignal")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "WordSignal.findAll", query = "SELECT w FROM WordSignal w"),
@@ -32,7 +32,7 @@ public class WordSignal implements Serializable {
     @EmbeddedId
     protected WordSignalPK wordSignalPK;
     @Basic(optional = false)
-    @Column(name = "meaningCode", nullable = false)
+    @Column(name = "meaningCode")
     private int meaningCode;
 
     public WordSignal() {
