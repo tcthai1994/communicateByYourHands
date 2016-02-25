@@ -38,9 +38,9 @@ public class translateSessionBean implements translateSessionBeanLocal, translat
         return return_val;
     }
 
-    public ArrayList<EmgData> convert(ArrayList emgList){
+    public ArrayList<EmgData> convert(ArrayList emgList) {
         ArrayList<EmgData> dataList = new ArrayList<EmgData>();
-        for(int i = 0; i<emgList.size(); i++){
+        for (int i = 0; i < emgList.size(); i++) {
             String StrEmg = emgList.get(i).toString();
             EmgData data = new EmgData();
             data.setLine(StrEmg);
@@ -49,53 +49,75 @@ public class translateSessionBean implements translateSessionBeanLocal, translat
         return dataList;
     }
 
+    public String reConvert(EmgData dataList) {
+        return dataList.toString();
+    }
 
     @Override
-    public ArrayList<RightSignal> getAllRightEmg() {
+    public ArrayList<String> getAllRightEmg() {
         String jnql = "SELECT a.emgCode FROM RightSignal a";
         Query query = em.createQuery(jnql);
-        ArrayList<RightSignal> listRightEmg = (ArrayList) query.getResultList();
+        ArrayList<String> listRightEmg = (ArrayList) query.getResultList();
         return listRightEmg;
     }
 
     @Override
-    public ArrayList<LeftSignal> getAllLeftEmg() {
+    public ArrayList<String> getAllLeftEmg() {
         String jnql = "SELECT a.emgCode FROM LeftSignal a";
         Query query = em.createQuery(jnql);
-        ArrayList<LeftSignal> listLeftEmg = (ArrayList) query.getResultList();
+        ArrayList<String> listLeftEmg = (ArrayList) query.getResultList();
         return listLeftEmg;
     }
 
     @Override
     public int getMeaningRight(String emgRight) {
-        String jnql = "SELECT a.meaningRight FROM RightSignal a WHERE a.emgCode = " + emgRight;
+        String jnql = "SELECT r.meaningRight FROM RightSignal r WHERE r.emgCode = :emgCode";
         Query query = em.createQuery(jnql);
+        query.setParameter("emgCode", emgRight);
+        if(!query.getResultList().isEmpty()){
         int meaningRight = (Integer) query.getSingleResult();
         return meaningRight;
+        }
+        return 0;
     }
 
     @Override
     public int getMeaningLeft(String emgLeft) {
-        String jnql = "SELECT a.meaningLeft FROM LeftSignal a WHERE a.emgCode = " + emgLeft;
+        String jnql = "SELECT l.meaningLeft FROM LeftSignal l WHERE l.emgCode = :emgCode";
         Query query = em.createQuery(jnql);
+        query.setParameter("emgCode", emgLeft);
+        if(!query.getResultList().isEmpty()){
         int meaningLeft = (Integer) query.getSingleResult();
         return meaningLeft;
+        }
+        return 0;
     }
 
     @Override
     public int getMeaningCode(int meaningRight, int meaningLeft) {
-        String jnql = "SELECT a.meaningCode FROM WordSignal a WHERE a.meaningLeft = " + meaningLeft
-                + " AND a.meaningRight = " + meaningRight;
+        String jnql = "SELECT a.meaningCode FROM WordSignal a WHERE a.wordSignalPK.meaningLeft = :meaningLeft "
+                + "AND a.wordSignalPK.meaningRight = :meaningRight";
         Query query = em.createQuery(jnql);
+        query.setParameter("meaningLeft", meaningLeft);
+        query.setParameter("meaningRight", meaningRight);
+        System.out.println("mr " + meaningRight);
+        System.out.println("ml " + meaningLeft);
+        if(!query.getResultList().isEmpty()){
         int meaningCode = (Integer) query.getSingleResult();
         return meaningCode;
+        }
+        return 0;
     }
 
     @Override
     public String getMeaning(int meaningCode) {
-        String jnql = "SELECT a.meaning FROM DataContent a WHERE a.meaningCode = " + meaningCode;
+        String jnql = "SELECT a.meaning FROM DataContent a WHERE a.meaningCode = :meaningCode";
         Query query = em.createQuery(jnql);
+        query.setParameter("meaningCode", meaningCode);
+        if(!query.getResultList().isEmpty()){
         String meaning = (String) query.getSingleResult();
         return meaning;
+        }
+        return null;
     }
 }

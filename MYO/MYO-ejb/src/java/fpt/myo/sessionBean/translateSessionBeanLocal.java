@@ -19,9 +19,10 @@ import javax.ejb.Local;
 @Local
 public interface translateSessionBeanLocal {
     double distanceCalculation(EmgData streamData, EmgData compareData);
+    String reConvert(EmgData dataList);
     ArrayList<EmgData> convert(ArrayList emgList);
-    ArrayList<RightSignal> getAllRightEmg();
-    ArrayList<LeftSignal> getAllLeftEmg();
+    ArrayList<String> getAllRightEmg();
+    ArrayList<String> getAllLeftEmg();
     int getMeaningRight(String emgRight);
     int getMeaningLeft(String emgLeft);
     int getMeaningCode(int meaningRight, int meaningLeft);
