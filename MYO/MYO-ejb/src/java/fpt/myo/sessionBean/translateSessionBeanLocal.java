@@ -27,4 +27,6 @@ public interface translateSessionBeanLocal {
     int getMeaningLeft(String emgLeft);
     int getMeaningCode(int meaningRight, int meaningLeft);
     String getMeaning(int meaningCode);
+    int getMeaningCodeBaseLeft(int meaningLeft);
+    int getMeaningCodeBaseRight(int meaningRight);
 }

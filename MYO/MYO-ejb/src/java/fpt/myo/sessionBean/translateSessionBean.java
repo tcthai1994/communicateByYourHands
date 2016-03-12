@@ -74,10 +74,11 @@ public class translateSessionBean implements translateSessionBeanLocal, translat
         String jnql = "SELECT r.meaningRight FROM RightSignal r WHERE r.emgCode = :emgCode";
         Query query = em.createQuery(jnql);
         query.setParameter("emgCode", emgRight);
-        if(!query.getResultList().isEmpty()){
-        int meaningRight = (Integer) query.getSingleResult();
-        return meaningRight;
+        if (!query.getResultList().isEmpty()) {
+            int meaningRight = (Integer) query.getSingleResult();
+            return meaningRight;
         }
+        System.out.println("eR" + emgRight);
         return 0;
     }
 
@@ -86,11 +87,13 @@ public class translateSessionBean implements translateSessionBeanLocal, translat
         String jnql = "SELECT l.meaningLeft FROM LeftSignal l WHERE l.emgCode = :emgCode";
         Query query = em.createQuery(jnql);
         query.setParameter("emgCode", emgLeft);
-        if(!query.getResultList().isEmpty()){
-        int meaningLeft = (Integer) query.getSingleResult();
-        return meaningLeft;
+        if (!query.getResultList().isEmpty()) {
+            int meaningLeft = (Integer) query.getSingleResult();
+            return meaningLeft;
         }
+        System.out.println("eL " + emgLeft);
         return 0;
+        
     }
 
     @Override
@@ -102,9 +105,9 @@ public class translateSessionBean implements translateSessionBeanLocal, translat
         query.setParameter("meaningRight", meaningRight);
         System.out.println("mr " + meaningRight);
         System.out.println("ml " + meaningLeft);
-        if(!query.getResultList().isEmpty()){
-        int meaningCode = (Integer) query.getSingleResult();
-        return meaningCode;
+        if (!query.getResultList().isEmpty()) {
+            int meaningCode = (Integer) query.getSingleResult();
+            return meaningCode;
         }
         return 0;
     }
@@ -114,10 +117,36 @@ public class translateSessionBean implements translateSessionBeanLocal, translat
         String jnql = "SELECT a.meaning FROM DataContent a WHERE a.meaningCode = :meaningCode";
         Query query = em.createQuery(jnql);
         query.setParameter("meaningCode", meaningCode);
-        if(!query.getResultList().isEmpty()){
-        String meaning = (String) query.getSingleResult();
-        return meaning;
+        if (!query.getResultList().isEmpty()) {
+            String meaning = (String) query.getSingleResult();
+            return meaning;
         }
         return null;
+    }
+
+    @Override
+    public int getMeaningCodeBaseLeft(int meaningLeft) {
+        String jnql = "SELECT a.meaningCode FROM WordSignal a WHERE a.wordSignalPK.meaningLeft = :meaningLeft";
+        Query query = em.createQuery(jnql);
+        query.setParameter("meaningLeft", meaningLeft);
+        System.out.println("mL " + meaningLeft);
+        if (!query.getResultList().isEmpty()) {
+            int meaningCode = (Integer) query.getSingleResult();
+            return meaningCode;
+        }
+        return 0;
+    }
+    
+     @Override
+    public int getMeaningCodeBaseRight(int meaningRight) {
+        String jnql = "SELECT a.meaningCode FROM WordSignal a WHERE a.wordSignalPK.meaningRight = :meaningRight";
+        Query query = em.createQuery(jnql);
+        query.setParameter("meaningRight", meaningRight);
+        System.out.println("mR " + meaningRight);
+        if (!query.getResultList().isEmpty()) {
+            int meaningCode = (Integer) query.getSingleResult();
+            return meaningCode;
+        }
+        return 0;
     }
 }
