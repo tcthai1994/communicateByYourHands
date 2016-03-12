@@ -28,6 +28,8 @@ import fpt.myo.emg.MyoSignal;
 import fpt.myo.emg.RightMyoArmband;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.List;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -36,8 +38,10 @@ import java.util.Arrays;
 public class TranslateServlet extends HttpServlet {
 
     private final static Double THRESHOLD = 0.01;
+    //private final static Double THRESHOLD = 0.005;
     private Double rDetect_distance;
     private Double lDetect_distance;
+    private final int cnt = 7;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -58,7 +62,7 @@ public class TranslateServlet extends HttpServlet {
         byte[] data = new byte[4096];
         int length;
         StringBuilder sb = new StringBuilder();
-        while((length = is.read(data))!=-1){
+        while ((length = is.read(data)) != -1) {
             sb.append(new String(data, 0, length));
         }
         String inputData = sb.toString();
@@ -70,6 +74,8 @@ public class TranslateServlet extends HttpServlet {
             JSONObject jsonR;
             try {
                 int meaningCode = 0;
+                int meaningCodeLeft = 0;
+                int meaningCodeRight = 0;
                 EmgData tmpRight = new EmgData();
                 EmgData tmpLeft = new EmgData();
                 String matchRight = "";
@@ -81,13 +87,33 @@ public class TranslateServlet extends HttpServlet {
                 ArrayList listMeaningRight = new ArrayList();
                 ArrayList listMeaningLeft = new ArrayList();
                 ArrayList listMeaningCode = new ArrayList();
+                ArrayList listMeaningTmpLeft = new ArrayList();
+                ArrayList listMeaningTmpRight = new ArrayList();
+                ArrayList listTmpLeft = new ArrayList();
+                ArrayList listTmpRight = new ArrayList();
                 ArrayList listMeaning = new ArrayList();
                 ArrayList<EmgData> rightCompare = new ArrayList<EmgData>();
                 ArrayList<EmgData> leftCompare = new ArrayList<EmgData>();
                 ArrayList<EmgData> rightBase = new ArrayList<EmgData>();
                 ArrayList<EmgData> leftBase = new ArrayList<EmgData>();
+                ArrayList<EmgData> loglLeftCompare = new ArrayList<EmgData>();
+                ArrayList<EmgData> loglRightCompare = new ArrayList<EmgData>();
+                ArrayList posLeft = new ArrayList();
+                ArrayList posRight = new ArrayList();
                 boolean noGuesture = false;
                 String meaning = "";
+                HttpSession session = request.getSession();
+//                session.setAttribute("leftCompare", "");
+//                session.setAttribute("rightCompare", "");
+//                session.setAttribute("listMeaning", "");
+                this.getServletConfig().getServletContext().setAttribute("loglLeftCompare", "");
+                this.getServletConfig().getServletContext().setAttribute("loglRightCompares", "");
+                this.getServletConfig().getServletContext().setAttribute("listMeaning", "");
+                this.getServletConfig().getServletContext().setAttribute("win", "");
+                this.getServletConfig().getServletContext().setAttribute("posLeft", "");
+                this.getServletConfig().getServletContext().setAttribute("posRight", "");
+                this.getServletConfig().getServletContext().setAttribute("listMeaningTmpLeft", "");
+                this.getServletConfig().getServletContext().setAttribute("listMeaningTmpRight", "");
                 //jsonR = (JSONObject) new JSONParser().parse(rEmgJson);
                 //jsonL = (JSONObject) new JSONParser().parse(lEmgJson);
                 //String rRawJson = jsonR.get("right").toString();
@@ -102,6 +128,8 @@ public class TranslateServlet extends HttpServlet {
                 RightMyoArmband rMyoArmband = myo.getrEmgJson();
                 leftCompare = lMyoArmband.getLeft();
                 rightCompare = rMyoArmband.getRight();
+                System.out.println("leftsize: " + leftCompare.size());
+                System.out.println("rightsize: " + rightCompare.size());
                 translateSessionBeanRemote poji = (translateSessionBeanRemote) obj;
                 if (poji != null) {
                     //Get Data in Database
@@ -147,14 +175,10 @@ public class TranslateServlet extends HttpServlet {
                             listMatchRight.add(matchRight);
                             //System.out.println("d");
                         }
-                    }
-
-                    //Find matched left gesture
-                    for (int n = 0; n < leftCompare.size(); n++) {
                         lDetect_distance = THRESHOLD;
                         tmpLeft = null;
                         for (int m = 0; m < leftBase.size(); m++) {
-                            double lDistance = poji.distanceCalculation(leftCompare.get(n), leftBase.get(m));
+                            double lDistance = poji.distanceCalculation(leftCompare.get(i), leftBase.get(m));
                             //System.out.println("lD " + lDistance);
                             if (lDistance < lDetect_distance) {
                                 lDetect_distance = lDistance;
@@ -168,6 +192,7 @@ public class TranslateServlet extends HttpServlet {
                             listMatchLeft.add(matchLeft);
                         }
                     }
+
                     System.out.println("Mathching raw ges!!");
                     //Find meaningRight
                     for (int x = 0; x < listMatchRight.size(); x++) {
@@ -190,34 +215,142 @@ public class TranslateServlet extends HttpServlet {
                     System.out.println("Find meaning each done!!!");
                     //Find meaningCode
                     for (int a = 0; a < listMeaningRight.size(); a++) {
+                        meaningCode = 0;
                         int mR = Integer.parseInt(listMeaningRight.get(a).toString());
                         int mL = Integer.parseInt(listMeaningLeft.get(a).toString());
+
                         meaningCode = poji.getMeaningCode(mR, mL);
-                        listMeaningCode.add(meaningCode);
+                        if (meaningCode != 0) {
+                            listMeaningTmpRight.add(meaningCode);
+                            listMeaningTmpLeft.add(meaningCode);
+                        } else {
+                            if (mR == 0 && mL != 0) {
+                                listMeaningTmpRight.add(mL);
+                                listMeaningTmpLeft.add(mL);
+                            } else if (mR != 0 && mL == 0) {
+                                listMeaningTmpRight.add(mR);
+                                listMeaningTmpLeft.add(mR);
+                            } else {
+                                listMeaningTmpRight.add(mR);
+                                listMeaningTmpLeft.add(mL);
+                            }
+
+                        }
+
                     }
+
+                    int cntLeft = 0;
+                    int cntRight = 0;
+                    for (int i = 0; i < listMeaningTmpLeft.size() - 1; i++) {
+                        if (listMeaningTmpLeft.get(i) == listMeaningTmpLeft.get(i + 1)) {
+                            cntLeft++;
+                            //System.out.println("cntLeft: " + cntLeft);
+                            if (cntLeft == cnt) {
+                                listTmpLeft.add(listMeaningTmpLeft.get(i));
+                                posLeft.add(i);
+                            }
+                        } else {
+                            cntLeft = 0;
+                        }
+                        if (listMeaningTmpRight.get(i) == listMeaningTmpRight.get(i + 1)) {
+                            cntRight++;
+                            //System.out.println("contRight: " + cntRight);
+                            if (cntRight == cnt) {
+                                listTmpRight.add(listMeaningTmpRight.get(i));
+                                posRight.add(i);
+                            }
+                        } else {
+                            cntRight = 0;
+                        }
+                    }
+                    System.out.println("right size " + listTmpRight.size());
+                    System.out.println("left size " + listTmpLeft.size());
+                    if (listTmpRight.size() < listTmpLeft.size()) {
+                        System.out.println("left win");
+                        listMeaningCode = listTmpLeft;
+                        this.getServletConfig().getServletContext().setAttribute("win", "left");
+                    } else {
+                        System.out.println("right win");
+                        this.getServletConfig().getServletContext().setAttribute("win", "right");
+                        listMeaningCode = listTmpRight;
+                    }
+
                     System.out.println("Find code done!!!");
                     //Find meaning
                     if (!listMeaningCode.isEmpty()) {
+                        listMeaning.add("");
                         for (int b = 0; b < listMeaningCode.size(); b++) {
                             int mC = Integer.parseInt(listMeaningCode.get(b).toString());
                             meaning = poji.getMeaning(mC);
-                            if (meaning != null) {
+                            if (meaning != null && !meaning.equals(listMeaning.get(listMeaning.size() - 1).toString())) {
                                 listMeaning.add(meaning);
                             }
                         }
                     }
                     System.out.println("I have the meaning!!!!!!!!!!");
+                    if (!listMeaning.isEmpty()) {
+                        listMeaning.remove(0);
+                    }
                     if (listMeaning.isEmpty()) {
                         noGuesture = true;
                     }
 
                     if (noGuesture == false) {
+//                        for(int i = 1; i< listMeaning.size(); i++){
+//                        String preWord = listMeaning.get(i-1).toString();
+//                        String postWord = listMeaning.get(i).toString();
+//                        if (preWord.equals(postWord)){
+//                            listMeaning.remove(postWord);
+//                        }
+//                    }
+
+//                        List filter = new ArrayList();
+//                        int count = 0;
+//                        for (int i = 0; i < listMeaning.size()-1; i++) {
+//                            if (listMeaning.get(i).equals(listMeaning.get(i+1))) {
+//                                count++;
+//                                if(count==3){
+//                                    filter.add(listMeaning.get(i));
+//                                }
+//                            } else{
+//                                count = 0;
+//                            }
+//                        }
                         String result = gson.toJson(listMeaning);
                         System.out.println(result);
-                        response.getWriter().write(result);
-                        for (int i = 0; i < listMeaning.size(); i++) {
-                            System.out.println(listMeaning.get(i));
+                        System.out.println("raw left size: " + leftCompare.size());
+                        System.out.println("raw right size: " + rightCompare.size());
+//                        session.setAttribute("leftCompare", leftCompare);
+//                        session.setAttribute("rightCompare", rightCompare);
+//                        session.setAttribute("listMeaning", listMeaning);
+
+                        //get 7 - emg datas of detected guesture to log
+                        //left
+                        for (int i = 0; i < posLeft.size(); i++) {
+                            int l = (Integer) posLeft.get(i);
+                            for (int j = 7; j > 0; j--) {
+                                loglLeftCompare.add(leftCompare.get(l));
+                                l--;
+                            }
                         }
+
+                        //right
+                        for (int i = 0; i < posRight.size(); i++) {
+                            int r = (Integer) posRight.get(i);
+                            for (int j = 7; j > 0; j--) {
+                                loglRightCompare.add(rightCompare.get(r));
+                                r--;
+                            }
+                        }
+
+                        this.getServletConfig().getServletContext().setAttribute("loglLeftCompare", loglLeftCompare);
+                        this.getServletConfig().getServletContext().setAttribute("loglRightCompare", loglRightCompare);
+                        this.getServletConfig().getServletContext().setAttribute("listMeaning", listMeaning);
+                        this.getServletConfig().getServletContext().setAttribute("posRight", posRight);
+                        this.getServletConfig().getServletContext().setAttribute("posLeft", posLeft);
+                        this.getServletConfig().getServletContext().setAttribute("listMeaningTmpRight", listMeaningTmpRight);
+                        this.getServletConfig().getServletContext().setAttribute("listMeaningTmpLeft", listMeaningTmpLeft);
+                        response.getWriter().write(result);
                     } else {
                         JSONObject error = new JSONObject();
                         error.put("Error", "NoGesture");
@@ -231,8 +364,8 @@ public class TranslateServlet extends HttpServlet {
             } catch (NamingException ex) {
                 Logger.getLogger(TranslateServlet.class.getName()).log(Level.SEVERE, null, ex);
             } /*catch (ParseException ex) {
-                Logger.getLogger(TranslateServlet.class.getName()).log(Level.SEVERE, null, ex);
-            } */finally {
+             Logger.getLogger(TranslateServlet.class.getName()).log(Level.SEVERE, null, ex);
+             } */ finally {
                 out.close();
             }
         }
