@@ -12,6 +12,14 @@
         <servlet-name>TranslateServlet</servlet-name>
         <servlet-class>fpt.myo.servlet.TranslateServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TrainServlet</servlet-name>
+        <servlet-class>fpt.myo.servlet.TrainServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>logEditServlet</servlet-name>
+        <servlet-class>fpt.myo.servlet.logEditServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>TestServlet</servlet-name>
         <url-pattern>/TestServlet</url-pattern>
@@ -23,6 +31,14 @@
     <servlet-mapping>
         <servlet-name>TranslateServlet</servlet-name>
         <url-pattern>/TranslateServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TrainServlet</servlet-name>
+        <url-pattern>/TrainServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>logEditServlet</servlet-name>
+        <url-pattern>/logEditServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
