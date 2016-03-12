@@ -13,5 +13,8 @@
     </head>
     <body>
         <h1>Hello World!</h1>
+        <form action="TestServlet">
+            <input type="submit" value="hehe" name="hehe" />
+        </form>
     </body>
 </html>
