@@ -6,10 +6,15 @@
             <jndi-name>TSJNDI</jndi-name>
             <local-jndi-name>TSLocalJNDI</local-jndi-name>
         </session>
-                <session>
+        <session>
             <ejb-name>trainSessionBean</ejb-name>
             <jndi-name>TJNDI</jndi-name>
             <local-jndi-name>TLocalJNDI</local-jndi-name>
+        </session>
+        <session>
+            <ejb-name>logEditSessionBean</ejb-name>
+            <jndi-name>LEJNDI</jndi-name>
+            <local-jndi-name>LELocalJNDI</local-jndi-name>
         </session>
     </enterprise-beans>
 </jboss>
