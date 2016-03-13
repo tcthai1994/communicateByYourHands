@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 6.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_6_0.dtd">
+<jboss>
+    <enterprise-beans>
+        <session>
+            <ejb-name>LoginSessionBean</ejb-name>
+            <jndi-name>LoginJNDI</jndi-name>
+            <local-jndi-name>LoginLocalJNDI</local-jndi-name>
+        </session>
+        <session>
+            <ejb-name>AccountDetailSessionBean</ejb-name>
+            <jndi-name>UAJNDI</jndi-name>
+            <local-jndi-name>UALocalJNDI</local-jndi-name>
+        </session>
+        <session>
+            <ejb-name>LibrarySessionBean</ejb-name>
+            <jndi-name>LibJNDI</jndi-name>
+            <local-jndi-name>LibLocalJNDI</local-jndi-name>
+        </session>
+        <session>
+            <ejb-name>NotificationSessionBean</ejb-name>
+            <jndi-name>NotiJNDI</jndi-name>
+            <local-jndi-name>NotiLocalJNDI</local-jndi-name>
+        </session>
+        <session>
+            <ejb-name>SearchSessionBean</ejb-name>
+            <jndi-name>SearJNDI</jndi-name>
+            <local-jndi-name>SearLocalJNDI</local-jndi-name>
+        </session>
+        <session>
+            <ejb-name>DictionarySessionBean</ejb-name>
+            <jndi-name>DicJNDI</jndi-name>
+            <local-jndi-name>DicLocalJNDI</local-jndi-name>
+        </session>
+        <session>
+            <ejb-name>PaymentSessionBean</ejb-name>
+            <jndi-name>PayJNDI</jndi-name>
+            <local-jndi-name>PayLocalJNDI</local-jndi-name>
+        </session>
+        <session>
+            <ejb-name>LicenseSessionBean</ejb-name>
+            <jndi-name>LicJNDI</jndi-name>
+            <local-jndi-name>LicLocalJNDI</local-jndi-name>
+        </session>
+        
+    </enterprise-beans>
+</jboss>
