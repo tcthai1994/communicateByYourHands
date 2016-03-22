@@ -175,6 +175,7 @@ public class TranslateServlet extends HttpServlet {
                             listMatchRight.add(matchRight);
                             //System.out.println("d");
                         }
+
                         lDetect_distance = THRESHOLD;
                         tmpLeft = null;
                         for (int m = 0; m < leftBase.size(); m++) {
@@ -236,33 +237,37 @@ public class TranslateServlet extends HttpServlet {
                             }
 
                         }
-
+                    }
+                    // this place is set to check manual or autodetect
+                    if (true) {
+                        int cntLeft = 0;
+                        int cntRight = 0;
+                        for (int i = 0; i < listMeaningTmpLeft.size() - 1; i++) {
+                            if (listMeaningTmpLeft.get(i) == listMeaningTmpLeft.get(i + 1)) {
+                                cntLeft++;
+                                //System.out.println("cntLeft: " + cntLeft);
+                                if (cntLeft == cnt) {
+                                    listTmpLeft.add(listMeaningTmpLeft.get(i));
+                                    posLeft.add(i);
+                                }
+                            } else {
+                                cntLeft = 0;
+                            }
+                            if (listMeaningTmpRight.get(i) == listMeaningTmpRight.get(i + 1)) {
+                                cntRight++;
+                                //System.out.println("contRight: " + cntRight);
+                                if (cntRight == cnt) {
+                                    listTmpRight.add(listMeaningTmpRight.get(i));
+                                    posRight.add(i);
+                                }
+                            } else {
+                                cntRight = 0;
+                            }
+                        }
+                    } else {
+                        
                     }
 
-                    int cntLeft = 0;
-                    int cntRight = 0;
-                    for (int i = 0; i < listMeaningTmpLeft.size() - 1; i++) {
-                        if (listMeaningTmpLeft.get(i) == listMeaningTmpLeft.get(i + 1)) {
-                            cntLeft++;
-                            //System.out.println("cntLeft: " + cntLeft);
-                            if (cntLeft == cnt) {
-                                listTmpLeft.add(listMeaningTmpLeft.get(i));
-                                posLeft.add(i);
-                            }
-                        } else {
-                            cntLeft = 0;
-                        }
-                        if (listMeaningTmpRight.get(i) == listMeaningTmpRight.get(i + 1)) {
-                            cntRight++;
-                            //System.out.println("contRight: " + cntRight);
-                            if (cntRight == cnt) {
-                                listTmpRight.add(listMeaningTmpRight.get(i));
-                                posRight.add(i);
-                            }
-                        } else {
-                            cntRight = 0;
-                        }
-                    }
                     System.out.println("right size " + listTmpRight.size());
                     System.out.println("left size " + listTmpLeft.size());
                     if (listTmpRight.size() < listTmpLeft.size()) {
@@ -328,7 +333,7 @@ public class TranslateServlet extends HttpServlet {
                         //left
                         for (int i = 0; i < posLeft.size(); i++) {
                             int l = (Integer) posLeft.get(i);
-                            for (int j = 7; j > 0; j--) {
+                            for (int j = cnt; j > 0; j--) {
                                 loglLeftCompare.add(leftCompare.get(l));
                                 l--;
                             }
@@ -337,7 +342,7 @@ public class TranslateServlet extends HttpServlet {
                         //right
                         for (int i = 0; i < posRight.size(); i++) {
                             int r = (Integer) posRight.get(i);
-                            for (int j = 7; j > 0; j--) {
+                            for (int j = cnt; j > 0; j--) {
                                 loglRightCompare.add(rightCompare.get(r));
                                 r--;
                             }
