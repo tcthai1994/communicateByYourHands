@@ -10,6 +10,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.naming.NamingException;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import myo.fpt.sample.entity.AccountDetail;
+import myo.fpt.sample.entity.Notification;
+import myo.fpt.sample.entity.controller.NotificationJpaController;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -24,10 +30,10 @@ public class MyJob implements Job {
     public void execute(JobExecutionContext context)
             throws JobExecutionException {
 
-        JobDataMap map = context.getMergedJobDataMap();
-        Object obj = map.get("abc");
-        NotificationSessionBeanRemote remote = (NotificationSessionBeanRemote) obj;
-        List<Date> result = remote.getExpiredDate();
+//        JobDataMap map = context.getMergedJobDataMap();
+//        Object obj = map.get("abc");
+        
+        List<Date> result = getJpaController().getExpiredDate();
         System.out.println("Scheduler has started....");
         if (result != null) {
             for (int i = 0; i < result.size(); i++) {
@@ -35,12 +41,12 @@ public class MyJob implements Job {
                 Date now = new Date();
                 if (date != null) {
                     //convert expiration date and now date to Millisecond and calculate
-                    List<Integer> listdetailId = remote.getDetailId();
+                    List<Integer> listdetailId = getJpaController().getDetailId();
                     int detailId = listdetailId.get(i);
                     Date notiDate = new Date();
-                    int custId = remote.findCustIdByDetailId(detailId);
+                    int custId = getJpaController().findCustIdByDetailId(detailId);
                     boolean isSent = false;
-                    int notiId = remote.getNotiId();
+                    int notiId = getJpaController().getNotiId();
                     notiId = notiId + 1;
                     Calendar calendar1 = Calendar.getInstance();
                     Calendar calendar2 = Calendar.getInstance();
@@ -54,16 +60,16 @@ public class MyJob implements Job {
                     if (diffMinutes <= 7200 && diffMinutes >= 0) {
                         //check expiration date less than 5 days and create notification
                         System.out.println("custId " + custId);
-                        String deviceId = remote.findDeviceIdByCustId(custId);
+                        String deviceId = getJpaController().findDeviceIdByCustId(custId);
 
                         System.out.println("Gan het han");
                         System.out.println("Detail ID " + detailId);
                         String notiContent = "Your account is about to expire. " +'\n' + "Expiration date: " + date;
                         Notification noti = new Notification(notiId, notiDate, custId, isSent, notiContent, deviceId);
-                        remote.createNotification(noti);
+                        getJpaController().createNotification(noti);
                     } else if (diffMinutes < 0) {
                         //Update license type to "basic" and delete expiration date
-                        String deviceId = remote.findDeviceIdByCustId(custId);
+                        String deviceId = getJpaController().findDeviceIdByCustId(custId);
 
                         String licenseType = "basic";
                         Date expiredDate = null;
@@ -71,9 +77,9 @@ public class MyJob implements Job {
                         System.out.println("Het han roi ban oi");
                         System.out.println("Detail ID " + detailId);
                         Notification noti = new Notification(notiId, notiDate, custId, isSent, notiContent, deviceId);
-                        remote.createNotification(noti);
+                        getJpaController().createNotification(noti);
                         AccountDetail AccDetailUpdate = new AccountDetail(licenseType, expiredDate);
-                        remote.updateOverExpiredDate(detailId, AccDetailUpdate);
+                        getJpaController().updateOverExpiredDate(detailId, AccDetailUpdate);
                     } else {
                         System.out.println("Con xai duoc");
                         System.out.println("Detail ID " + detailId);
@@ -84,6 +90,18 @@ public class MyJob implements Job {
             }
         } else {
             System.out.println("list rong");
+        }
+    }
+    
+    private EntityManagerFactory getEntityManagerFactory() throws NamingException {
+        return Persistence.createEntityManagerFactory("MYO-1PU");
+    }
+    
+    private NotificationJpaController getJpaController() {
+        try {
+            return new NotificationJpaController(getEntityManagerFactory());
+        } catch (NamingException ex) {
+            throw new RuntimeException(ex);
         }
     }
 }

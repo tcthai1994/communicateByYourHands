@@ -15,9 +15,11 @@ import java.util.logging.Logger;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
-import fpt.myo.entityBean.Account;
-import fpt.myo.entityBean.Notification;
-import sample.session.NotificationSessionBeanRemote;
+import javax.naming.NamingException;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import myo.fpt.sample.entity.Notification;
+import myo.fpt.sample.entity.controller.NotificationJpaController;
 
 /**
  *
@@ -33,16 +35,16 @@ public class SendNotiToMobile implements Job {
 
     public void execute(JobExecutionContext context) {
         Result result = null;
-        JobDataMap map = context.getMergedJobDataMap();
-        Object obj = map.get("abc");
-        NotificationSessionBeanRemote remote = (NotificationSessionBeanRemote) obj;
-        List<Notification> listNoti = remote.findAllNewNotification();
+//        JobDataMap map = context.getMergedJobDataMap();
+//        Object obj = map.get("abc");
+        
+        List<Notification> listNoti = getJpaController().findAllNewNotification();
         if (listNoti != null) {
             for (int i = 0; i < listNoti.size(); i++) {
                 
                 String userMessage = listNoti.get(i).getNotiContent();
                 String deviceId = listNoti.get(i).getDeviceId();
-                String regId = remote.findRegIdByDeviceId(deviceId);
+                String regId = getJpaController().findRegIdByDeviceId(deviceId);
                 int notiId = listNoti.get(i).getNotiId();
                 Sender sender = new Sender(GOOGLE_SERVER_KEY);
                 Message message = new Message.Builder().timeToLive(30)
@@ -53,10 +55,22 @@ public class SendNotiToMobile implements Job {
                 } catch (IOException ex) {
                     Logger.getLogger(SendNotiToMobile.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                remote.updateIsSentNotification(notiId, true);
+                getJpaController().updateIsSentNotification(notiId, true);
             }
 
         }
 
+    }
+    
+    private EntityManagerFactory getEntityManagerFactory() throws NamingException {
+        return Persistence.createEntityManagerFactory("MYO-1PU");
+    }
+    
+    private NotificationJpaController getJpaController() {
+        try {
+            return new NotificationJpaController(getEntityManagerFactory());
+        } catch (NamingException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }

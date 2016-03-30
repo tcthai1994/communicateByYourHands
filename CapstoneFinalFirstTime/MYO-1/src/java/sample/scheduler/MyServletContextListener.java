@@ -50,10 +50,10 @@ public class MyServletContextListener implements ServletContextListener {
                 JobDetail job = JobBuilder.newJob(MyJob.class)
                         .withIdentity("JobName", "group1").build();
 
-                Context context = new InitialContext();
-                Object obj = context.lookup("NotiJNDI");
-                JobDataMap map = new JobDataMap();
-                map.put("abc", obj);
+//                Context context = new InitialContext();
+//                Object obj = context.lookup("NotiJNDI");
+//                JobDataMap map = new JobDataMap();
+//                map.put("abc", obj);
 
                 java.util.Calendar startTime = java.util.Calendar.getInstance();
                 startTime.set(java.util.Calendar.HOUR_OF_DAY, 14);
@@ -69,7 +69,6 @@ public class MyServletContextListener implements ServletContextListener {
                 Trigger trigger = TriggerBuilder
                         .newTrigger()
                         .withIdentity("JobName", "group1")
-                        .usingJobData(map)
                         .withSchedule(
                                 CronScheduleBuilder.cronSchedule(schedulerTime))
                         .startAt(startTime.getTime())
@@ -97,7 +96,6 @@ public class MyServletContextListener implements ServletContextListener {
                 Trigger trigger2 = TriggerBuilder
                         .newTrigger()
                         .withIdentity("JobName2", "group2")
-                        .usingJobData(map)
                         .withSchedule(
                                 CronScheduleBuilder.cronSchedule(schedulerTime))
                         .startAt(startTime.getTime())
