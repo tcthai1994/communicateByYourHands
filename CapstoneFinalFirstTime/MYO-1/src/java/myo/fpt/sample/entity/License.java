@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -31,6 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "License.findByStatus", query = "SELECT l FROM License l WHERE l.status = :status")})
 public class License implements Serializable {
     private static final long serialVersionUID = 1L;
+    @GeneratedValue
     @Id
     @Basic(optional = false)
     @Column(name = "licenseId")
@@ -57,6 +59,13 @@ public class License implements Serializable {
 
     public License(Integer licenseId, String licenseName, double price, String description, boolean status) {
         this.licenseId = licenseId;
+        this.licenseName = licenseName;
+        this.price = price;
+        this.description = description;
+        this.status = status;
+    }
+    
+    public License(String licenseName, double price, String description, boolean status) {
         this.licenseName = licenseName;
         this.price = price;
         this.description = description;

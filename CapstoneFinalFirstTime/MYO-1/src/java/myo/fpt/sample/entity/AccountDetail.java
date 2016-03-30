@@ -77,6 +77,28 @@ public class AccountDetail implements Serializable {
         this.licenseType = licenseType;
         this.status = status;
     }
+    
+    public AccountDetail(Integer detailId, String email, String fullname, String phone, boolean isStaff, String licenseType, Date expiredDate, boolean status) {
+        this.detailId = detailId;
+        this.email = email;
+        this.fullname = fullname;
+        this.phone = phone;
+        this.expiredDate = expiredDate;
+        this.isStaff = isStaff;
+        this.licenseType = licenseType;
+        this.status = status;
+    }
+    
+    public AccountDetail(String licenseType, Date expiredDate){
+        this.licenseType = licenseType;
+        this.expiredDate = expiredDate;
+    }
+    
+    public AccountDetail(String email, String fullname, String phone){
+        this.email = email;
+        this.fullname = fullname;
+        this.phone = phone;
+    }
 
     public Integer getDetailId() {
         return detailId;

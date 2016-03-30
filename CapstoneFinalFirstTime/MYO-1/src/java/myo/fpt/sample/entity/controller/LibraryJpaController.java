@@ -32,113 +32,67 @@ public class LibraryJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Library library) throws PreexistingEntityException, Exception {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            em.persist(library);
-            em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findLibrary(library.getLibraryId()) != null) {
-                throw new PreexistingEntityException("Library " + library + " already exists.", ex);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-
-    public void edit(Library library) throws NonexistentEntityException, Exception {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            library = em.merge(library);
-            em.getTransaction().commit();
-        } catch (Exception ex) {
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Integer id = library.getLibraryId();
-                if (findLibrary(id) == null) {
-                    throw new NonexistentEntityException("The library with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-
-    public void destroy(Integer id) throws NonexistentEntityException {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            Library library;
-            try {
-                library = em.getReference(Library.class, id);
-                library.getLibraryId();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The library with id " + id + " no longer exists.", enfe);
-            }
-            em.remove(library);
-            em.getTransaction().commit();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-
-    public List<Library> findLibraryEntities() {
-        return findLibraryEntities(true, -1, -1);
-    }
-
-    public List<Library> findLibraryEntities(int maxResults, int firstResult) {
-        return findLibraryEntities(false, maxResults, firstResult);
-    }
-
-    private List<Library> findLibraryEntities(boolean all, int maxResults, int firstResult) {
+    public List<Library> getAllLibrary() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Library.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
+            String jnql = "SELECT a FROM Library a";
+            Query query = em.createQuery(jnql);
+            List<Library> listLib = query.getResultList();
+            return listLib;
         } finally {
             em.close();
         }
     }
 
-    public Library findLibrary(Integer id) {
+    public void addNewLibrary(Library lib) {
+
         EntityManager em = getEntityManager();
         try {
-            return em.find(Library.class, id);
+            em.getTransaction().begin();
+            em.persist(lib);
+            em.getTransaction().commit();
         } finally {
             em.close();
         }
     }
 
-    public int getLibraryCount() {
+    public void updateLibrary(int libraryId, Library libUpdate) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Library> rt = cq.from(Library.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
+            em.getTransaction().begin();
+            Library lib = em.find(Library.class, libraryId);
+            lib.setLibraryName(libUpdate.getLibraryName());
+            lib.setStatus(libUpdate.getStatus());
+            em.merge(lib);
+            em.getTransaction().commit();
         } finally {
             em.close();
         }
     }
-    
+
+    public boolean DeleteLibrary(int libraryId) {
+        EntityManager em = getEntityManager();
+        try {
+            Library lib = em.find(Library.class, libraryId);
+            if (lib != null) {
+                em.remove(lib);
+                return true;
+            }
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
+    public void persist(Object object) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(object);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
 }

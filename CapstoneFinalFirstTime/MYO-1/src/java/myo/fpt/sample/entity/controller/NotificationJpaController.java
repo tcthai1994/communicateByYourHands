@@ -6,6 +6,7 @@
 package myo.fpt.sample.entity.controller;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -13,6 +14,8 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import myo.fpt.sample.entity.Account;
+import myo.fpt.sample.entity.AccountDetail;
 import myo.fpt.sample.entity.Notification;
 import myo.fpt.sample.entity.controller.exceptions.NonexistentEntityException;
 import myo.fpt.sample.entity.controller.exceptions.PreexistingEntityException;
@@ -32,113 +35,156 @@ public class NotificationJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Notification notification) throws PreexistingEntityException, Exception {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            em.persist(notification);
-            em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findNotification(notification.getNotiId()) != null) {
-                throw new PreexistingEntityException("Notification " + notification + " already exists.", ex);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-
-    public void edit(Notification notification) throws NonexistentEntityException, Exception {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            notification = em.merge(notification);
-            em.getTransaction().commit();
-        } catch (Exception ex) {
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Integer id = notification.getNotiId();
-                if (findNotification(id) == null) {
-                    throw new NonexistentEntityException("The notification with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-
-    public void destroy(Integer id) throws NonexistentEntityException {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            Notification notification;
-            try {
-                notification = em.getReference(Notification.class, id);
-                notification.getNotiId();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The notification with id " + id + " no longer exists.", enfe);
-            }
-            em.remove(notification);
-            em.getTransaction().commit();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-
-    public List<Notification> findNotificationEntities() {
-        return findNotificationEntities(true, -1, -1);
-    }
-
-    public List<Notification> findNotificationEntities(int maxResults, int firstResult) {
-        return findNotificationEntities(false, maxResults, firstResult);
-    }
-
-    private List<Notification> findNotificationEntities(boolean all, int maxResults, int firstResult) {
+    public List<Date> getExpiredDate() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Notification.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
+            String jnql = "SELECT a.expiredDate FROM AccountDetail a";
+            Query query = em.createQuery(jnql);
+            List<Date> expiredDate = query.getResultList();
+            return expiredDate;
         } finally {
             em.close();
         }
     }
 
-    public Notification findNotification(Integer id) {
+    public void createNotification(Notification noti) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Notification.class, id);
+            em.getTransaction().begin();
+            em.persist(noti);
+            em.getTransaction().commit();
         } finally {
             em.close();
         }
     }
 
-    public int getNotificationCount() {
+    public int getNotiId() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Notification> rt = cq.from(Notification.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
+            String jnql = "SELECT a.notiId FROM Notification a ORDER BY a.notiId DESC";
+            Query query = em.createQuery(jnql);
+            query.setFirstResult(0);
+            query.setMaxResults(1);
+            if (!query.getResultList().isEmpty()) {
+                int notiId = (Integer) query.getSingleResult();
+                return notiId;
+            }
+            return 0;
         } finally {
             em.close();
         }
     }
-    
+
+    public List<Integer> getDetailId() {
+        EntityManager em = getEntityManager();
+        try {
+            String jnql = "SELECT a.detailId FROM AccountDetail a";
+            Query query = em.createQuery(jnql);
+            List<Integer> detailIdList = query.getResultList();
+            return detailIdList;
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Notification> findNewNotificationsByCustId(int customerId) {
+        EntityManager em = getEntityManager();
+        try {
+            String sql = "SELECT a FROM Notification a WHERE a.custId = :custId AND a.isSent = :isSent";
+            Query query = em.createQuery(sql);
+            query.setParameter("custId", customerId);
+            query.setParameter("isSent", false);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public void updateIsSentNotification(int notificationId, boolean isSent) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Notification notification = em.find(Notification.class, notificationId);
+            notification.setIsSent(isSent);
+            em.merge(notification);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
+    public int findCustIdByDetailId(int detailId) {
+        EntityManager em = getEntityManager();
+        try {
+            String jnql = "SELECT a.custId FROM Account a WHERE a.detailId = :detailIdparam";
+            Query query = em.createQuery(jnql);
+            query.setParameter("detailIdparam", detailId);
+            return (Integer) query.getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
+    public void updateOverExpiredDate(int detailId, AccountDetail accDetailUpdate) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            AccountDetail AccDetail = em.find(AccountDetail.class, detailId);
+            AccDetail.setLicenseType(accDetailUpdate.getLicenseType());
+            AccDetail.setExpiredDate(accDetailUpdate.getExpiredDate());
+            em.merge(AccDetail);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
+    public String findDeviceIdByCustId(int custId) {
+        EntityManager em = getEntityManager();
+        try {
+            Account tmp = em.find(Account.class, custId);
+            if (tmp == null) {
+                return "";
+            }
+            return tmp.getDeviceId().toString();
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Notification> findAllNewNotification() {
+        EntityManager em = getEntityManager();
+        try {
+            String jnql = "SELECT a FROM Notification a WHERE a.isSent = :isSent";
+            Query query = em.createQuery(jnql);
+            query.setParameter("isSent", false);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public String findRegIdByDeviceId(String deviceId) {
+        EntityManager em = getEntityManager();
+        try {
+            String jnql = "SELECT a.registrationId FROM Device a WHERE a.deviceId = :deviceId";
+            Query query = em.createQuery(jnql);
+            query.setParameter("deviceId", deviceId);
+            return query.getSingleResult().toString();
+        } finally {
+            em.close();
+        }
+    }
+
+    public void persist(Object object) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(object);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
 }

@@ -10,6 +10,7 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -35,6 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Recipt.findByPrice", query = "SELECT r FROM Recipt r WHERE r.price = :price")})
 public class Recipt implements Serializable {
     private static final long serialVersionUID = 1L;
+    @GeneratedValue
     @Id
     @Basic(optional = false)
     @Column(name = "reciptId")
@@ -58,6 +60,13 @@ public class Recipt implements Serializable {
 
     public Recipt(Integer reciptId) {
         this.reciptId = reciptId;
+    }
+    
+    public Recipt(Integer licenseId, Date startDate, Integer custId, double price){
+        this.licenseId = licenseId;
+        this.startDate = startDate;
+        this.custId = custId;
+        this.price = price;
     }
 
     public Integer getReciptId() {

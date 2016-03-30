@@ -32,113 +32,68 @@ public class DictionaryJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Dictionary dictionary) throws PreexistingEntityException, Exception {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            em.persist(dictionary);
-            em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findDictionary(dictionary.getInstructionId()) != null) {
-                throw new PreexistingEntityException("Dictionary " + dictionary + " already exists.", ex);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-
-    public void edit(Dictionary dictionary) throws NonexistentEntityException, Exception {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            dictionary = em.merge(dictionary);
-            em.getTransaction().commit();
-        } catch (Exception ex) {
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Integer id = dictionary.getInstructionId();
-                if (findDictionary(id) == null) {
-                    throw new NonexistentEntityException("The dictionary with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-
-    public void destroy(Integer id) throws NonexistentEntityException {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            Dictionary dictionary;
-            try {
-                dictionary = em.getReference(Dictionary.class, id);
-                dictionary.getInstructionId();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The dictionary with id " + id + " no longer exists.", enfe);
-            }
-            em.remove(dictionary);
-            em.getTransaction().commit();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-
-    public List<Dictionary> findDictionaryEntities() {
-        return findDictionaryEntities(true, -1, -1);
-    }
-
-    public List<Dictionary> findDictionaryEntities(int maxResults, int firstResult) {
-        return findDictionaryEntities(false, maxResults, firstResult);
-    }
-
-    private List<Dictionary> findDictionaryEntities(boolean all, int maxResults, int firstResult) {
+    public List<Dictionary> getAllDictionary() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Dictionary.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
+            String jnql = "SELECT d FROM Dictionary d";
+            Query query = em.createQuery(jnql);
+            List<Dictionary> listDic = query.getResultList();
+            return listDic;
         } finally {
             em.close();
         }
     }
 
-    public Dictionary findDictionary(Integer id) {
+    public void addNewDictionary(Dictionary dic) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Dictionary.class, id);
+            em.getTransaction().begin();
+            em.persist(dic);
+            em.getTransaction().commit();
         } finally {
             em.close();
         }
     }
 
-    public int getDictionaryCount() {
+    public void updateDictionary(int dictionaryId, Dictionary dicUpdate) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Dictionary> rt = cq.from(Dictionary.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
+            em.getTransaction().begin();
+            Dictionary dictionary = em.find(Dictionary.class, dictionaryId);
+            dictionary.setKeyword(dicUpdate.getKeyword());
+            dictionary.setDescription(dicUpdate.getDescription());
+            dictionary.setVideoURL(dicUpdate.getVideoURL());
+            dictionary.setStatus(dicUpdate.getStatus());
+            em.merge(dictionary);
+            em.getTransaction().commit();
         } finally {
             em.close();
         }
     }
-    
+
+    public boolean deleteDictionary(int dictionaryId) {
+        EntityManager em = getEntityManager();
+        try {
+            Dictionary dictionary = em.find(Dictionary.class, dictionaryId);
+            if (dictionary != null) {
+                em.remove(dictionary);
+                return true;
+            }
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
+    public void persist(Object object) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(object);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
 }

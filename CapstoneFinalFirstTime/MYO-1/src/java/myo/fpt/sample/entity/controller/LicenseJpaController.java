@@ -32,113 +32,68 @@ public class LicenseJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(License license) throws PreexistingEntityException, Exception {
-        EntityManager em = null;
+    public List<License> getAllLicense() {
+        EntityManager em = getEntityManager();
         try {
-            em = getEntityManager();
+            String jnql = "SELECT a FROM License a";
+            Query query = em.createQuery(jnql);
+            List<License> listLicense = query.getResultList();
+            return listLicense;
+        } finally {
+            em.close();
+        }
+    }
+
+    public void addNewLicense(License license) {
+        EntityManager em = getEntityManager();
+        try {
             em.getTransaction().begin();
             em.persist(license);
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findLicense(license.getLicenseId()) != null) {
-                throw new PreexistingEntityException("License " + license + " already exists.", ex);
-            }
-            throw ex;
         } finally {
-            if (em != null) {
-                em.close();
-            }
+            em.close();
         }
     }
 
-    public void edit(License license) throws NonexistentEntityException, Exception {
-        EntityManager em = null;
+    public void updateLicense(int licenseId, License licUpdate) {
+        EntityManager em = getEntityManager();
         try {
-            em = getEntityManager();
             em.getTransaction().begin();
-            license = em.merge(license);
-            em.getTransaction().commit();
-        } catch (Exception ex) {
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Integer id = license.getLicenseId();
-                if (findLicense(id) == null) {
-                    throw new NonexistentEntityException("The license with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-
-    public void destroy(Integer id) throws NonexistentEntityException {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            License license;
-            try {
-                license = em.getReference(License.class, id);
-                license.getLicenseId();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The license with id " + id + " no longer exists.", enfe);
-            }
-            em.remove(license);
+            License lic = em.find(License.class, licenseId);
+            lic.setLicenseName(licUpdate.getLicenseName());
+            lic.setPrice(licUpdate.getPrice());
+            lic.setDescription(licUpdate.getDescription());
+            lic.setStatus(licUpdate.getStatus());
+            em.merge(lic);
             em.getTransaction().commit();
         } finally {
-            if (em != null) {
-                em.close();
+            em.close();
+        }
+    }
+
+    public boolean DeleteLicense(int licenseId) {
+        EntityManager em = getEntityManager();
+        try {
+            License license = em.find(License.class, licenseId);
+            if (license != null) {
+                em.remove(license);
+                return true;
             }
-        }
-    }
-
-    public List<License> findLicenseEntities() {
-        return findLicenseEntities(true, -1, -1);
-    }
-
-    public List<License> findLicenseEntities(int maxResults, int firstResult) {
-        return findLicenseEntities(false, maxResults, firstResult);
-    }
-
-    private List<License> findLicenseEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(License.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
+            return false;
         } finally {
             em.close();
         }
     }
 
-    public License findLicense(Integer id) {
+    public void persist(Object object) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(License.class, id);
+            em.getTransaction().begin();
+            em.persist(object);
+            em.getTransaction().commit();
         } finally {
             em.close();
         }
     }
 
-    public int getLicenseCount() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<License> rt = cq.from(License.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
-    }
-    
 }

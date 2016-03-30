@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -29,6 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Library.findByStatus", query = "SELECT l FROM Library l WHERE l.status = :status")})
 public class Library implements Serializable {
     private static final long serialVersionUID = 1L;
+    @GeneratedValue
     @Id
     @Basic(optional = false)
     @Column(name = "libraryId")
@@ -49,6 +51,11 @@ public class Library implements Serializable {
 
     public Library(Integer libraryId, String libraryName, boolean status) {
         this.libraryId = libraryId;
+        this.libraryName = libraryName;
+        this.status = status;
+    }
+    
+    public Library(String libraryName, boolean status) {
         this.libraryName = libraryName;
         this.status = status;
     }

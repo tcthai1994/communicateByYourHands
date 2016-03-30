@@ -11,8 +11,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import myo.fpt.sample.entity.Account;
 import myo.fpt.sample.entity.Device;
 import myo.fpt.sample.entity.controller.exceptions.NonexistentEntityException;
 import myo.fpt.sample.entity.controller.exceptions.PreexistingEntityException;
@@ -32,113 +34,134 @@ public class DeviceJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Device device) throws PreexistingEntityException, Exception {
-        EntityManager em = null;
+    public void addDevice(Device device) {
+        EntityManager em = getEntityManager();
         try {
-            em = getEntityManager();
             em.getTransaction().begin();
             em.persist(device);
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findDevice(device.getDeviceId()) != null) {
-                throw new PreexistingEntityException("Device " + device + " already exists.", ex);
-            }
-            throw ex;
         } finally {
-            if (em != null) {
-                em.close();
-            }
+            em.close();
         }
     }
 
-    public void edit(Device device) throws NonexistentEntityException, Exception {
-        EntityManager em = null;
+    public int getCustIdByUsername(String username) {
+        EntityManager em = getEntityManager();
         try {
-            em = getEntityManager();
+            String jnql = "SELECT a.custId FROM Account a WHERE a.username = :userparam";
+            Query query = em.createQuery(jnql);
+            query.setParameter("userparam", username);
+            return (Integer) query.getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
+    public void addDeviceIdToAccount(int custId, Account accountUpdate) {
+        EntityManager em = getEntityManager();
+        try {
             em.getTransaction().begin();
-            device = em.merge(device);
+            Account account = em.find(Account.class, custId);
+            account.setDeviceId(accountUpdate.getDeviceId());
+            em.merge(account);
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                String id = device.getDeviceId();
-                if (findDevice(id) == null) {
-                    throw new NonexistentEntityException("The device with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
         } finally {
-            if (em != null) {
-                em.close();
-            }
+            em.close();
         }
     }
 
-    public void destroy(String id) throws NonexistentEntityException {
-        EntityManager em = null;
+    public boolean checkLogin(String username, String password) {
+        EntityManager em = getEntityManager();
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            Device device;
+            String jnql = "SELECT a FROM Account a WHERE a.username = :userparam AND a.password = :passparam";
+            Query query = em.createQuery(jnql);
+            query.setParameter("userparam", username);
+            query.setParameter("passparam", password);
+            List<Account> result = query.getResultList();
+            if (result.isEmpty()) {
+                return false;
+            }
+            return true;
+        } finally {
+            em.close();
+        }
+    }
+
+    public int getDetailIdByUsername(String username) {
+        EntityManager em = getEntityManager();
+        try {
+            String jnql = "SELECT a.detailId FROM Account a WHERE a.username = :userparam";
+            Query query = em.createQuery(jnql);
+            query.setParameter("userparam", username);
+            int detailId = 0;
             try {
-                device = em.getReference(Device.class, id);
-                device.getDeviceId();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The device with id " + id + " no longer exists.", enfe);
+                detailId = (Integer) query.getSingleResult();
+            } catch (NoResultException nre) {
             }
-            em.remove(device);
+            return detailId;
+        } finally {
+            em.close();
+        }
+    }
+
+    public boolean isActive(int detailId) {
+        EntityManager em = getEntityManager();
+        try {
+            String jnql = "SELECT a.status FROM AccountDetail a WHERE a.detailId = :detailIdparam";
+            Query query = em.createQuery(jnql);
+            query.setParameter("detailIdparam", detailId);
+            boolean status = true;
+            try {
+                status = (Boolean) query.getSingleResult();
+            } catch (NoResultException nre) {
+            }
+            if (status == true) {
+                return true;
+            }
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
+    public boolean isDeviceIdExist(String deviceId) {
+        EntityManager em = getEntityManager();
+        try {
+            String jnql = "SELECT a.deviceId FROM Device a WHERE a.deviceId = :deviceId";
+            Query query = em.createQuery(jnql);
+            query.setParameter("deviceId", deviceId);
+            List<Device> result = query.getResultList();
+            if (result.isEmpty()) {
+                return false;
+            }
+            return true;
+        } finally {
+            em.close();
+        }
+    }
+
+    public void updateRegistrationId(String deviceId, String regId) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Device device = em.find(Device.class, deviceId);
+            device.setRegistrationId(regId);
+            em.merge(device);
             em.getTransaction().commit();
         } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-
-    public List<Device> findDeviceEntities() {
-        return findDeviceEntities(true, -1, -1);
-    }
-
-    public List<Device> findDeviceEntities(int maxResults, int firstResult) {
-        return findDeviceEntities(false, maxResults, firstResult);
-    }
-
-    private List<Device> findDeviceEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Device.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
             em.close();
         }
     }
 
-    public Device findDevice(String id) {
+    public void persist(Object object) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Device.class, id);
+            em.getTransaction().begin();
+            em.persist(object);
+            em.getTransaction().commit();
         } finally {
             em.close();
         }
-    }
 
-    public int getDeviceCount() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Device> rt = cq.from(Device.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
     }
-    
 }

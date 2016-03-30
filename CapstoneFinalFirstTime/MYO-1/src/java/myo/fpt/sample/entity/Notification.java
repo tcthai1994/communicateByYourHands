@@ -69,6 +69,15 @@ public class Notification implements Serializable {
         this.isSent = isSent;
         this.notiContent = notiContent;
     }
+    
+    public Notification(Integer notiId, Date notiDate, int custId, boolean isSent, String notiContent, String deviceId) {
+        this.notiId = notiId;
+        this.notiDate = notiDate;
+        this.custId = custId;
+        this.isSent = isSent;
+        this.notiContent = notiContent;
+        this.deviceId = deviceId;
+    }
 
     public Integer getNotiId() {
         return notiId;

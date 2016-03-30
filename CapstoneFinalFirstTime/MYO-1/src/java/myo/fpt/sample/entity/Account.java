@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -31,6 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Account.findByDeviceId", query = "SELECT a FROM Account a WHERE a.deviceId = :deviceId")})
 public class Account implements Serializable {
     private static final long serialVersionUID = 1L;
+    @GeneratedValue
     @Id
     @Basic(optional = false)
     @Column(name = "custId")
@@ -59,6 +61,28 @@ public class Account implements Serializable {
         this.username = username;
         this.password = password;
         this.detailId = detailId;
+    }
+    
+    public Account(String username, String password, int detailId) {
+        this.username = username;
+        this.password = password;
+        this.detailId = detailId;
+    }
+    
+    public Account(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+    
+    public Account(String username, String password, int detailId, String deviceId) {
+        this.username = username;
+        this.password = password;
+        this.detailId = detailId;
+        this.deviceId = deviceId;
+    }
+    
+    public Account(String deviceId){
+        this.deviceId = deviceId;
     }
 
     public Integer getCustId() {

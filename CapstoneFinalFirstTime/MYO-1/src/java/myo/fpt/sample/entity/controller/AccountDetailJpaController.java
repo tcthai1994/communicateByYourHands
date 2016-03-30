@@ -13,9 +13,11 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import myo.fpt.sample.entity.Account;
 import myo.fpt.sample.entity.AccountDetail;
 import myo.fpt.sample.entity.controller.exceptions.NonexistentEntityException;
 import myo.fpt.sample.entity.controller.exceptions.PreexistingEntityException;
+import sample.dto.AccountManage;
 
 /**
  *
@@ -32,61 +34,37 @@ public class AccountDetailJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(AccountDetail accountDetail) throws PreexistingEntityException, Exception {
+    public List<Account> getAllAccount() {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
-            em.persist(accountDetail);
-            em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findAccountDetail(accountDetail.getDetailId()) != null) {
-                throw new PreexistingEntityException("AccountDetail " + accountDetail + " already exists.", ex);
-            }
-            throw ex;
+            String jnql = "SELECT a FROM Account a";
+            Query query = em.createQuery(jnql);
+            List<Account> listUA = query.getResultList();
+            return listUA;
         } finally {
-            if (em != null) {
-                em.close();
-            }
+            em.close();
         }
     }
 
-    public void edit(AccountDetail accountDetail) throws NonexistentEntityException, Exception {
+    public List<AccountDetail> getAllAccountDetail() {
         EntityManager em = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            accountDetail = em.merge(accountDetail);
-            em.getTransaction().commit();
-        } catch (Exception ex) {
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Integer id = accountDetail.getDetailId();
-                if (findAccountDetail(id) == null) {
-                    throw new NonexistentEntityException("The accountDetail with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
+            String jnql = "SELECT a FROM AccountDetail a";
+            Query query = em.createQuery(jnql);
+            List<AccountDetail> listUAD = query.getResultList();
+            return listUAD;
         } finally {
-            if (em != null) {
-                em.close();
-            }
+            em.close();
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void RegistertoAccount(Account Acc) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            AccountDetail accountDetail;
-            try {
-                accountDetail = em.getReference(AccountDetail.class, id);
-                accountDetail.getDetailId();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The accountDetail with id " + id + " no longer exists.", enfe);
-            }
-            em.remove(accountDetail);
+            em.persist(Acc);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -95,50 +73,199 @@ public class AccountDetailJpaController implements Serializable {
         }
     }
 
-    public List<AccountDetail> findAccountDetailEntities() {
-        return findAccountDetailEntities(true, -1, -1);
-    }
-
-    public List<AccountDetail> findAccountDetailEntities(int maxResults, int firstResult) {
-        return findAccountDetailEntities(false, maxResults, firstResult);
-    }
-
-    private List<AccountDetail> findAccountDetailEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
+    public void RegistertoAccountDetail(AccountDetail AccDetail) {
+        EntityManager em = null;
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(AccountDetail.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
+            em = getEntityManager();
+            em.getTransaction().begin();
+            em.persist(AccDetail);
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
             }
-            return q.getResultList();
+        }
+    }
+
+    public int getDetailId() {
+        EntityManager em = null;
+        try {
+            String jnql = "SELECT a.detailId FROM AccountDetail a ORDER BY a.detailId DESC";
+            Query query = em.createQuery(jnql);
+            query.setFirstResult(0);
+            query.setMaxResults(1);
+            if (!query.getResultList().isEmpty()) {
+                int detailId = (Integer) query.getSingleResult();
+                return detailId;
+            }
+            return 0;
         } finally {
             em.close();
         }
     }
 
-    public AccountDetail findAccountDetail(Integer id) {
-        EntityManager em = getEntityManager();
+    public AccountDetail getACdetailByDetailId(int detailId) {
+        EntityManager em = null;
         try {
-            return em.find(AccountDetail.class, id);
+            em = getEntityManager();
+            AccountDetail accd = em.find(AccountDetail.class, detailId);
+            return accd;
         } finally {
             em.close();
         }
     }
 
-    public int getAccountDetailCount() {
+    public void UpdateAccount(int custId, Account AccUpdate) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<AccountDetail> rt = cq.from(AccountDetail.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
+            em.getTransaction().begin();
+            Account Acc = em.find(Account.class, custId);
+            Acc.setUsername(AccUpdate.getUsername());
+            Acc.setPassword(AccUpdate.getPassword());
+            em.merge(Acc);
+            em.getTransaction().commit();
         } finally {
             em.close();
         }
     }
-    
+
+    public void UpdateAccountDetail(int detailid, AccountDetail AccDetailUpdate) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            AccountDetail AccDetail = em.find(AccountDetail.class, detailid);
+            AccDetail.setEmail(AccDetailUpdate.getEmail());
+            AccDetail.setFullname(AccDetailUpdate.getFullname());
+            AccDetail.setPhone(AccDetailUpdate.getPhone());
+            AccDetail.setIsStaff(AccDetailUpdate.getIsStaff());
+            AccDetail.setLicenseType(AccDetailUpdate.getLicenseType());
+            AccDetail.setExpiredDate(AccDetailUpdate.getExpiredDate());
+            AccDetail.setStatus(AccDetailUpdate.getStatus());
+            em.merge(AccDetail);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
+    public Account findByUsername(String username) {
+        EntityManager em = getEntityManager();
+        try {
+            String jnql = "SELECT a FROM Account a WHERE a.username = :userparam";
+            Query query = em.createQuery(jnql);
+            query.setParameter("userparam", username);
+            return (Account) query.getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
+    public int getCustIdByUsername(String username) {
+        EntityManager em = getEntityManager();
+        try {
+            String jnql = "SELECT a.custId FROM Account a WHERE a.username = :userparam";
+            Query query = em.createQuery(jnql);
+            query.setParameter("userparam", username);
+            return (Integer) query.getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
+    public boolean checkUsernameExisted(String username) {
+        EntityManager em = getEntityManager();
+        try {
+            String jnql = "SELECT a FROM Account a WHERE a.username = :userparam";
+            Query query = em.createQuery(jnql);
+            query.setParameter("userparam", username);
+            List<Account> result = query.getResultList();
+            if (result.isEmpty()) {
+                return false;
+            }
+            return true;
+        } finally {
+            em.close();
+        }
+    }
+
+    public boolean checkEmailExisted(String email) {
+        EntityManager em = getEntityManager();
+        try {
+            String jnql = "SELECT a FROM AccountDetail a WHERE a.email = :emailparam";
+            Query query = em.createQuery(jnql);
+            query.setParameter("emailparam", email);
+            List<Account> result = query.getResultList();
+            if (result.isEmpty()) {
+                return false;
+            }
+            return true;
+        } finally {
+            em.close();
+        }
+    }
+
+    public void updateExpiredDate(int detailId, AccountDetail accDetailUpdate) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            AccountDetail accDetail = em.find(AccountDetail.class, detailId);
+            accDetail.setLicenseType(accDetailUpdate.getLicenseType());
+            accDetail.setExpiredDate(accDetailUpdate.getExpiredDate());
+            em.merge(accDetail);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
+    public int findDetailIdByUsername(String username) {
+        EntityManager em = getEntityManager();
+        try {
+            String jnql = "SELECT a.detailId FROM Account a WHERE a.username = :userparam";
+            Query query = em.createQuery(jnql);
+            query.setParameter("userparam", username);
+            return (Integer) query.getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
+    public void UserUpdateAccountDetail(int detailid, AccountDetail AccDetailUpdate) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            AccountDetail AccDetail = em.find(AccountDetail.class, detailid);
+            AccDetail.setEmail(AccDetailUpdate.getEmail());
+            AccDetail.setFullname(AccDetailUpdate.getFullname());
+            AccDetail.setPhone(AccDetailUpdate.getPhone());
+            em.merge(AccDetail);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
+    public void persist(Object object) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(object);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
+    public AccountManage getAccMng(String username) {
+        EntityManager em = getEntityManager();
+        try {
+            Account acc = findByUsername(username);
+            AccountDetail accDt = getACdetailByDetailId(acc.getDetailId());
+            AccountManage AccMng = new AccountManage(username, acc.getPassword(), acc.getDetailId(), accDt.getEmail(), accDt.getFullname(), accDt.getPhone(), accDt.getLicenseType(), accDt.getExpiredDate());
+            return AccMng;
+        } finally {
+            em.close();
+        }
+    }
+
 }
