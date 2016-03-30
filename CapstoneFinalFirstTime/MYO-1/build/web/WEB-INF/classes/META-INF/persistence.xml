@@ -20,6 +20,7 @@
     <class>myo.fpt.sample.entity.MeaningRignt</class>
     <class>myo.fpt.sample.entity.CustomContent</class>
     <class>myo.fpt.sample.entity.Recipt</class>
+    <class>myo.fpt.sample.entity.Testtable</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=Myo01"/>

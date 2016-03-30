@@ -108,7 +108,7 @@
     </servlet>
     <servlet>
         <servlet-name>LoadGuestPageServlet</servlet-name>
-        <servlet-class>sample.servlet.LoadGuestPageServlet</servlet-class>
+        <servlet-class>myo.fpt.sample.servlet.LoadGuestPageServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ProcessServlet</servlet-name>

@@ -140,14 +140,14 @@
                                                                                     </a>
                                                                                 </li>-->
 
-<!--                                        <li>
-                                            <a href="<%=request.getContextPath()%>/LoadUserProfileServlet">
-                                                <i class="ace-icon fa fa-user"></i>
-                                                Profile
-                                            </a>
-                                        </li>
-
-                                        <li class="divider"></li>-->
+                                        <!--                                        <li>
+                                                                                    <a href="<%=request.getContextPath()%>/LoadUserProfileServlet">
+                                                                                        <i class="ace-icon fa fa-user"></i>
+                                                                                        Profile
+                                                                                    </a>
+                                                                                </li>
+                                        
+                                                                                <li class="divider"></li>-->
 
                                         <li>
                                             <a href="<%=request.getContextPath()%>/LogoutServlet">
@@ -287,74 +287,79 @@
                                     <div class="row">
                                         <div class="col-xs-12">
                                             <!-- PAGE CONTENT BEGINS -->
-                                            <form action="TrainServlet" class="form-horizontal">
+                                            <div class="col-xs-6">
+                                                <form action="TrainServlet" class="form-horizontal">
 
-                                                <div class="form-group">
-                                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> EMG left: </label>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> EMG left: </label>
 
-                                                    <div class="col-sm-9">
-                                                        <input type="text" name="leftData" id="form-field-1" class="col-xs-10 col-sm-3" value="" required/>
-                                                    </div>
-                                                </div>
-                                                <!--                                                    <tr>
-                                                                                                        <td>EMG left: </td>
-                                                                                                        <td><input type="text" name="leftData" value="" /></td>
-                                                                                                    </tr>-->
-                                                <div class="form-group">
-                                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-2"> EMG right: </label>
-
-                                                    <div class="col-sm-9">
-                                                        <input type="text" name="rightData" id="form-field-2" class="col-xs-10 col-sm-3" value="" required/>
-                                                    </div>
-                                                </div>
-                                                <!--                                                    <tr>
-                                                                                                        <td>EMG right: </td>
-                                                                                                        <td><input type="text" name="rightData" value="" /></td>
-                                                                                                    </tr>-->
-                                                <div class="form-group">
-                                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-3"> leftMeaning </label>
-
-                                                    <div class="col-sm-9">
-                                                        <input type="text" name="leftMeaning" id="form-field-3" class="col-xs-10 col-sm-3" value="" required/>
-                                                    </div>
-                                                </div>
-                                                <!--                                                    <tr>
-                                                                                                        <td>leftMeaning </td>
-                                                                                                        <td><input type="text" name="leftMeaning" value="" /></td>
-                                                                                                    </tr>-->
-                                                <div class="form-group">
-                                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-4"> rightMeaning </label>
-
-                                                    <div class="col-sm-9">
-                                                        <input type="text" name="rightMeaning" id="form-field-4" class="col-xs-10 col-sm-3" value="" required/>
-                                                    </div>
-                                                </div>
-                                                <!--                                                    <tr>
-                                                                                                        <td>rightMeaning </td>
-                                                                                                        <td><input type="text" name="rightMeaning" value="" /></td>
-                                                                                                    </tr>-->
-                                                <div class="form-group">
-                                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-4"> Meaning: </label>
-
-                                                    <div class="col-sm-9">
-                                                        <input type="text" name="meaning" id="form-field-4" class="col-xs-10 col-sm-3" value="" required/>
-                                                    </div>
-                                                </div>
-                                                <!--                                                    <tr>
-                                                                                                        <td>Meaning: </td>
-                                                                                                        <td><input type="text" name="meaning" value="" /></td>
-                                                                                                    </tr>-->
-                                                <div class="clearfix form-actions">
-                                                    <div class="col-md-offset-3 col-md-9">
-                                                        <div class="input-group-btn">
-                                                            <input  type="submit" value="Done" class="btn btn-primary btn-sm">
+                                                        <div class="col-sm-9">
+                                                            <input type="text" name="leftData" id="form-field-1" class="col-xs-10 col-sm-10" value="" required/>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                    <!--                                                    <tr>
+                                                                                                            <td>EMG left: </td>
+                                                                                                            <td><input type="text" name="leftData" value="" /></td>
+                                                                                                        </tr>-->
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label no-padding-right" for="form-field-2"> EMG right: </label>
 
-                                                <!--                                                <input type="submit" value="Done" />-->
-                                            </form>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" name="rightData" id="form-field-2" class="col-xs-10 col-sm-10" value="" required/>
+                                                        </div>
+                                                    </div>
+                                                    <!--                                                    <tr>
+                                                                                                            <td>EMG right: </td>
+                                                                                                            <td><input type="text" name="rightData" value="" /></td>
+                                                                                                        </tr>-->
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label no-padding-right" for="form-field-3"> leftMeaning </label>
 
+                                                        <div class="col-sm-9">
+                                                            <input type="text" name="leftMeaning" id="form-field-3" class="col-xs-10 col-sm-10" value="" required/>
+                                                        </div>
+                                                    </div>
+                                                    <!--                                                    <tr>
+                                                                                                            <td>leftMeaning </td>
+                                                                                                            <td><input type="text" name="leftMeaning" value="" /></td>
+                                                                                                        </tr>-->
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label no-padding-right" for="form-field-4"> rightMeaning </label>
+
+                                                        <div class="col-sm-9">
+                                                            <input type="text" name="rightMeaning" id="form-field-4" class="col-xs-10 col-sm-10" value="" required/>
+                                                        </div>
+                                                    </div>
+                                                    <!--                                                    <tr>
+                                                                                                            <td>rightMeaning </td>
+                                                                                                            <td><input type="text" name="rightMeaning" value="" /></td>
+                                                                                                        </tr>-->
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label no-padding-right" for="form-field-4"> Meaning: </label>
+
+                                                        <div class="col-sm-9">
+                                                            <input type="text" name="meaning" id="form-field-4" class="col-xs-10 col-sm-10" value="" required/>
+                                                        </div>
+                                                    </div>
+                                                    <!--                                                    <tr>
+                                                                                                            <td>Meaning: </td>
+                                                                                                            <td><input type="text" name="meaning" value="" /></td>
+                                                                                                        </tr>-->
+                                                    <div class="clearfix form-actions">
+                                                        <div class="col-md-offset-3 col-md-9">
+                                                            <div class="input-group-btn">
+                                                                <input  type="submit" value="Done" class="btn btn-primary btn-sm">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!--                                                <input type="submit" value="Done" />-->
+                                                </form>
+                                            </div>
+
+                                            <div class="col-xs-6">
+                                                
+                                            </div>
                                             <!-- PAGE CONTENT ENDS -->
                                         </div><!-- /.col -->
                                     </div><!-- /.row -->
@@ -447,8 +452,8 @@
 
                 <!-- inline scripts related to this page -->
                 <script type="text/javascript">
-                    jQuery(function($) {
-                        $('#id-disable-check').on('click', function() {
+                    jQuery(function ($) {
+                        $('#id-disable-check').on('click', function () {
                             var inp = $('#form-input-readonly').get(0);
                             if (inp.hasAttribute('disabled')) {
                                 inp.setAttribute('readonly', 'true');
@@ -468,15 +473,15 @@
 
                         $(window)
                                 .off('resize.chosen')
-                                .on('resize.chosen', function() {
-                            $('.chosen-select').each(function() {
-                                var $this = $(this);
-                                $this.next().css({'width': $this.parent().width()});
-                            });
-                        }).trigger('resize.chosen');
+                                .on('resize.chosen', function () {
+                                    $('.chosen-select').each(function () {
+                                        var $this = $(this);
+                                        $this.next().css({'width': $this.parent().width()});
+                                    });
+                                }).trigger('resize.chosen');
 
 
-                        $('#chosen-multiple-style').on('click', function(e) {
+                        $('#chosen-multiple-style').on('click', function (e) {
                             var target = $(e.target).find('input[type=radio]');
                             var which = parseInt(target.val());
                             if (which === 2)
@@ -499,7 +504,7 @@
                         $('.input-mask-date').mask('99/99/9999');
                         $('.input-mask-phone').mask('(999) 999-9999');
                         $('.input-mask-eyescript').mask('~9.99 ~9.99 999');
-                        $(".input-mask-product").mask("a*-999-a999", {placeholder: " ", completed: function() {
+                        $(".input-mask-product").mask("a*-999-a999", {placeholder: " ", completed: function () {
                                 alert("You typed the following: " + this.val());
                             }});
 
@@ -511,7 +516,7 @@
                             min: 1,
                             max: 8,
                             step: 1,
-                            slide: function(event, ui) {
+                            slide: function (event, ui) {
                                 var sizing = ['', 'input-sm', 'input-lg', 'input-mini', 'input-small', 'input-medium', 'input-large', 'input-xlarge', 'input-xxlarge'];
                                 var val = parseInt(ui.value);
                                 $('#form-field-4').attr('class', sizing[val]).val('.' + sizing[val]);
@@ -524,7 +529,7 @@
                             min: 1,
                             max: 12,
                             step: 1,
-                            slide: function(event, ui) {
+                            slide: function (event, ui) {
                                 var val = parseInt(ui.value);
                                 $('#form-field-5').attr('class', 'col-xs-' + val).val('.col-xs-' + val);
                             }
@@ -540,7 +545,7 @@
                             min: 0,
                             max: 100,
                             values: [17, 67],
-                            slide: function(event, ui) {
+                            slide: function (event, ui) {
                                 var val = ui.values[$(ui.handle).index() - 1] + "";
 
                                 if (!ui.handle.firstChild) {
@@ -549,7 +554,7 @@
                                 }
                                 $(ui.handle.firstChild).show().children().eq(1).text(val);
                             }
-                        }).find('a').on('blur', function() {
+                        }).find('a').on('blur', function () {
                             $(this.firstChild).hide();
                         });
 
@@ -561,7 +566,7 @@
                             value: 2
                         });
 
-                        $("#slider-eq > span").css({width: '90%', 'float': 'left', margin: '15px'}).each(function() {
+                        $("#slider-eq > span").css({width: '90%', 'float': 'left', margin: '15px'}).each(function () {
                             // read initial values from markup and remove that
                             var value = parseInt($(this).text(), 10);
                             $(this).empty().slider({
@@ -607,8 +612,8 @@
                                     /**,before_remove : function() {
                                      return true;
                                      }*/
-                                    ,
-                            preview_error: function(filename, error_code) {
+                            ,
+                            preview_error: function (filename, error_code) {
                                 //name of the file that failed
                                 //error_code values
                                 //1 = 'FILE_LOAD_FAILED',
@@ -617,14 +622,14 @@
                                 //alert(error_code);
                             }
 
-                        }).on('change', function() {
+                        }).on('change', function () {
                             //console.log($(this).data('ace_input_files'));
                             //console.log($(this).data('ace_input_method'));
                         });
 
 
                         //dynamically change allowed formats by changing allowExt && allowMime function
-                        $('#id-file-format').removeAttr('checked').on('change', function() {
+                        $('#id-file-format').removeAttr('checked').on('change', function () {
                             var whitelist_ext, whitelist_mime;
                             var btn_choose;
                             var no_icon;
@@ -645,52 +650,52 @@
                             var file_input = $('#id-input-file-3');
                             file_input
                                     .ace_file_input('update_settings',
-                                    {
-                                        'btn_choose': btn_choose,
-                                        'no_icon': no_icon,
-                                        'allowExt': whitelist_ext,
-                                        'allowMime': whitelist_mime
-                                    });
+                                            {
+                                                'btn_choose': btn_choose,
+                                                'no_icon': no_icon,
+                                                'allowExt': whitelist_ext,
+                                                'allowMime': whitelist_mime
+                                            });
                             file_input.ace_file_input('reset_input');
 
                             file_input
                                     .off('file.error.ace')
-                                    .on('file.error.ace', function(e, info) {
-                                //console.log(info.file_count);//number of selected files
-                                //console.log(info.invalid_count);//number of invalid files
-                                //console.log(info.error_list);//a list of errors in the following format
+                                    .on('file.error.ace', function (e, info) {
+                                        //console.log(info.file_count);//number of selected files
+                                        //console.log(info.invalid_count);//number of invalid files
+                                        //console.log(info.error_list);//a list of errors in the following format
 
-                                //info.error_count['ext']
-                                //info.error_count['mime']
-                                //info.error_count['size']
+                                        //info.error_count['ext']
+                                        //info.error_count['mime']
+                                        //info.error_count['size']
 
-                                //info.error_list['ext']  = [list of file names with invalid extension]
-                                //info.error_list['mime'] = [list of file names with invalid mimetype]
-                                //info.error_list['size'] = [list of file names with invalid size]
-
-
-                                /**
-                                 if( !info.dropped ) {
-                                 //perhapse reset file field if files have been selected, and there are invalid files among them
-                                 //when files are dropped, only valid files will be added to our file array
-                                 e.preventDefault();//it will rest input
-                                 }
-                                 */
+                                        //info.error_list['ext']  = [list of file names with invalid extension]
+                                        //info.error_list['mime'] = [list of file names with invalid mimetype]
+                                        //info.error_list['size'] = [list of file names with invalid size]
 
 
-                                //if files have been selected (not dropped), you can choose to reset input
-                                //because browser keeps all selected files anyway and this cannot be changed
-                                //we can only reset file field to become empty again
-                                //on any case you still should check files with your server side script
-                                //because any arbitrary file can be uploaded by user and it's not safe to rely on browser-side measures
-                            });
+                                        /**
+                                         if( !info.dropped ) {
+                                         //perhapse reset file field if files have been selected, and there are invalid files among them
+                                         //when files are dropped, only valid files will be added to our file array
+                                         e.preventDefault();//it will rest input
+                                         }
+                                         */
+
+
+                                        //if files have been selected (not dropped), you can choose to reset input
+                                        //because browser keeps all selected files anyway and this cannot be changed
+                                        //we can only reset file field to become empty again
+                                        //on any case you still should check files with your server side script
+                                        //because any arbitrary file can be uploaded by user and it's not safe to rely on browser-side measures
+                                    });
 
                         });
 
                         $('#spinner1').ace_spinner({value: 0, min: 0, max: 200, step: 10, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
-                                .on('change', function() {
-                            //alert(this.value)
-                        });
+                                .on('change', function () {
+                                    //alert(this.value)
+                                });
                         $('#spinner2').ace_spinner({value: 0, min: 0, max: 10000, step: 100, touch_spinner: true, icon_up: 'ace-icon fa fa-caret-up', icon_down: 'ace-icon fa fa-caret-down'});
                         $('#spinner3').ace_spinner({value: 0, min: -100, max: 100, step: 10, on_sides: true, icon_up: 'ace-icon fa fa-plus smaller-75', icon_down: 'ace-icon fa fa-minus smaller-75', btn_up_class: 'btn-success', btn_down_class: 'btn-danger'});
                         //$('#spinner1').ace_spinner('disable').ace_spinner('value', 11);
@@ -706,7 +711,7 @@
                             todayHighlight: true
                         })
                                 //show datepicker when clicking on the icon
-                                .next().on(ace.click_event, function() {
+                                .next().on(ace.click_event, function () {
                             $(this).prev().focus();
                         });
 
@@ -723,7 +728,7 @@
                                 cancelLabel: 'Cancel'
                             }
                         })
-                                .prev().on(ace.click_event, function() {
+                                .prev().on(ace.click_event, function () {
                             $(this).next().focus();
                         });
 
@@ -732,11 +737,11 @@
                             minuteStep: 1,
                             showSeconds: true,
                             showMeridian: false
-                        }).next().on(ace.click_event, function() {
+                        }).next().on(ace.click_event, function () {
                             $(this).prev().focus();
                         });
 
-                        $('#date-timepicker1').datetimepicker().next().on(ace.click_event, function() {
+                        $('#date-timepicker1').datetimepicker().next().on(ace.click_event, function () {
                             $(this).prev().focus();
                         });
 
@@ -787,7 +792,7 @@
 
                         //typeahead.js
                         //example taken from plugin's page at: https://twitter.github.io/typeahead.js/examples/
-                        var substringMatcher = function(strs) {
+                        var substringMatcher = function (strs) {
                             return function findMatches(q, cb) {
                                 var matches, substringRegex;
 
@@ -799,7 +804,7 @@
 
                                 // iterate through the pool of strings and for any string that
                                 // contains the substring `q`, add it to the `matches` array
-                                $.each(strs, function(i, str) {
+                                $.each(strs, function (i, str) {
                                     if (substrRegex.test(str)) {
                                         // the typeahead jQuery plugin expects suggestions to a
                                         // JavaScript object, refer to typeahead docs for more info
@@ -836,8 +841,8 @@
                         //chosen plugin inside a modal will have a zero width because the select element is originally hidden
                         //and its width cannot be determined.
                         //so we set the width after modal is show
-                        $('#modal-form').on('shown.bs.modal', function() {
-                            $(this).find('.chosen-container').each(function() {
+                        $('#modal-form').on('shown.bs.modal', function () {
+                            $(this).find('.chosen-container').each(function () {
                                 $(this).find('a:first-child').css('width', '210px');
                                 $(this).find('.chosen-drop').css('width', '210px');
                                 $(this).find('.chosen-search input').css('width', '200px');

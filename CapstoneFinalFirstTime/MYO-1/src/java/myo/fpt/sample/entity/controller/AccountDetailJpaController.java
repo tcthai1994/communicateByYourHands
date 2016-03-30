@@ -48,7 +48,7 @@ public class AccountDetailJpaController implements Serializable {
     }
 
     public List<AccountDetail> getAllAccountDetail() {
-        EntityManager em = null;
+        EntityManager em = getEntityManager();
         try {
             String jnql = "SELECT a FROM AccountDetail a";
             Query query = em.createQuery(jnql);
@@ -88,7 +88,7 @@ public class AccountDetailJpaController implements Serializable {
     }
 
     public int getDetailId() {
-        EntityManager em = null;
+        EntityManager em = getEntityManager();
         try {
             String jnql = "SELECT a.detailId FROM AccountDetail a ORDER BY a.detailId DESC";
             Query query = em.createQuery(jnql);

@@ -36,7 +36,7 @@ public class LoginJpaController implements Serializable {
     }
 
     public boolean checkLogin(String username, String password) {
-        EntityManager em = null;
+        EntityManager em = getEntityManager();
         try {
             String jnql = "SELECT a FROM Account a WHERE a.username = :userparam AND a.password = :passparam";
             Query query = em.createQuery(jnql);
@@ -53,7 +53,7 @@ public class LoginJpaController implements Serializable {
     }
 
     public List<AccountDetail> getAllAccountDetail() {
-        EntityManager em = null;
+        EntityManager em = getEntityManager();
         try {
             String jnql = "SELECT a FROM AccountDetail a";
             Query query = em.createQuery(jnql);
@@ -65,7 +65,7 @@ public class LoginJpaController implements Serializable {
     }
 
     public int getDetailIdByUsername(String username) {
-        EntityManager em = null;
+        EntityManager em = getEntityManager();
         try {
             String jnql = "SELECT a.detailId FROM Account a WHERE a.username = :userparam";
             Query query = em.createQuery(jnql);
@@ -82,7 +82,7 @@ public class LoginJpaController implements Serializable {
     }
 
     public boolean isAdmin(int detailId) {
-        EntityManager em = null;
+        EntityManager em = getEntityManager();
         try {
             String jnql = "SELECT a.isStaff FROM AccountDetail a WHERE a.detailId = :detailIdparam";
             Query query = em.createQuery(jnql);
@@ -102,7 +102,7 @@ public class LoginJpaController implements Serializable {
     }
 
     public boolean isActive(int detailId) {
-        EntityManager em = null;
+        EntityManager em = getEntityManager();
         try {
             String jnql = "SELECT a.status FROM AccountDetail a WHERE a.detailId = :detailIdparam";
             Query query = em.createQuery(jnql);
@@ -122,7 +122,7 @@ public class LoginJpaController implements Serializable {
     }
 
     public void persist(Object object) {
-        EntityManager em = null;
+        EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(object);
