@@ -44,6 +44,27 @@
         <script src="assets/js/html5shiv.min.js"></script>
         <script src="assets/js/respond.min.js"></script>
         <![endif]-->
+        <script type="text/javascript">
+//            var file = document.getElementById("myFile").files[0];
+//            var reader = new FileReader();
+//            reader.onload = function (e) {
+//                var textArea = document.getElementById("myTextArea");
+//                textArea.value = e.target.result;
+//            };
+//            reader.readAsText(file);
+            var openFile = function (event) {
+                var input = event.target;
+
+                var reader = new FileReader();
+                reader.onload = function () {
+                    var text = reader.result;
+                    var node = document.getElementById('myTextArea');
+                    node.innerText = text;
+                    console.log(reader.result.substring(0, 200));
+                };
+                reader.readAsText(input.files[0]);
+            };
+        </script>
     </head>
     <body class="no-skin">
         <c:if test="${sessionScope.USER == null}">
@@ -358,7 +379,19 @@
                                             </div>
 
                                             <div class="col-xs-6">
-                                                
+                                                <div class="col-xs-12" >
+                                                    <!--                                                    <form action="LoadFileServlet" method="POST" class="blue">
+                                                                                                            <button type="submit" value="Load" name="btAction">
+                                                                                                                <i class="ace-icon fa fa-refresh"></i>
+                                                                                                            </button>
+                                                                                                        </form>-->
+                                                    <input type="file" accept="text/plain" onchange="openFile(event)" class="btn btn-link"/>
+                                                </div>
+
+                                                <div class="col-xs-12" style="height: 400px">
+                                                    <!--<div class="files-content" id="myFileArea"><p style="font-weight: bold; font-size: 1.5em">File content:</p><br/></div>-->
+                                                    <textarea id="myTextArea" style="width: 100%; height: 100%"></textarea>
+                                                </div>
                                             </div>
                                             <!-- PAGE CONTENT ENDS -->
                                         </div><!-- /.col -->
@@ -408,7 +441,7 @@
                 <![endif]-->
                 <!--[if !IE]> -->
                 <script type="text/javascript">
-                            window.jQuery || document.write("<script src='assets/js/jquery.min.js'>" + "<" + "/script>");
+                                                        window.jQuery || document.write("<script src='assets/js/jquery.min.js'>" + "<" + "/script>");
                 </script>
 
                 <!-- <![endif]-->
@@ -451,8 +484,20 @@
                 <script src="assets/js/ace.min.js"></script>
 
                 <!-- inline scripts related to this page -->
+
                 <script type="text/javascript">
                     jQuery(function ($) {
+//                        $(document).ready(function () {
+//                            $("#LogServer").click(function () {
+//                                $.ajax({
+//                                    url: "D:\Data\LogServer.txt",
+//                                    dataType: "text",
+//                                    success: function (data) {
+//                                        $(".files-content").html(data);
+//                                    }
+//                                });
+//                            });
+//                        });
                         $('#id-disable-check').on('click', function () {
                             var inp = $('#form-input-readonly').get(0);
                             if (inp.hasAttribute('disabled')) {
@@ -500,15 +545,6 @@
                             limitText: 'max allowed : %n.'
                         });
 
-                        $.mask.definitions['~'] = '[+-]';
-                        $('.input-mask-date').mask('99/99/9999');
-                        $('.input-mask-phone').mask('(999) 999-9999');
-                        $('.input-mask-eyescript').mask('~9.99 ~9.99 999');
-                        $(".input-mask-product").mask("a*-999-a999", {placeholder: " ", completed: function () {
-                                alert("You typed the following: " + this.val());
-                            }});
-
-
 
                         $("#input-size-slider").css('width', '200px').slider({
                             value: 1,
@@ -523,17 +559,6 @@
                             }
                         });
 
-                        $("#input-span-slider").slider({
-                            value: 1,
-                            range: "min",
-                            min: 1,
-                            max: 12,
-                            step: 1,
-                            slide: function (event, ui) {
-                                var val = parseInt(ui.value);
-                                $('#form-field-5').attr('class', 'col-xs-' + val).val('.col-xs-' + val);
-                            }
-                        });
 
 
 

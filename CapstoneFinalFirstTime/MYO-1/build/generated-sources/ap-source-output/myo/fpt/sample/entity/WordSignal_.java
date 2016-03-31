@@ -5,7 +5,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import myo.fpt.sample.entity.WordSignalPK;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2016-03-30T17:42:02")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2016-03-31T14:17:11")
 @StaticMetamodel(WordSignal.class)
 public class WordSignal_ { 
 
