@@ -3,10 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/communicateByYourHands.git/trunk/CapstoneFinalFirstTime/MYO-1/web/update-user.jsp</file>
-            <file>file:/C:/communicateByYourHands.git/trunk/CapstoneFinalFirstTime/MYO-1/src/java/myo/fpt/sample/servlet/UpdateUserAccountServlet.java</file>
-            <file>file:/C:/communicateByYourHands.git/trunk/CapstoneFinalFirstTime/MYO-1/web/guest.jsp</file>
-            <file>file:/C:/communicateByYourHands.git/trunk/CapstoneFinalFirstTime/MYO-1/web/editData.jsp</file>
+            <file>file:/D:/Data/Capstone%20Project/SVN/trunk/CapstoneFinalFirstTime/MYO-1/src/java/myo/fpt/sample/entity/controller/PaymentJpaController.java</file>
+            <file>file:/D:/Data/Capstone%20Project/SVN/trunk/CapstoneFinalFirstTime/MYO-1/src/java/myo/fpt/sample/servlet/LoadUserProfileServlet.java</file>
+            <file>file:/D:/Data/Capstone%20Project/SVN/trunk/CapstoneFinalFirstTime/MYO-1/src/java/myo/fpt/sample/servlet/LibraryProcessServlet.java</file>
+            <file>file:/D:/Data/Capstone%20Project/SVN/trunk/CapstoneFinalFirstTime/MYO-1/src/java/myo/fpt/sample/servlet/AccountServlet.java</file>
+            <file>file:/D:/Data/Capstone%20Project/SVN/trunk/CapstoneFinalFirstTime/MYO-1/src/java/myo/fpt/sample/servlet/LoadBuyLicenseServlet.java</file>
+            <file>file:/D:/Data/Capstone%20Project/SVN/trunk/CapstoneFinalFirstTime/MYO-1/src/java/myo/fpt/sample/entity/controller/AccountDetailJpaController.java</file>
+            <file>file:/D:/Data/Capstone%20Project/SVN/trunk/CapstoneFinalFirstTime/MYO-1/src/java/myo/fpt/sample/entity/controller/LibraryJpaController.java</file>
+            <file>file:/D:/Data/Capstone%20Project/SVN/trunk/CapstoneFinalFirstTime/MYO-1/src/java/sample/scheduler/MyJob.java</file>
+            <file>file:/D:/Data/Capstone%20Project/SVN/trunk/CapstoneFinalFirstTime/MYO-1/src/java/myo/fpt/sample/servlet/UpdateUserAccountServlet.java</file>
+            <file>file:/D:/Data/Capstone%20Project/SVN/trunk/CapstoneFinalFirstTime/MYO-1/src/java/sample/scheduler/SendNotiToMobile.java</file>
+            <file>file:/D:/Data/Capstone%20Project/SVN/trunk/CapstoneFinalFirstTime/MYO-1/web/homePage.jsp</file>
+            <file>file:/D:/Data/Capstone%20Project/SVN/trunk/CapstoneFinalFirstTime/MYO-1/src/java/sample/dto/AccountManage.java</file>
+            <file>file:/D:/Data/Capstone%20Project/SVN/trunk/CapstoneFinalFirstTime/MYO-1/src/java/sample/scheduler/MyServletContextListener.java</file>
         </group>
     </open-files>
 </project-private>

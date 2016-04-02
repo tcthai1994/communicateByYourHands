@@ -21,13 +21,13 @@ public class AccountManage {
     private String phone;
     private boolean isStaff;
     private String licenseType;
-    private Date expiredDate;
+    private String expiredDate;
     private boolean status;
 
     public AccountManage() {
     }
 
-    public AccountManage(String username, int detailId, String email, String fullname, String phone, boolean isStaff, String licenseType, Date expiredDate, boolean status) {
+    public AccountManage(String username, int detailId, String email, String fullname, String phone, boolean isStaff, String licenseType, String expiredDate, boolean status) {
         this.username = username;
         this.detailId = detailId;
         this.email = email;
@@ -39,7 +39,7 @@ public class AccountManage {
         this.status = status;
     }
     
-    public AccountManage(String username, String password, int detailId, String email, String fullname, String phone, String licenseType, Date expiredDate){
+    public AccountManage(String username, String password, int detailId, String email, String fullname, String phone, String licenseType, String expiredDate){
         this.username = username;
         this.password = password;
         this.detailId = detailId;
@@ -137,14 +137,14 @@ public class AccountManage {
     /**
      * @return the expiredDate
      */
-    public Date getExpiredDate() {
+    public String getExpiredDate() {
         return expiredDate;
     }
 
     /**
      * @param expiredDate the expiredDate to set
      */
-    public void setExpiredDate(Date expiredDate) {
+    public void setExpiredDate(String expiredDate) {
         this.expiredDate = expiredDate;
     }
 

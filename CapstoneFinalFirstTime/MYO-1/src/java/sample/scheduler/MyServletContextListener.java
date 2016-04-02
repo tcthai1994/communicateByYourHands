@@ -37,15 +37,15 @@ public class MyServletContextListener implements ServletContextListener {
             //  factory.initialize(sce.getServletContext().getResourceAsStream("/WEB-INF/quartz.properties"));
             Scheduler scheduler = factory.getScheduler();
 
-            try {
-                String schedulerTime = "";
-                InputStream in = getClass().getClassLoader().getResourceAsStream("//TimeConfig.txt");
-                BufferedReader br = new BufferedReader(new InputStreamReader(in));
-                if ((schedulerTime = br.readLine()) == null) {
-                    schedulerTime = "0 0 0 * * ?";
-                }
-                br.close();
-                System.out.println(schedulerTime);
+            
+//                String schedulerTime = "";
+//                InputStream in = getClass().getClassLoader().getResourceAsStream("//TimeConfig.txt");
+//                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+//                if ((schedulerTime = br.readLine()) == null) {
+//                    schedulerTime = "0 0 0 * * ?";
+//                }
+//                br.close();
+//                System.out.println(schedulerTime);
                 // create job
                 JobDetail job = JobBuilder.newJob(MyJob.class)
                         .withIdentity("JobName", "group1").build();
@@ -70,7 +70,7 @@ public class MyServletContextListener implements ServletContextListener {
                         .newTrigger()
                         .withIdentity("JobName", "group1")
                         .withSchedule(
-                                CronScheduleBuilder.cronSchedule(schedulerTime))
+                                CronScheduleBuilder.cronSchedule("0 0 0 * * ?"))
                         .startAt(startTime.getTime())
                         .build();
 
@@ -97,7 +97,7 @@ public class MyServletContextListener implements ServletContextListener {
                         .newTrigger()
                         .withIdentity("JobName2", "group2")
                         .withSchedule(
-                                CronScheduleBuilder.cronSchedule(schedulerTime))
+                                CronScheduleBuilder.cronSchedule("1 0 0 * * ?"))
                         .startAt(startTime.getTime())
                         .build();
 
@@ -106,9 +106,7 @@ public class MyServletContextListener implements ServletContextListener {
                 scheduler.scheduleJob(job2, trigger2);
                 // and start it off
                 scheduler.start();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

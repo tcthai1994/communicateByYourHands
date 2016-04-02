@@ -125,10 +125,6 @@
         <servlet-name>logEditServlet</servlet-name>
         <servlet-class>fpt.myo.servlet.logEditServlet</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>LoadFileServlet</servlet-name>
-        <servlet-class>myo.fpt.sample.servlet.LoadFileServlet</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>ServletAdaptor</servlet-name>
         <url-pattern>/api/*</url-pattern>
@@ -264,10 +260,6 @@
             sample.scheduler.MyServletContextListener 
         </listener-class>
     </listener>
-    <servlet-mapping>
-        <servlet-name>LoadFileServlet</servlet-name>
-        <url-pattern>/LoadFileServlet</url-pattern>
-    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

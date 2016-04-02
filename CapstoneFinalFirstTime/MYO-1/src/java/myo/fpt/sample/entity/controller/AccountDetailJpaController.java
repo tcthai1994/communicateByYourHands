@@ -6,6 +6,8 @@
 package myo.fpt.sample.entity.controller;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -261,7 +263,13 @@ public class AccountDetailJpaController implements Serializable {
         try {
             Account acc = findByUsername(username);
             AccountDetail accDt = getACdetailByDetailId(acc.getDetailId());
-            AccountManage AccMng = new AccountManage(username, acc.getPassword(), acc.getDetailId(), accDt.getEmail(), accDt.getFullname(), accDt.getPhone(), accDt.getLicenseType(), accDt.getExpiredDate());
+            Date date = accDt.getExpiredDate();
+            String exDate = "";
+            if (date != null) {
+                SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                exDate = ft.format(date);
+            }
+            AccountManage AccMng = new AccountManage(username, acc.getPassword(), acc.getDetailId(), accDt.getEmail(), accDt.getFullname(), accDt.getPhone(), accDt.getLicenseType(), exDate);
             return AccMng;
         } finally {
             em.close();

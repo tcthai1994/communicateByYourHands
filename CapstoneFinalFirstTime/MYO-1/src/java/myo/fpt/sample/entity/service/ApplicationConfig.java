@@ -32,6 +32,7 @@ public class ApplicationConfig  extends Application {
         resources.add(myo.fpt.sample.entity.service.CustomContentRESTFacade.class);
         resources.add(myo.fpt.sample.entity.service.CustomSignalRESTFacade.class);
         resources.add(myo.fpt.sample.entity.service.DataContentRESTFacade.class);
+        resources.add(myo.fpt.sample.entity.service.GetDataForMobile.class);
         resources.add(myo.fpt.sample.entity.service.LeftSignalRESTFacade.class);
         resources.add(myo.fpt.sample.entity.service.MeaningLeftRESTFacade.class);
         resources.add(myo.fpt.sample.entity.service.MeaningRigntRESTFacade.class);

@@ -7,8 +7,11 @@ package myo.fpt.sample.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
@@ -36,6 +39,7 @@ public class AccountServlet extends HttpServlet {
 
     private final String ManageUser = "homePage.jsp";
     private final String loginPage = "index.jsp";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -50,31 +54,32 @@ public class AccountServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            HttpSession session = request.getSession();
-            String sess = session.getAttribute("USER").toString();
+            
             List<Account> result = getJpaController().getAllAccount();
             AccountDetail accdt = null;
             AccountManage am = null;
             List<AccountManage> resultmalayboratrangjspne = new ArrayList<AccountManage>();
             for (int i = 0; i < result.size(); i++) {
                 accdt = getJpaController().getACdetailByDetailId(result.get(i).getDetailId());
-                am = new AccountManage(result.get(i).getUsername(), accdt.getDetailId(), accdt.getEmail(), accdt.getFullname(), accdt.getPhone(), accdt.getIsStaff(), accdt.getLicenseType(), accdt.getExpiredDate(), accdt.getStatus());
+                Date date = accdt.getExpiredDate();
+                String exDate = "";
+                if (date != null) {
+                    SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    exDate = ft.format(date);
+                }
+                am = new AccountManage(result.get(i).getUsername(), accdt.getDetailId(), accdt.getEmail(), accdt.getFullname(), accdt.getPhone(), accdt.getIsStaff(), accdt.getLicenseType(), exDate, accdt.getStatus());
                 resultmalayboratrangjspne.add(am);
             }
-            if (result != null && sess != null && sess != "") {
+            if (result != null ) {
                 request.setAttribute("INFO", resultmalayboratrangjspne);
                 RequestDispatcher rd = request.getRequestDispatcher(ManageUser);
-                rd.forward(request, response);
-            }
-            else if(sess == null && sess.equals("")){
-                RequestDispatcher rd = request.getRequestDispatcher(loginPage);
                 rd.forward(request, response);
             }
         } finally {
             out.close();
         }
     }
-    
+
     private EntityManagerFactory getEntityManagerFactory() throws NamingException {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
