@@ -19,11 +19,10 @@ import javax.persistence.Query;
  */
 public class TranslateController implements Serializable {
 
-    private final static Double THRESHOLD = 0.01;
+    private final static Double THRESHOLD = 0.005;
     //private final static Double THRESHOLD = 0.005;
-    private Double rDetect_distance;
-    private Double lDetect_distance;
-    private final int cnt = 7;
+    private Double detect_distance;
+    private final int cnt = 50;
 
     public TranslateController(EntityManagerFactory emf) {
         this.emf = emf;
@@ -178,16 +177,48 @@ public class TranslateController implements Serializable {
         }
     }
 
-    public ArrayList<String> getTranslateResult(ArrayList<EmgData> leftCompare, ArrayList<EmgData> rightCompare) {
+    public ArrayList findMatching(ArrayList<EmgData> Base, ArrayList<EmgData> Compare) {
+        ArrayList result = new ArrayList();
+        String match = "";
+        EmgData tmpEmg = new EmgData();
+        for (int i = 0; i < Compare.size(); i++) {
+
+            detect_distance = THRESHOLD;
+            tmpEmg = null;
+            for (int j = 0; j < Base.size(); j++) {
+                double Distance = distanceCalculation(Compare.get(i), Base.get(j));
+                if (Distance < detect_distance) {
+                    detect_distance = Distance;
+                    tmpEmg = Base.get(j);
+                }
+                if (!(tmpEmg == null)) {
+                    match = reConvert(tmpEmg);
+                }
+                if (Distance == 0) {
+                    break;
+                }
+            }
+            if (match != null) {
+                result.add(match);
+            }
+        }
+        return result;
+    }
+
+    public ArrayList getMeaningCodeSide(ArrayList listMatch) {
+        int meaning = 0;
+        String emgCode = "";
+        ArrayList result = new ArrayList();
+        for (int x = 0; x < listMatch.size(); x++) {
+            emgCode = listMatch.get(x).toString();
+            meaning = getMeaningRight(emgCode);
+            result.add(meaning);
+        }
+        return result;
+    }
+
+    public ArrayList<String> getTranslateResult(ArrayList<EmgData> leftCompare, ArrayList<EmgData> rightCompare, int mode) {
         int meaningCode = 0;
-        int meaningCodeLeft = 0;
-        int meaningCodeRight = 0;
-        EmgData tmpRight = new EmgData();
-        EmgData tmpLeft = new EmgData();
-        String matchRight = "";
-        String matchLeft = "";
-        int meaningRight = 0;
-        int meaningLeft = 0;
         ArrayList listMatchRight = new ArrayList();
         ArrayList listMatchLeft = new ArrayList();
         ArrayList listMeaningRight = new ArrayList();
@@ -204,7 +235,6 @@ public class TranslateController implements Serializable {
         ArrayList<EmgData> loglRightCompare = new ArrayList<EmgData>();
         ArrayList posLeft = new ArrayList();
         ArrayList posRight = new ArrayList();
-        boolean noGuesture = false;
         String meaning = "";
 
         ArrayList StrRightEmg = getAllRightEmg();
@@ -215,58 +245,13 @@ public class TranslateController implements Serializable {
         leftBase = convert(StrLeftEmg);
         System.out.println("Convert done");
 
-        rDetect_distance = THRESHOLD;
-        lDetect_distance = THRESHOLD;
-
-        for (int i = 0; i < rightCompare.size(); i++) {
-            rDetect_distance = THRESHOLD;
-            tmpRight = null;
-            for (int j = 0; j < rightBase.size(); j++) {
-                double rDistance = distanceCalculation(rightCompare.get(i), rightBase.get(j));
-                if (rDistance < rDetect_distance) {
-                    rDetect_distance = rDistance;
-                    tmpRight = rightBase.get(j);
-                }
-                if (!(tmpRight == null)) {
-                    matchRight = reConvert(tmpRight);
-                }
-            }
-            if (matchRight != null) {
-                listMatchRight.add(matchRight);
-            }
-
-            lDetect_distance = THRESHOLD;
-            tmpLeft = null;
-            for (int m = 0; m < leftBase.size(); m++) {
-                double lDistance = distanceCalculation(leftCompare.get(i), leftBase.get(m));
-                //System.out.println("lD " + lDistance);
-                if (lDistance < lDetect_distance) {
-                    lDetect_distance = lDistance;
-                    tmpLeft = leftBase.get(m);
-                }
-                if (!(tmpLeft == null)) {
-                    matchLeft = reConvert(tmpLeft);
-                }
-            }
-            if (matchLeft != null) {
-                listMatchLeft.add(matchLeft);
-            }
-        }
+        listMatchLeft = findMatching(leftBase, leftCompare);
+        listMatchRight = findMatching(rightBase, rightBase);
         System.out.println("Mathching raw ges!!");
         //Find meaningRight
-        for (int x = 0; x < listMatchRight.size(); x++) {
-            String emgCodeR = listMatchRight.get(x).toString();
-            //System.out.println("R:" + emgCodeR);
-            meaningRight = getMeaningRight(emgCodeR);
-            listMeaningRight.add(meaningRight);
-        }
+        listMeaningRight = getMeaningCodeSide(listMatchRight);
+        listMeaningLeft = getMeaningCodeSide(listMatchLeft);
         //Find meaningLeft
-        for (int y = 0; y < listMatchLeft.size(); y++) {
-            String emgCodeL = listMatchLeft.get(y).toString();
-            //System.out.println("L:" + emgCodeL);
-            meaningLeft = getMeaningLeft(emgCodeL);
-            listMeaningLeft.add(meaningLeft);
-        }
         System.out.println("Find meaning each done!!!");
         //Find meaningCode
         for (int a = 0; a < listMeaningRight.size(); a++) {
@@ -292,7 +277,7 @@ public class TranslateController implements Serializable {
 
             }
         }
-        if (true) {
+        if (mode == 0) {
             int cntLeft = 0;
             int cntRight = 0;
             for (int i = 0; i < listMeaningTmpLeft.size() - 1; i++) {
@@ -316,7 +301,28 @@ public class TranslateController implements Serializable {
                 }
             }
         } else {
-
+            int cntLeft = 0;
+            int cntRight = 0;
+            for (int i = 0; i < listMeaningTmpLeft.size() - 1; i++) {
+                if (listMeaningTmpLeft.get(i) == listMeaningTmpLeft.get(i + 1)) {
+                    cntLeft++;
+                    if (cntLeft == 2) {
+                        listTmpLeft.add(listMeaningTmpLeft.get(i));
+                        posLeft.add(i);
+                    }
+                } else {
+                    cntLeft = 0;
+                }
+                if (listMeaningTmpRight.get(i) == listMeaningTmpRight.get(i + 1)) {
+                    cntRight++;
+                    if (cntRight == 2) {
+                        listTmpRight.add(listMeaningTmpRight.get(i));
+                        posRight.add(i);
+                    }
+                } else {
+                    cntRight = 0;
+                }
+            }
         }
         System.out.println("right size " + listTmpRight.size());
         System.out.println("left size " + listTmpLeft.size());
@@ -348,12 +354,18 @@ public class TranslateController implements Serializable {
         if (!listMeaning.isEmpty()) {
             listMeaning.remove(0);
         }
-            System.out.println("I have the meaning!!!!!!!!!!");
-            System.out.println("raw left size: " + leftCompare.size());
-            System.out.println("raw right size: " + rightCompare.size());
-            System.out.println("Find code done!!!");
-            System.out.println(listMeaning);
+        System.out.println("I have the meaning!!!!!!!!!!");
+        System.out.println("raw left size: " + leftCompare.size());
+        System.out.println("raw right size: " + rightCompare.size());
+        System.out.println("Find code done!!!");
+        System.out.println(listMeaning);
 
+        if (!listMeaning.isEmpty()) {
+            return listMeaning;
+        } else {
+            listMeaning.add("No guesture");
             return listMeaning;
         }
+
     }
+}

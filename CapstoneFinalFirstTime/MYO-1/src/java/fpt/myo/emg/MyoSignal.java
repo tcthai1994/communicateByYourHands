@@ -18,10 +18,14 @@ public class MyoSignal {
 
     @SerializedName("rEmgJson")
     private RightMyoArmband rEmgJson;
-
-    public MyoSignal(LeftMyoArmband lEmgJson, RightMyoArmband rEmgJson) {
+    
+    @SerializedName("mode")
+    private int mode;
+    
+    public MyoSignal(LeftMyoArmband lEmgJson, RightMyoArmband rEmgJson, int mode) {
         this.lEmgJson = lEmgJson;
         this.rEmgJson = rEmgJson;
+        this.mode = mode;
     }
 
     public LeftMyoArmband getlEmgJson() {
@@ -39,6 +43,16 @@ public class MyoSignal {
     public void setrEmgJson(RightMyoArmband rEmgJson) {
         this.rEmgJson = rEmgJson;
     }
+
+    public int getMode() {
+        return mode;
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
+    }
+    
+    
     
     
 

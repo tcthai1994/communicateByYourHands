@@ -5,6 +5,7 @@
  */
 package myo.fpt.sample.entity.controller;
 
+import fpt.myo.emg.EmgData;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -236,12 +237,17 @@ public class TrainController implements Serializable {
         boolean isCustom = false;
         boolean isContinue = true;
         int libraryId = 1;
+        EmgData emgTmp = new EmgData();
+        emgTmp.setFixLine(leftData);
+        leftData = emgTmp.toString();
+        emgTmp.setFixLine(rightData);
+        rightData = emgTmp.toString();
         if (!isMeaningExist(meaning)) {
             int leftCode = 0;
             int rightCode = 0;
             System.out.println("Insert lan dau");
             DataContent dT = new DataContent(meaning, libraryId);
-            System.out.println("dataconten Seted:"+dT.getMeaning());
+            System.out.println("dataconten Seted:" + dT.getMeaning());
             setDataContent(dT);
             System.out.println("Datacontent Inserted");
             if (isMeaningExist(leftMeaning)) {
@@ -302,7 +308,7 @@ public class TrainController implements Serializable {
         if (isContinue == true) {
             System.out.println("Done");
             return true;
-        } 
+        }
         return false;
     }
 }

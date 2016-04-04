@@ -8,8 +8,10 @@ package myo.fpt.sample.entity.controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.Query;
 import myo.fpt.sample.entity.DataContent;
 import myo.fpt.sample.entity.LeftSignal;
@@ -37,7 +39,7 @@ public class GetDataForMobileController {
     public List<Integer> getAllMeaningLeft() {
         EntityManager em = getEntityManager();
         try {
-            String jnql = "SELECT a FROM MeaningLeft a";
+            String jnql = "SELECT a.meaningLeft FROM MeaningLeft a";
             Query query = em.createQuery(jnql);
             List lisMeaningLeft = query.getResultList();
             return lisMeaningLeft;
@@ -46,10 +48,44 @@ public class GetDataForMobileController {
         }
     }
 
+    private EntityManagerFactory getEntityManagerFactory() throws NamingException {
+        return Persistence.createEntityManagerFactory("MYO-1PU");
+    }
+
+    public List<WordSignal> getAllWS() throws NamingException {
+        WordSignalJpaController cl = new WordSignalJpaController(getEntityManagerFactory());
+        return cl.findWordSignalEntities();
+    }
+
+    public List<DataContent> getAllDT() throws NamingException {
+        DataContentJpaController cl = new DataContentJpaController(getEntityManagerFactory());
+        return cl.findDataContentEntities();
+    }
+
+    public List<MeaningLeft> getAllML() throws NamingException {
+        MeaningLeftJpaController cl = new MeaningLeftJpaController(getEntityManagerFactory());
+        return cl.findMeaningLeftEntities();
+    }
+
+    public List<MeaningRignt> getAllMR() throws NamingException {
+        MeaningRigntJpaController cl = new MeaningRigntJpaController(getEntityManagerFactory());
+        return cl.findMeaningRigntEntities();
+    }
+
+    public List<RightSignal> getAllRS() throws NamingException {
+        RightSignalJpaController cl = new RightSignalJpaController(getEntityManagerFactory());
+        return cl.findRightSignalEntities();
+    }
+
+    public List<LeftSignal> getAllLS() throws NamingException {
+        LeftSignalJpaController cl = new LeftSignalJpaController(getEntityManagerFactory());
+        return cl.findLeftSignalEntities();
+    }
+    
     public List<Integer> getAllMeaningRight() {
         EntityManager em = getEntityManager();
         try {
-            String jnql = "SELECT a FROM MeaningRignt a";
+            String jnql = "SELECT a.meaningRight FROM MeaningRignt a";
             Query query = em.createQuery(jnql);
             List lisMeaningRight = query.getResultList();
             return lisMeaningRight;
@@ -202,51 +238,61 @@ public class GetDataForMobileController {
         }
     }
 
-    public MeaningLeft getMLData() {
+    public List<MeaningLeft> getMLData() {
+        List<MeaningLeft> MLL = new ArrayList<MeaningLeft>();
         MeaningLeft ML = new MeaningLeft();
         List<Integer> listMeaningLeft = getAllMeaningLeft();
         for (int i = 0; i < listMeaningLeft.size(); i++) {
-            ML.setMeaningLeft(listMeaningLeft.get(i));
+            System.out.println("ada: " + listMeaningLeft.get(i));
+            ML.setMeaningLeft((Integer) listMeaningLeft.get(i));
+            MLL.add(ML);
         }
-        return ML;
+        return MLL;
     }
 
-    public MeaningRignt getMRData() {
+    public List<MeaningRignt> getMRData() {
+        List<MeaningRignt> MRL = new ArrayList<MeaningRignt>();
         MeaningRignt MR = new MeaningRignt();
         List<Integer> listMeaningRight = getAllMeaningRight();
         for (int i = 0; i < listMeaningRight.size(); i++) {
-            MR.setMeaningRight(listMeaningRight.get(i));
+            MR.setMeaningRight((Integer) listMeaningRight.get(i));
+            MRL.add(MR);
         }
-        return MR;
+        return MRL;
     }
 
-    public LeftSignal getLSData() {
+    public List<LeftSignal> getLSData() {
+        List<LeftSignal> LSL = new ArrayList<LeftSignal>();
         LeftSignal LS = new LeftSignal();
         List<String> listLeftEmg = getLeftEmg();
         List<Integer> listMeaningLeft = getMeaningLeft();
 
         for (int i = 0; i < listLeftEmg.size(); i++) {
-            LS.setEmgCode(listLeftEmg.get(i));
-            LS.setMeaningLeft(listMeaningLeft.get(i));
+            LS.setEmgCode((String) listLeftEmg.get(i));
+            LS.setMeaningLeft((Integer) listMeaningLeft.get(i));
             LS.setIsCustom(false);
+            LSL.add(LS);
         }
-        return LS;
+        return LSL;
     }
 
-    public RightSignal getRSData() {
+    public List<RightSignal> getRSData() {
+        List<RightSignal> RSL = new ArrayList<RightSignal>();
         RightSignal RS = new RightSignal();
         List<String> listRighttEmg = getRightEmg();
         List<Integer> listMeaningRight = getMeaningRight();
 
         for (int i = 0; i < listRighttEmg.size(); i++) {
-            RS.setEmgCode(listRighttEmg.get(i));
-            RS.setMeaningRight(listMeaningRight.get(i));
+            RS.setEmgCode((String) listRighttEmg.get(i));
+            RS.setMeaningRight((Integer) listMeaningRight.get(i));
             RS.setIsCustom(false);
+            RSL.add(RS);
         }
-        return RS;
+        return RSL;
     }
 
-    public WordSignal getWSData() {
+    public List<WordSignal> getWSData() {
+        List<WordSignal> WSL = new ArrayList<WordSignal>();
         WordSignal WS = new WordSignal();
         WordSignalPK WSPK = new WordSignalPK();
 
@@ -255,28 +301,31 @@ public class GetDataForMobileController {
         List<Integer> listMeaningCode = getMeaningCodeFromWS();
 
         for (int i = 0; i < listMeaningCode.size(); i++) {
-            WS.setMeaningCode(listMeaningCode.get(i));
-            WSPK.setMeaningLeft(listMeaningLeft.get(i));
-            WSPK.setMeaningRight(listMeaningRight.get(i));
+            WS.setMeaningCode((Integer) listMeaningCode.get(i));
+            WSPK.setMeaningLeft((Integer) listMeaningLeft.get(i));
+            WSPK.setMeaningRight((Integer) listMeaningRight.get(i));
+            WS.setWordSignalPK(WSPK);
+            WSL.add(WS);
         }
-        WS.setWordSignalPK(WSPK);
-        return WS;
+        return WSL;
     }
 
-    public DataContent getDTData(){
-       DataContent DT = new DataContent();
-       
-       List <Integer> listMeaningCode = getMeaningCode();
-       List <String> listMeaning = getMeaning();
-       List <Integer> listLibrariId = getLibraryId();
-       
-       for(int i = 0; i< listMeaningCode.size(); i++){
-           DT.setMeaningCode(listMeaningCode.get(i));
-           DT.setMeaning(listMeaning.get(i));
-           DT.setLibraryId(listLibrariId.get(i));
-       }
-       return DT;
-   }
-    
-    
+    public List<DataContent> getDTData() {
+        List<DataContent> DTL = new ArrayList<DataContent>();
+
+        DataContent DT = new DataContent();
+
+        List<Integer> listMeaningCode = getMeaningCode();
+        List<String> listMeaning = getMeaning();
+        List<Integer> listLibrariId = getLibraryId();
+
+        for (int i = 0; i < listMeaningCode.size(); i++) {
+            DT.setMeaningCode((Integer) listMeaningCode.get(i));
+            DT.setMeaning((String) listMeaning.get(i));
+            DT.setLibraryId((Integer) listLibrariId.get(i));
+            DTL.add(DT);
+        }
+        return DTL;
+    }
+
 }

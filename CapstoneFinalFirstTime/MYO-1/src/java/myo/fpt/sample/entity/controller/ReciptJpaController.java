@@ -38,14 +38,15 @@ public class ReciptJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(recipt);
-            em.getTransaction().commit();
         } catch (Exception ex) {
+            em.getTransaction().rollback();
             if (findRecipt(recipt.getReciptId()) != null) {
                 throw new PreexistingEntityException("Recipt " + recipt + " already exists.", ex);
             }
             throw ex;
         } finally {
             if (em != null) {
+                em.getTransaction().commit();
                 em.close();
             }
         }

@@ -51,7 +51,7 @@ import javax.ws.rs.core.Response;
  * @author Thai
  */
 
-@Path("TranslateAPI")
+@Path("DownloadAPI")
 public class GetDataForMobile {
 
     private WordSignalPK getPrimaryKey(PathSegment pathSegment) {
@@ -89,7 +89,6 @@ public class GetDataForMobile {
 
     public GetDataForMobile() {
     }
-
     /**
      * Retrieves representation of an instance of com.app.api.TestAPI
      *
@@ -98,18 +97,18 @@ public class GetDataForMobile {
     @POST
     @Path("/doDownload")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response doDownload() throws IOException {
+    public Response doDownload() throws IOException, NamingException {
         Gson gson = new Gson();
-        MeaningLeft ML = getJpaController().getMLData();
-        MeaningRignt MR = getJpaController().getMRData();
-        LeftSignal LS = getJpaController().getLSData();
-        RightSignal RS = getJpaController().getRSData();
-        WordSignal WS = getJpaController().getWSData();
-        DataContent DT = getJpaController().getDTData();
+        List<MeaningLeft> ML = getJpaController().getAllML();
+        List<MeaningRignt> MR = getJpaController().getAllMR();
+        List<LeftSignal> LS = getJpaController().getAllLS();
+        List<RightSignal> RS = getJpaController().getAllRS();
+        List<WordSignal> WS = getJpaController().getAllWS();
+        List<DataContent> DT = getJpaController().getAllDT();
 
         Download DW = new Download(ML, MR, LS, RS, WS, DT);
         String result = gson.toJson(DW);
-        FileWriter file = new FileWriter("D:/study/Chuyen nganh 9/JsonDownload/abc.json");
+        FileWriter file = new FileWriter("C:/JsonDownload/abc.json");
         try {
             file.write(result);
         } catch (IOException e) {
@@ -118,7 +117,7 @@ public class GetDataForMobile {
             file.flush();
             file.close();
         }
-        File downFile = new File("D:/study/Chuyen nganh 9/JsonDownload/abc.json");
+        File downFile = new File("C:/JsonDownload/abc.json");
         return Response.ok(downFile, MediaType.APPLICATION_OCTET_STREAM)
                 .header("Content-Disposition", "attachment; filename=\"" + downFile.getName() + "\"") //optional
                 .build();

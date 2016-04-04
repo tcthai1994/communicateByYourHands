@@ -94,11 +94,12 @@ public class TranslateService {
         System.out.println(inputData);
         LeftMyoArmband lMyoArmband = myo.getlEmgJson();
         RightMyoArmband rMyoArmband = myo.getrEmgJson();
+        int mode = myo.getMode();
         ArrayList<EmgData> rightCompare = new ArrayList<EmgData>();
         ArrayList<EmgData> leftCompare = new ArrayList<EmgData>();
         leftCompare = lMyoArmband.getLeft();
         rightCompare = rMyoArmband.getRight();
-        List<String> ListResult = getJpaController().getTranslateResult(leftCompare, rightCompare);
+        List<String> ListResult = getJpaController().getTranslateResult(leftCompare, rightCompare, mode);
         String result = gson.toJson(ListResult);
         return result;
     }

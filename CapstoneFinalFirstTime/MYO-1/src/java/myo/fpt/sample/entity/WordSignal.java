@@ -89,7 +89,7 @@ public class WordSignal implements Serializable {
 
     @Override
     public String toString() {
-        return "myo.fpt.sample.entity.WordSignal[ wordSignalPK=" + wordSignalPK + " ]";
+        return "bien no thanh j son di" + this.meaningCode;
     }
     
 }

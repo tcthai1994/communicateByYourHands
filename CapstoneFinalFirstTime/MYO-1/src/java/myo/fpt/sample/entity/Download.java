@@ -6,6 +6,7 @@
 package myo.fpt.sample.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import myo.fpt.sample.entity.MeaningRignt;
 import myo.fpt.sample.entity.MeaningLeft;
 import myo.fpt.sample.entity.RightSignal;
@@ -19,17 +20,17 @@ import myo.fpt.sample.entity.DataContent;
  */
 public class Download implements Serializable{
     
-    private MeaningLeft ML;
-    private MeaningRignt MR;
-    private LeftSignal LS;
-    private RightSignal RS;
-    private WordSignal WS;
-    private DataContent DT;
+    private List<MeaningLeft> ML;
+    private List<MeaningRignt> MR;
+    private List<LeftSignal> LS;
+    private List<RightSignal> RS;
+    private List<WordSignal> WS;
+    private List<DataContent> DT;
 
     public Download() {
     }
     
-    public Download(MeaningLeft ML, MeaningRignt MR, LeftSignal LS, RightSignal RS, WordSignal WS, DataContent DT){
+    public Download(List<MeaningLeft> ML, List<MeaningRignt> MR, List<LeftSignal> LS, List<RightSignal> RS, List<WordSignal> WS, List<DataContent> DT){
         this.ML = ML;
         this.MR = MR;
         this.LS = LS;

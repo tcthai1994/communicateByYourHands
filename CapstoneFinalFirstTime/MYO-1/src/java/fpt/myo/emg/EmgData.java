@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
  */
 public class EmgData implements Serializable{
     private ArrayList<Double> emgData = new ArrayList<Double>();
-
+    private final static Double STANDARDDISTANCE = 50.0;
     public EmgData() {
     }
 
@@ -42,7 +42,16 @@ public class EmgData implements Serializable{
         }
         emgData = data;
     }
-
+    public void setFixLine(String line){
+        ArrayList<Double> data = new ArrayList<Double>();
+        setLine(line);
+        Double k = getNumberToMultipleWithEmgForStandardDistance(STANDARDDISTANCE);
+        StringTokenizer st = new StringTokenizer(line , ",");
+        for (int i_emg_num = 0; i_emg_num < 8; i_emg_num++) {
+            data.add((Double.parseDouble(st.nextToken()))*k);
+        }
+        emgData = data;
+    }
     
     public void addElement(double element) {
         emgData.add(element);
@@ -70,6 +79,10 @@ public class EmgData implements Serializable{
             distance += Math.pow((emgData.get(i_element) - baseData.getElement(i_element)),2.0);
         }
         return Math.sqrt(distance);
+    }
+    public Double getNumberToMultipleWithEmgForStandardDistance(Double standardDistance){
+        Double result = standardDistance/getNorm();
+        return result;
     }
 
 //    public Double getInnerProductionTo(EmgData baseData) {
