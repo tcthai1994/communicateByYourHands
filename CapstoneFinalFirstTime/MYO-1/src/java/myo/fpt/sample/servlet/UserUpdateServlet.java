@@ -49,7 +49,6 @@ public class UserUpdateServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             String action = request.getParameter("btAction");
             if (action.equals("Update")) {
-                
                 int detailId = Integer.parseInt(request.getParameter("txtDetailId"));
                 String username = request.getParameter("txtUsername");
                 String email = request.getParameter("txtEmail");
@@ -68,16 +67,18 @@ public class UserUpdateServlet extends HttpServlet {
                     } else {
                         password = password_old;
                     }
-
                     int custid = getJpaController().getCustIdByUsername(username);
                     Account acc = new Account(username, password);
                     AccountDetail accDetail = new AccountDetail(email, fullname, phone);
-                    getJpaController().UpdateAccount(custid, acc);
-                    getJpaController().UserUpdateAccountDetail(detailId, accDetail);
-                    RequestDispatcher rd = request.getRequestDispatcher("LoadDictionaryPageServlet");
-                    rd.forward(request, response);
-                }
-                else{
+                    boolean checkUpdateAcc = getJpaController().updateAccount(custid, acc);
+                    if (checkUpdateAcc) {
+                        boolean checkUpdateAccDt = getJpaController().userUpdateAccountDetail(detailId, accDetail);
+                        if (checkUpdateAccDt) {
+                            RequestDispatcher rd = request.getRequestDispatcher("LoadDictionaryPageServlet");
+                            rd.forward(request, response);
+                        }
+                    }
+                } else {
                     System.out.println(listError);
                     out.println("<script type=\"text/javascript\">");
                     out.println("alert('" + listError + "');");
@@ -90,7 +91,7 @@ public class UserUpdateServlet extends HttpServlet {
             out.close();
         }
     }
-    
+
     private EntityManagerFactory getEntityManagerFactory() throws NamingException {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }

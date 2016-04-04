@@ -58,7 +58,7 @@ public class RegisterServlet extends HttpServlet {
             String listError = Validate.validateRegister(email, fullname, username, password, re_password, phone);//validate
             if (listError.equals("")) {
                 int detailId;
-                
+
                 detailId = getJpaController().getDetailId();
                 detailId = detailId + 1;
                 boolean isStaff = false;
@@ -68,13 +68,23 @@ public class RegisterServlet extends HttpServlet {
                 String deviceId = "";
                 Account Acc = new Account(username, password, detailId, deviceId);
                 AccountDetail AccDetail = new AccountDetail(detailId, email, fullname, phone, isStaff, licenseType, expiredDate, status);
-                getJpaController().RegistertoAccount(Acc);
-                getJpaController().RegistertoAccountDetail(AccDetail);
-                out.println("<script type=\"text/javascript\">");
-                out.println("alert('Register successful!');");
-                out.println("location='index.jsp';");
-                out.println("</script>");
-                response.sendRedirect(loginPage);
+                boolean checkReg = getJpaController().RegistertoAccount(Acc);
+                if (checkReg) {
+                    boolean checkRegDt = getJpaController().RegistertoAccountDetail(AccDetail);
+                    if (checkRegDt) {
+
+                        response.sendRedirect(loginPage);
+                        out.println("<script type=\"text/javascript\">");
+                        out.println("alert('Register successful!');");
+                        out.println("location='index.jsp';");
+                        out.println("</script>");
+                    }
+                } else {
+                    out.println("<script type=\"text/javascript\">");
+                    out.println("alert('Register unsuccessful!');");
+                    out.println("location='index.jsp';");
+                    out.println("</script>");
+                }
             } else {
                 System.out.println(listError);
                 out.println("<script type=\"text/javascript\">");
@@ -86,7 +96,7 @@ public class RegisterServlet extends HttpServlet {
             out.close();
         }
     }
-    
+
     private EntityManagerFactory getEntityManagerFactory() throws NamingException {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }

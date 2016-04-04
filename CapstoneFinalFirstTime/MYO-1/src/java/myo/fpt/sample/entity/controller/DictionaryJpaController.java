@@ -44,18 +44,22 @@ public class DictionaryJpaController implements Serializable {
         }
     }
 
-    public void addNewDictionary(Dictionary dic) {
+    public boolean addNewDictionary(Dictionary dic) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(dic);
             em.getTransaction().commit();
-        } finally {
+        }
+        catch(Exception ex){
+            return false;
+        }finally {
             em.close();
         }
+        return true;
     }
 
-    public void updateDictionary(int dictionaryId, Dictionary dicUpdate) {
+    public boolean updateDictionary(int dictionaryId, Dictionary dicUpdate) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
@@ -66,9 +70,13 @@ public class DictionaryJpaController implements Serializable {
             dictionary.setStatus(dicUpdate.getStatus());
             em.merge(dictionary);
             em.getTransaction().commit();
-        } finally {
+        }
+        catch(Exception ex){
+            return false;
+        }finally {
             em.close();
         }
+        return true;
     }
 
     public boolean deleteDictionary(int dictionaryId) {

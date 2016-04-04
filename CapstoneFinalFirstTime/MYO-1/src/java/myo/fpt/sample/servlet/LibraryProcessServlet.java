@@ -54,10 +54,11 @@ public class LibraryProcessServlet extends HttpServlet {
                 String listError = Validate.validateLibrary(libraryName);
                 if (listError.equals("")) {
                     Library lib = new Library(libraryName, status);
-                    getJpaController().addNewLibrary(lib);
-                    RequestDispatcher rd = request.getRequestDispatcher(LibraryServlet);
-                    rd.forward(request, response);
-
+                    boolean checkAddLibrary = getJpaController().addNewLibrary(lib);
+                    if (checkAddLibrary) {
+                        RequestDispatcher rd = request.getRequestDispatcher(LibraryServlet);
+                        rd.forward(request, response);
+                    }
                 } else {
                     System.out.println(listError);
                     out.println("<script type=\"text/javascript\">");
@@ -75,10 +76,11 @@ public class LibraryProcessServlet extends HttpServlet {
                 String listError = Validate.validateUpdateLibrary(libraryName);
                 if (listError.equals("")) {
                     Library lib = new Library(libraryName, status);
-                    getJpaController().updateLibrary(libraryId, lib);
-                    RequestDispatcher rd = request.getRequestDispatcher(LibraryServlet);
-                    rd.forward(request, response);
-
+                    boolean checkUpdateLibrary = getJpaController().updateLibrary(libraryId, lib);
+                    if (checkUpdateLibrary) {
+                        RequestDispatcher rd = request.getRequestDispatcher(LibraryServlet);
+                        rd.forward(request, response);
+                    }
                 } else {
                     System.out.println(listError);
                     out.println("<script type=\"text/javascript\">");

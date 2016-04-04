@@ -54,12 +54,12 @@ public class LicenseProcessServlet extends HttpServlet {
                 boolean status = ("ON".equals(active2));
                 String listError = Validate.validateLicense(licenseName, value, description);
                 if (listError.equals("")) {
-                    
-                        License license = new License(licenseName, price, description, status);
-                        getJpaController().addNewLicense(license);
-                        RequestDispatcher rd = request.getRequestDispatcher(LicenseServlet);
-                        rd.forward(request, response);
-                    
+
+                    License license = new License(licenseName, price, description, status);
+                    getJpaController().addNewLicense(license);
+                    RequestDispatcher rd = request.getRequestDispatcher(LicenseServlet);
+                    rd.forward(request, response);
+
                 } else {
                     System.out.println(listError);
                     out.println("<script type=\"text/javascript\">");
@@ -79,12 +79,13 @@ public class LicenseProcessServlet extends HttpServlet {
                 boolean status = ("ON".equals(active2));
                 String listError = Validate.validateUpdateLicense(licenseName, value, description);
                 if (listError.equals("")) {
-                    
-                        License license = new License(licenseName, price, description, status);
-                        getJpaController().updateLicense(licenseId, license);
+
+                    License license = new License(licenseName, price, description, status);
+                    boolean checkUpdateLicense = getJpaController().updateLicense(licenseId, license);
+                    if (checkUpdateLicense) {
                         RequestDispatcher rd = request.getRequestDispatcher(LicenseServlet);
                         rd.forward(request, response);
-                    
+                    }
                 } else {
                     System.out.println(listError);
                     out.println("<script type=\"text/javascript\">");
@@ -102,7 +103,7 @@ public class LicenseProcessServlet extends HttpServlet {
             out.close();
         }
     }
-    
+
     private EntityManagerFactory getEntityManagerFactory() throws NamingException {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }

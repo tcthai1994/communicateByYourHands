@@ -96,9 +96,11 @@ public class UpdateUserAccountServlet extends HttpServlet {
                             dateNew = new Date(real);
                         }
                         AccountDetail AccDetail = new AccountDetail(detailId, email, fullname, phone, isStaff, licenseTypeNew, dateNew, status);
-                        getJpaController().UpdateAccountDetail(detailId, AccDetail);
-                        RequestDispatcher rd = request.getRequestDispatcher(AccountServlet);
-                        rd.forward(request, response);
+                        boolean checkUpdateAccDt = getJpaController().UpdateAccountDetail(detailId, AccDetail);
+                        if(checkUpdateAccDt){
+                            RequestDispatcher rd = request.getRequestDispatcher(AccountServlet);
+                            rd.forward(request, response);
+                        }
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }

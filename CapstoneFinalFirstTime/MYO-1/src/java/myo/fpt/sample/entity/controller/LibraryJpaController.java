@@ -44,19 +44,21 @@ public class LibraryJpaController implements Serializable {
         }
     }
 
-    public void addNewLibrary(Library lib) {
-
+    public boolean addNewLibrary(Library lib) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(lib);
             em.getTransaction().commit();
+        } catch (Exception ex) {
+            return false;
         } finally {
             em.close();
         }
+        return true;
     }
 
-    public void updateLibrary(int libraryId, Library libUpdate) {
+    public boolean updateLibrary(int libraryId, Library libUpdate) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
@@ -65,9 +67,12 @@ public class LibraryJpaController implements Serializable {
             lib.setStatus(libUpdate.getStatus());
             em.merge(lib);
             em.getTransaction().commit();
+        } catch (Exception ex) {
+            return false;
         } finally {
             em.close();
         }
+        return true;
     }
 
     public boolean DeleteLibrary(int libraryId) {

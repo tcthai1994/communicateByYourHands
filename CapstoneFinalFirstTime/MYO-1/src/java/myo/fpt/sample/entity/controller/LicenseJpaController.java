@@ -55,7 +55,7 @@ public class LicenseJpaController implements Serializable {
         }
     }
 
-    public void updateLicense(int licenseId, License licUpdate) {
+    public boolean updateLicense(int licenseId, License licUpdate) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
@@ -66,9 +66,13 @@ public class LicenseJpaController implements Serializable {
             lic.setStatus(licUpdate.getStatus());
             em.merge(lic);
             em.getTransaction().commit();
-        } finally {
+        }
+        catch(Exception ex){
+            return false;
+        }finally {
             em.close();
         }
+        return true;
     }
 
     public boolean DeleteLicense(int licenseId) {

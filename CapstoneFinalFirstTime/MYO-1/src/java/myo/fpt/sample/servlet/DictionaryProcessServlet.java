@@ -57,10 +57,11 @@ public class DictionaryProcessServlet extends HttpServlet {
                 if (listError.equals("")) {
 
                     Dictionary dictionary = new Dictionary(keyword, description, videoURL, status);
-                    getJpaController().addNewDictionary(dictionary);
-                    RequestDispatcher rd = request.getRequestDispatcher(DictionaryServlet);
-                    rd.forward(request, response);
-
+                    boolean checkAddDictionary = getJpaController().addNewDictionary(dictionary);
+                    if (checkAddDictionary) {
+                        RequestDispatcher rd = request.getRequestDispatcher(DictionaryServlet);
+                        rd.forward(request, response);
+                    }
                 } else {
                     System.out.println(listError);
                     out.println("<script type=\"text/javascript\">");
@@ -80,9 +81,11 @@ public class DictionaryProcessServlet extends HttpServlet {
                 String listError = Validate.validateUpdateDictionary(keyword, description, videoURL);
                 if (listError.equals("")) {
                     Dictionary dictionary = new Dictionary(keyword, description, videoURL, status);
-                    getJpaController().updateDictionary(dictionaryId, dictionary);
-                    RequestDispatcher rd = request.getRequestDispatcher(DictionaryServlet);
-                    rd.forward(request, response);
+                    boolean checkUpdateDictionary = getJpaController().updateDictionary(dictionaryId, dictionary);
+                    if (checkUpdateDictionary) {
+                        RequestDispatcher rd = request.getRequestDispatcher(DictionaryServlet);
+                        rd.forward(request, response);
+                    }
                 } else {
                     System.out.println(listError);
                     out.println("<script type=\"text/javascript\">");

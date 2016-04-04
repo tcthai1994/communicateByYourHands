@@ -61,32 +61,41 @@ public class AccountDetailJpaController implements Serializable {
         }
     }
 
-    public void RegistertoAccount(Account Acc) {
+    public boolean RegistertoAccount(Account Acc) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(Acc);
             em.getTransaction().commit();
-        } finally {
+        }
+        catch(Exception ex){
+            return false;
+        }
+        finally {
             if (em != null) {
                 em.close();
             }
         }
+        return true;
     }
 
-    public void RegistertoAccountDetail(AccountDetail AccDetail) {
+    public boolean RegistertoAccountDetail(AccountDetail AccDetail) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(AccDetail);
             em.getTransaction().commit();
-        } finally {
+        }
+        catch(Exception ex){
+            return false;
+        }finally {
             if (em != null) {
                 em.close();
             }
         }
+        return true;
     }
 
     public int getDetailId() {
@@ -117,7 +126,7 @@ public class AccountDetailJpaController implements Serializable {
         }
     }
 
-    public void UpdateAccount(int custId, Account AccUpdate) {
+    public boolean updateAccount(int custId, Account AccUpdate) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
@@ -126,12 +135,16 @@ public class AccountDetailJpaController implements Serializable {
             Acc.setPassword(AccUpdate.getPassword());
             em.merge(Acc);
             em.getTransaction().commit();
-        } finally {
+        }
+        catch(Exception ex){
+            return false;
+        }finally {
             em.close();
         }
+        return true;
     }
 
-    public void UpdateAccountDetail(int detailid, AccountDetail AccDetailUpdate) {
+    public boolean UpdateAccountDetail(int detailid, AccountDetail AccDetailUpdate) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
@@ -145,9 +158,14 @@ public class AccountDetailJpaController implements Serializable {
             AccDetail.setStatus(AccDetailUpdate.getStatus());
             em.merge(AccDetail);
             em.getTransaction().commit();
-        } finally {
+        }
+        catch(Exception ex){
+            return false;
+        }
+        finally {
             em.close();
         }
+        return true;
     }
 
     public Account findByUsername(String username) {
@@ -232,7 +250,7 @@ public class AccountDetailJpaController implements Serializable {
         }
     }
 
-    public void UserUpdateAccountDetail(int detailid, AccountDetail AccDetailUpdate) {
+    public boolean userUpdateAccountDetail(int detailid, AccountDetail AccDetailUpdate) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
@@ -242,9 +260,13 @@ public class AccountDetailJpaController implements Serializable {
             AccDetail.setPhone(AccDetailUpdate.getPhone());
             em.merge(AccDetail);
             em.getTransaction().commit();
-        } finally {
+        }
+        catch(Exception ex){
+            return false;
+        }finally {
             em.close();
         }
+        return true;
     }
 
     public void persist(Object object) {

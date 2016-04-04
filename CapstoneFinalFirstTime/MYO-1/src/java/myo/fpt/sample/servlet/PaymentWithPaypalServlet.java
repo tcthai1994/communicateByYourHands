@@ -32,8 +32,9 @@ import myo.fpt.sample.entity.controller.PaymentJpaController;
  * @author AnhND
  */
 public class PaymentWithPaypalServlet extends HttpServlet {
-    
+
     static final long ONE_DATE = 86400000;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -49,49 +50,54 @@ public class PaymentWithPaypalServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             String username = "";
-            
+
             HttpSession session = request.getSession();
             username = session.getAttribute("USER").toString();
-            
+
             int custId = getAccountDetailJpaController().getCustIdByUsername(username);
-            
+
             int licenseId = 5;
             double premiumPrice = getPaymentJpaController().getPrice();
-            double price = premiumPrice + (premiumPrice * 10 /100);
+            double price = premiumPrice + (premiumPrice * 10 / 100);
             Date now = new Date();
             Recipt recipt = new Recipt(licenseId, now, custId, price);
-            getPaymentJpaController().addRecipt(recipt);
-            int detailId = getPaymentJpaController().findDetailIdByCustId(custId);
-            String licenseType = getPaymentJpaController().getLicenseName();
-            Date expiredDateOld = getPaymentJpaController().findExpiredDateByDetailId(detailId);
-            System.out.println("Expiration Date lay tu database " + expiredDateOld);
-            if (expiredDateOld == null) {
-                Calendar calendarNow = Calendar.getInstance();
-                calendarNow.setTime(now);
-                long millisecondNow = calendarNow.getTimeInMillis();
-                long real = millisecondNow + (ONE_DATE * 30);
-                Date expiredDate = new Date(real);
-                AccountDetail updated = new AccountDetail(licenseType, expiredDate);
-                getPaymentJpaController().updateAfterPayment(detailId, updated);
-            } else {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(expiredDateOld);
-                long millisecond = calendar.getTimeInMillis();
-                long real = millisecond + (ONE_DATE * 30);
-                Date expiredDate = new Date(real);
-                AccountDetail updated = new AccountDetail(licenseType, expiredDate);
-                getPaymentJpaController().updateAfterPayment(detailId, updated);
+            boolean checkRecipt = getPaymentJpaController().addRecipt(recipt);
+            if (checkRecipt) {
+                int detailId = getPaymentJpaController().findDetailIdByCustId(custId);
+                String licenseType = getPaymentJpaController().getLicenseName();
+                Date expiredDateOld = getPaymentJpaController().findExpiredDateByDetailId(detailId);
+                System.out.println("Expiration Date lay tu database " + expiredDateOld);
+                boolean checkUpdate = true;
+                if (expiredDateOld == null) {
+                    Calendar calendarNow = Calendar.getInstance();
+                    calendarNow.setTime(now);
+                    long millisecondNow = calendarNow.getTimeInMillis();
+                    long real = millisecondNow + (ONE_DATE * 30);
+                    Date expiredDate = new Date(real);
+                    AccountDetail updated = new AccountDetail(licenseType, expiredDate);
+                    checkUpdate = getPaymentJpaController().updateAfterPayment(detailId, updated);
+                } else {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(expiredDateOld);
+                    long millisecond = calendar.getTimeInMillis();
+                    long real = millisecond + (ONE_DATE * 30);
+                    Date expiredDate = new Date(real);
+                    AccountDetail updated = new AccountDetail(licenseType, expiredDate);
+                    checkUpdate = getPaymentJpaController().updateAfterPayment(detailId, updated);
+                }
+                if(checkUpdate){
+                    response.sendRedirect("payment-complete.jsp");
+                }
             }
-            response.sendRedirect("payment-complete.jsp");
         } finally {
             out.close();
         }
     }
-    
+
     private EntityManagerFactory getEntityManagerFactory() throws NamingException {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
-    
+
     private AccountDetailJpaController getAccountDetailJpaController() {
         try {
             return new AccountDetailJpaController(getEntityManagerFactory());
@@ -99,7 +105,7 @@ public class PaymentWithPaypalServlet extends HttpServlet {
             throw new RuntimeException(ex);
         }
     }
-    
+
     private PaymentJpaController getPaymentJpaController() {
         try {
             return new PaymentJpaController(getEntityManagerFactory());

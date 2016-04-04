@@ -37,13 +37,19 @@ public class PaymentJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void addRecipt(Recipt recipt) {
+    public boolean addRecipt(Recipt recipt) {
         EntityManager em = getEntityManager();
         try {
+            em.getTransaction().begin();
             em.persist(recipt);
-        } finally {
+            em.getTransaction().commit();
+        }
+        catch(Exception ex){
+            return false;
+        }finally {
             em.close();
         }
+        return true;
     }
 
     public String getLicenseName() {
@@ -72,7 +78,7 @@ public class PaymentJpaController implements Serializable {
         }
     }
 
-    public void updateAfterPayment(int detailId, AccountDetail accDetailUpdate) {
+    public boolean updateAfterPayment(int detailId, AccountDetail accDetailUpdate) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
@@ -81,9 +87,13 @@ public class PaymentJpaController implements Serializable {
             accDetail.setExpiredDate(accDetailUpdate.getExpiredDate());
             em.merge(accDetail);
             em.getTransaction().commit();
-        } finally {
+        }
+        catch(Exception ex){
+            return false;
+        }finally {
             em.close();
         }
+        return true;
     }
 
     public int findDetailIdByCustId(int custId) {
