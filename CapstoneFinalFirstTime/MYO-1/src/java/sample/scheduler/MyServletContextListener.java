@@ -6,6 +6,7 @@
 package sample.scheduler;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,43 +37,39 @@ public class MyServletContextListener implements ServletContextListener {
             StdSchedulerFactory factory = new StdSchedulerFactory();
             //  factory.initialize(sce.getServletContext().getResourceAsStream("/WEB-INF/quartz.properties"));
             Scheduler scheduler = factory.getScheduler();
-
-            
-//                String schedulerTime = "";
-//                InputStream in = getClass().getClassLoader().getResourceAsStream("//TimeConfig.txt");
-//                BufferedReader br = new BufferedReader(new InputStreamReader(in));
-//                if ((schedulerTime = br.readLine()) == null) {
-//                    schedulerTime = "0 0 0 * * ?";
-//                }
-//                br.close();
-//                System.out.println(schedulerTime);
-                // create job
-                JobDetail job = JobBuilder.newJob(MyJob.class)
-                        .withIdentity("JobName", "group1").build();
+            String schedulerTime = "";
+            InputStream in = getClass().getClassLoader().getResourceAsStream("..//TimeConfig.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            if ((schedulerTime = br.readLine()) == null) {
+                schedulerTime = "0 0 0 * * ?";
+            }
+            System.out.println(schedulerTime);
+            // create job
+            JobDetail job = JobBuilder.newJob(MyJob.class)
+                    .withIdentity("JobName", "group1").build();
 
 //                Context context = new InitialContext();
 //                Object obj = context.lookup("NotiJNDI");
 //                JobDataMap map = new JobDataMap();
 //                map.put("abc", obj);
+            java.util.Calendar startTime = java.util.Calendar.getInstance();
+            startTime.set(java.util.Calendar.HOUR_OF_DAY, 14);
+            startTime.set(java.util.Calendar.MINUTE, 45);
+            startTime.set(java.util.Calendar.SECOND, 0);
+            startTime.set(java.util.Calendar.MILLISECOND, 0);
+            if (startTime.getTime().before(new Date())) {
+                startTime.add(java.util.Calendar.DAY_OF_MONTH, 1);
+                //if the startTime will be before the current time, move to next day
+            }
 
-                java.util.Calendar startTime = java.util.Calendar.getInstance();
-                startTime.set(java.util.Calendar.HOUR_OF_DAY, 14);
-                startTime.set(java.util.Calendar.MINUTE, 45);
-                startTime.set(java.util.Calendar.SECOND, 0);
-                startTime.set(java.util.Calendar.MILLISECOND, 0);
-                if (startTime.getTime().before(new Date())) {
-                    startTime.add(java.util.Calendar.DAY_OF_MONTH, 1);
-                    //if the startTime will be before the current time, move to next day
-                }
-
-                // create trigger
-                Trigger trigger = TriggerBuilder
-                        .newTrigger()
-                        .withIdentity("JobName", "group1")
-                        .withSchedule(
-                                CronScheduleBuilder.cronSchedule("0 0 0 * * ?"))
-                        .startAt(startTime.getTime())
-                        .build();
+            // create trigger
+            Trigger trigger = TriggerBuilder
+                    .newTrigger()
+                    .withIdentity("JobName", "group1")
+                    .withSchedule(
+                            CronScheduleBuilder.cronSchedule(schedulerTime))
+                    .startAt(startTime.getTime())
+                    .build();
 
 //            Trigger trigger = TriggerBuilder
 //                    .newTrigger()
@@ -92,21 +89,21 @@ public class MyServletContextListener implements ServletContextListener {
 //            trigger.setStartTime(startTime.getTime());
 //// 24 hours * 60(minutes per hour) * 60(seconds per minute) * 1000(milliseconds per second)
 //            trigger.setRepeatInterval(24L * 60L * 60L * 1000L);
-                JobDetail job2 = JobBuilder.newJob(SendNotiToMobile.class).withIdentity("JobName2", "group2").build();
-                Trigger trigger2 = TriggerBuilder
-                        .newTrigger()
-                        .withIdentity("JobName2", "group2")
-                        .withSchedule(
-                                CronScheduleBuilder.cronSchedule("1 0 0 * * ?"))
-                        .startAt(startTime.getTime())
-                        .build();
+            JobDetail job2 = JobBuilder.newJob(SendNotiToMobile.class).withIdentity("JobName2", "group2").build();
+            Trigger trigger2 = TriggerBuilder
+                    .newTrigger()
+                    .withIdentity("JobName2", "group2")
+                    .withSchedule(
+                            CronScheduleBuilder.cronSchedule(schedulerTime))
+                    .startAt(startTime.getTime())
+                    .build();
 
-                // Tell quartz to schedule the job using our trigger
-                scheduler.scheduleJob(job, trigger);
-                scheduler.scheduleJob(job2, trigger2);
-                // and start it off
-                scheduler.start();
-            
+            // Tell quartz to schedule the job using our trigger
+            scheduler.scheduleJob(job, trigger);
+            scheduler.scheduleJob(job2, trigger2);
+            // and start it off
+            scheduler.start();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

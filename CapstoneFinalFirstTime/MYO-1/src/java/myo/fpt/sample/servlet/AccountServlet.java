@@ -7,6 +7,7 @@ package myo.fpt.sample.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,14 +51,14 @@ public class AccountServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, NamingException {
+            throws ServletException, IOException, NamingException, ParseException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
             
             List<Account> result = getJpaController().getAllAccount();
             AccountDetail accdt = null;
-            AccountManage am = null;
+            AccountManage accTmp = null;
             List<AccountManage> resultmalayboratrangjspne = new ArrayList<AccountManage>();
             for (int i = 0; i < result.size(); i++) {
                 accdt = getJpaController().getACdetailByDetailId(result.get(i).getDetailId());
@@ -67,8 +68,9 @@ public class AccountServlet extends HttpServlet {
                     SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                     exDate = ft.format(date);
                 }
-                am = new AccountManage(result.get(i).getUsername(), accdt.getDetailId(), accdt.getEmail(), accdt.getFullname(), accdt.getPhone(), accdt.getIsStaff(), accdt.getLicenseType(), exDate, accdt.getStatus());
-                resultmalayboratrangjspne.add(am);
+                
+                accTmp = new AccountManage(result.get(i).getUsername(), accdt.getDetailId(), accdt.getEmail(), accdt.getFullname(), accdt.getPhone(), accdt.getIsStaff(), accdt.getLicenseType(), exDate, accdt.getStatus());
+                resultmalayboratrangjspne.add(accTmp);
             }
             if (result != null ) {
                 request.setAttribute("INFO", resultmalayboratrangjspne);
@@ -108,6 +110,8 @@ public class AccountServlet extends HttpServlet {
             processRequest(request, response);
         } catch (NamingException ex) {
             Logger.getLogger(AccountServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(AccountServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -125,6 +129,8 @@ public class AccountServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
+            Logger.getLogger(AccountServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
             Logger.getLogger(AccountServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

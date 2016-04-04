@@ -10,11 +10,13 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import myo.fpt.sample.entity.AccountDetail;
 
 /**
  *
@@ -32,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Account.findByDeviceId", query = "SELECT a FROM Account a WHERE a.deviceId = :deviceId")})
 public class Account implements Serializable {
     private static final long serialVersionUID = 1L;
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Basic(optional = false)
     @Column(name = "custId")
@@ -48,6 +50,8 @@ public class Account implements Serializable {
     private int detailId;
     @Column(name = "deviceId")
     private String deviceId;
+    
+    
 
     public Account() {
     }
@@ -84,6 +88,17 @@ public class Account implements Serializable {
     public Account(String deviceId){
         this.deviceId = deviceId;
     }
+    
+//    public Account(String username, AccountDetail accountDetail){
+//        this.username = username;
+//        this.accountDetail = accountDetail;
+//    }
+//    
+//    public Account(String username, String password, AccountDetail accountDetail){
+//        this.username = username;
+//        this.password = password;
+//        this.accountDetail = accountDetail;
+//    }
 
     public Integer getCustId() {
         return custId;

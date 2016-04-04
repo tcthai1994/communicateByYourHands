@@ -48,7 +48,6 @@ public class LicenseServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             String sess = session.getAttribute("USER").toString();
-            
             List<License> result = getJpaController().getAllLicense();
             if (result != null && sess != null && sess != "") {
                 request.setAttribute("LICINFO", result);

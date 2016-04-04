@@ -76,7 +76,9 @@ public class LicenseJpaController implements Serializable {
         try {
             License license = em.find(License.class, licenseId);
             if (license != null) {
+                em.getTransaction().begin();
                 em.remove(license);
+                em.getTransaction().commit();
                 return true;
             }
             return false;

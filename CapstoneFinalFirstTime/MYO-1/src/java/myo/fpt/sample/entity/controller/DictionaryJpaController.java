@@ -76,7 +76,9 @@ public class DictionaryJpaController implements Serializable {
         try {
             Dictionary dictionary = em.find(Dictionary.class, dictionaryId);
             if (dictionary != null) {
+                em.getTransaction().begin();
                 em.remove(dictionary);
+                em.getTransaction().commit();
                 return true;
             }
             return false;

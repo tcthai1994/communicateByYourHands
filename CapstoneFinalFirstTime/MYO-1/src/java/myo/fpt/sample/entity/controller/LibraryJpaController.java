@@ -75,7 +75,9 @@ public class LibraryJpaController implements Serializable {
         try {
             Library lib = em.find(Library.class, libraryId);
             if (lib != null) {
+                em.getTransaction().begin();
                 em.remove(lib);
+                em.getTransaction().commit();
                 return true;
             }
             return false;

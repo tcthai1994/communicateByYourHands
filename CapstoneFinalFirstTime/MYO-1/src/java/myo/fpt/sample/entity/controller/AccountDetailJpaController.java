@@ -269,8 +269,8 @@ public class AccountDetailJpaController implements Serializable {
                 SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 exDate = ft.format(date);
             }
-            AccountManage AccMng = new AccountManage(username, acc.getPassword(), acc.getDetailId(), accDt.getEmail(), accDt.getFullname(), accDt.getPhone(), accDt.getLicenseType(), exDate);
-            return AccMng;
+            AccountManage accTmp = new AccountManage(username, acc.getPassword(), accDt.getDetailId(), accDt.getEmail(), accDt.getFullname(), accDt.getPhone(), accDt.getLicenseType(), exDate);
+            return accTmp;
         } finally {
             em.close();
         }
