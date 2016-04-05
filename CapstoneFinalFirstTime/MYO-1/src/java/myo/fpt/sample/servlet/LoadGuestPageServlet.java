@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import myo.fpt.sample.entity.Dictionary;
-import myo.fpt.sample.entity.controller.SearchJpaController;
+import myo.fpt.sample.entity.controller.user.SearchJpaController;
 
 /**
  *

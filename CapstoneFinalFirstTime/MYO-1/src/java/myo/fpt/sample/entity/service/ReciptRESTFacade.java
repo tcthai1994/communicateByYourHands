@@ -8,7 +8,7 @@ package myo.fpt.sample.entity.service;
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.naming.InitialContext;
-import myo.fpt.sample.entity.controller.ReciptJpaController;
+import myo.fpt.sample.entity.controller.payment.ReciptJpaController;
 import myo.fpt.sample.entity.Recipt;
 import java.net.URI;
 import java.util.List;

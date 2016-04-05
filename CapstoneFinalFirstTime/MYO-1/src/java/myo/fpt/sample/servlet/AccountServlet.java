@@ -29,7 +29,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import myo.fpt.sample.entity.Account;
 import myo.fpt.sample.entity.AccountDetail;
-import myo.fpt.sample.entity.controller.AccountDetailJpaController;
+import myo.fpt.sample.entity.controller.staff.AccountDetailJpaController;
 import myo.fpt.sample.entity.controller.AccountJpaController;
 
 /**

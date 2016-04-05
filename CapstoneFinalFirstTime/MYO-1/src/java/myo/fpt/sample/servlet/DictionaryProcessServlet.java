@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import myo.fpt.sample.entity.Dictionary;
-import myo.fpt.sample.entity.controller.DictionaryJpaController;
+import myo.fpt.sample.entity.controller.staff.DictionaryJpaController;
 import sample.check.Validate;
 
 /**
@@ -59,8 +59,7 @@ public class DictionaryProcessServlet extends HttpServlet {
                     Dictionary dictionary = new Dictionary(keyword, description, videoURL, status);
                     boolean checkAddDictionary = getJpaController().addNewDictionary(dictionary);
                     if (checkAddDictionary) {
-                        RequestDispatcher rd = request.getRequestDispatcher(DictionaryServlet);
-                        rd.forward(request, response);
+                        response.sendRedirect(DictionaryServlet);
                     }
                 } else {
                     System.out.println(listError);
@@ -83,8 +82,7 @@ public class DictionaryProcessServlet extends HttpServlet {
                     Dictionary dictionary = new Dictionary(keyword, description, videoURL, status);
                     boolean checkUpdateDictionary = getJpaController().updateDictionary(dictionaryId, dictionary);
                     if (checkUpdateDictionary) {
-                        RequestDispatcher rd = request.getRequestDispatcher(DictionaryServlet);
-                        rd.forward(request, response);
+                        response.sendRedirect(DictionaryServlet);
                     }
                 } else {
                     System.out.println(listError);

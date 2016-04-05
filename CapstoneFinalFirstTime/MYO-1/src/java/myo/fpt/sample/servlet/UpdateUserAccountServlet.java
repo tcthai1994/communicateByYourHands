@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import myo.fpt.sample.entity.AccountDetail;
-import myo.fpt.sample.entity.controller.AccountDetailJpaController;
+import myo.fpt.sample.entity.controller.staff.AccountDetailJpaController;
 import static myo.fpt.sample.servlet.PaymentWithPaypalServlet.ONE_DATE;
 import sample.check.Validate;
 
@@ -98,8 +98,7 @@ public class UpdateUserAccountServlet extends HttpServlet {
                         AccountDetail AccDetail = new AccountDetail(detailId, email, fullname, phone, isStaff, licenseTypeNew, dateNew, status);
                         boolean checkUpdateAccDt = getJpaController().UpdateAccountDetail(detailId, AccDetail);
                         if(checkUpdateAccDt){
-                            RequestDispatcher rd = request.getRequestDispatcher(AccountServlet);
-                            rd.forward(request, response);
+                            response.sendRedirect(AccountServlet);
                         }
                     } catch (ParseException e) {
                         e.printStackTrace();

@@ -309,7 +309,7 @@
                                     <div class="row">
                                         <div class="col-xs-12">
                                             <!-- PAGE CONTENT BEGINS -->
-                                            <form action="DictionaryProcessServlet" onsubmit="return validateUpdateDictionary()" method="POST" name="myForm" class="form-horizontal">
+                                            <form action="CenterServlet" onsubmit="return validateUpdateDictionary()" method="POST" name="myForm" class="form-horizontal">
                                                 <c:set var="status" value='<%= request.getParameter("chbStatus")%>'></c:set>
                                                     <div class="form-group">
                                                         <label class="col-sm-3 control-label no-padding-right" for="form-input-readonly"> Instruction ID </label>

@@ -297,7 +297,7 @@
                                     <div class="row">
                                         <div class="col-xs-12">
                                             <!-- PAGE CONTENT BEGINS -->
-                                            <form action="LibraryProcessServlet" onsubmit="return validateUpdateLibrary();" method="POST" name="myForm" class="form-horizontal">
+                                            <form action="CenterServlet" onsubmit="return validateUpdateLibrary();" method="POST" name="myForm" class="form-horizontal">
                                                 
                                                 <c:set var="status" value='<%= request.getParameter("chbStatus")%>'></c:set>
                                                     <div class="form-group">

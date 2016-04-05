@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package myo.fpt.sample.entity.controller;
+package myo.fpt.sample.entity.controller.staff;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,7 +13,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import myo.fpt.sample.entity.Library;
+import myo.fpt.sample.entity.Dictionary;
 import myo.fpt.sample.entity.controller.exceptions.NonexistentEntityException;
 import myo.fpt.sample.entity.controller.exceptions.PreexistingEntityException;
 
@@ -21,9 +21,9 @@ import myo.fpt.sample.entity.controller.exceptions.PreexistingEntityException;
  *
  * @author nguyen
  */
-public class LibraryJpaController implements Serializable {
+public class DictionaryJpaController implements Serializable {
 
-    public LibraryJpaController(EntityManagerFactory emf) {
+    public DictionaryJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -32,56 +32,60 @@ public class LibraryJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public List<Library> getAllLibrary() {
+    public List<Dictionary> getAllDictionary() {
         EntityManager em = getEntityManager();
         try {
-            String jnql = "SELECT a FROM Library a";
+            String jnql = "SELECT d FROM Dictionary d";
             Query query = em.createQuery(jnql);
-            List<Library> listLib = query.getResultList();
-            return listLib;
+            List<Dictionary> listDic = query.getResultList();
+            return listDic;
         } finally {
             em.close();
         }
     }
 
-    public boolean addNewLibrary(Library lib) {
+    public boolean addNewDictionary(Dictionary dic) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(lib);
+            em.persist(dic);
             em.getTransaction().commit();
-        } catch (Exception ex) {
+        }
+        catch(Exception ex){
             return false;
-        } finally {
+        }finally {
             em.close();
         }
         return true;
     }
 
-    public boolean updateLibrary(int libraryId, Library libUpdate) {
+    public boolean updateDictionary(int dictionaryId, Dictionary dicUpdate) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            Library lib = em.find(Library.class, libraryId);
-            lib.setLibraryName(libUpdate.getLibraryName());
-            lib.setStatus(libUpdate.getStatus());
-            em.merge(lib);
+            Dictionary dictionary = em.find(Dictionary.class, dictionaryId);
+            dictionary.setKeyword(dicUpdate.getKeyword());
+            dictionary.setDescription(dicUpdate.getDescription());
+            dictionary.setVideoURL(dicUpdate.getVideoURL());
+            dictionary.setStatus(dicUpdate.getStatus());
+            em.merge(dictionary);
             em.getTransaction().commit();
-        } catch (Exception ex) {
+        }
+        catch(Exception ex){
             return false;
-        } finally {
+        }finally {
             em.close();
         }
         return true;
     }
 
-    public boolean DeleteLibrary(int libraryId) {
+    public boolean deleteDictionary(int dictionaryId) {
         EntityManager em = getEntityManager();
         try {
-            Library lib = em.find(Library.class, libraryId);
-            if (lib != null) {
+            Dictionary dictionary = em.find(Dictionary.class, dictionaryId);
+            if (dictionary != null) {
                 em.getTransaction().begin();
-                em.remove(lib);
+                em.remove(dictionary);
                 em.getTransaction().commit();
                 return true;
             }

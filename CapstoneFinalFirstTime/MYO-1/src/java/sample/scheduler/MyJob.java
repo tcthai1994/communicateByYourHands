@@ -15,7 +15,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import myo.fpt.sample.entity.AccountDetail;
 import myo.fpt.sample.entity.Notification;
-import myo.fpt.sample.entity.controller.NotificationJpaController;
+import myo.fpt.sample.entity.controller.payment.NotificationJpaController;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;

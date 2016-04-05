@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import myo.fpt.sample.entity.Notification;
-import myo.fpt.sample.entity.controller.DeviceJpaController;
-import myo.fpt.sample.entity.controller.NotificationJpaController;
+import myo.fpt.sample.entity.controller.staff.DeviceJpaController;
+import myo.fpt.sample.entity.controller.payment.NotificationJpaController;
 
 /**
  *

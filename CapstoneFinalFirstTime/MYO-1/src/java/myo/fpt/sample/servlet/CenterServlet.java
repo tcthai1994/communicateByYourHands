@@ -21,6 +21,12 @@ public class CenterServlet extends HttpServlet {
 
     private final String loginServlet = "LoginServlet";
     private final String registerServlet = "RegisterServlet";
+    private final String DictionaryProcessServlet = "DictionaryProcessServlet";
+    private final String UpdateUserAccountServlet = "UpdateUserAccountServlet";
+    private final String LibraryProcessServlet = "LibraryProcessServlet";
+    private final String LicenseProcessServlet = "LicenseProcessServlet";
+    private final String UserUpdateServlet = "UserUpdateServlet";
+    private final String SearchProcessServlet = "SearchProcessServlet";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,8 +49,33 @@ public class CenterServlet extends HttpServlet {
             } else if (action.equals("Register")) {
                 RequestDispatcher rd = request.getRequestDispatcher(registerServlet);
                 rd.forward(request, response);
-            } else {
-
+            } else if (action.equals("AddDictionary")) {
+                RequestDispatcher rd = request.getRequestDispatcher(DictionaryProcessServlet);
+                rd.forward(request, response);
+            } else if (action.equals("UpdateDictionary")) {
+                RequestDispatcher rd = request.getRequestDispatcher(DictionaryProcessServlet);
+                rd.forward(request, response);
+            } else if (action.equals("UpdateUser")) {
+                RequestDispatcher rd = request.getRequestDispatcher(UpdateUserAccountServlet);
+                rd.forward(request, response);
+            } else if (action.equals("AddLibrary")) {
+                RequestDispatcher rd = request.getRequestDispatcher(LibraryProcessServlet);
+                rd.forward(request, response);
+            } else if (action.equals("UpdateLibrary")) {
+                RequestDispatcher rd = request.getRequestDispatcher(LibraryProcessServlet);
+                rd.forward(request, response);
+            } else if (action.equals("UpdateLicense")) {
+                RequestDispatcher rd = request.getRequestDispatcher(LicenseProcessServlet);
+                rd.forward(request, response);
+            } else if (action.equals("UserUpdateProfile")) {
+                RequestDispatcher rd = request.getRequestDispatcher(UserUpdateServlet);
+                rd.forward(request, response);
+            } else if (action.equals("Find")) {
+                RequestDispatcher rd = request.getRequestDispatcher(SearchProcessServlet);
+                rd.forward(request, response);
+            } else if (action.equals("Search")) {
+                RequestDispatcher rd = request.getRequestDispatcher(SearchProcessServlet);
+                rd.forward(request, response);
             }
         } finally {
             out.close();

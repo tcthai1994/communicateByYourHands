@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import myo.fpt.sample.entity.Account;
-import myo.fpt.sample.entity.controller.DeviceJpaController;
+import myo.fpt.sample.entity.controller.staff.DeviceJpaController;
 import org.json.simple.JSONObject;
 
 /**

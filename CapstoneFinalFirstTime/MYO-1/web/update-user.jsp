@@ -327,7 +327,7 @@
                                     <div class="row">
                                         <div class="col-xs-12">
                                             <!-- PAGE CONTENT BEGINS -->
-                                            <form action="UpdateUserAccountServlet" onsubmit="return validateUpdateUser();" method="POST" name="myForm" class="form-horizontal">
+                                            <form action="CenterServlet" onsubmit="return validateUpdateUser();" method="POST" name="myForm" class="form-horizontal">
 
                                                 <c:set var="isStaff" value='<%= request.getParameter("chbIsStaff")%>'/>
                                                 <c:set var="status" value='<%= request.getParameter("chbStatus")%>'/>

@@ -282,7 +282,7 @@
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <!-- PAGE CONTENT BEGINS -->
-                                        <form class="form-horizontal" action="UserUpdateServlet" onsubmit="return validateUpdate();" method="POST" name="myForm">
+                                        <form class="form-horizontal" action="CenterServlet" onsubmit="return validateUpdate();" method="POST" name="myForm">
                                             <c:set var="profile" value="${requestScope.userProfile}"/>
                                             <div class="tabbable">
                                                 <ul class="nav nav-tabs padding-16">
@@ -393,7 +393,7 @@
 
                                             <div class="clearfix form-actions">
                                                 <div class="col-md-offset-3 col-md-9">
-                                                    <button class="btn btn-info" type="submit" value="Update" name="btAction">
+                                                    <button class="btn btn-info" type="submit" value="UserUpdateProfile" name="btAction">
                                                         <i class="ace-icon fa fa-check bigger-110"></i>
                                                         Save
                                                     </button>

@@ -295,7 +295,7 @@
                                     <div class="row">
                                         <div class="col-xs-12">
                                             <!-- PAGE CONTENT BEGINS -->
-                                            <form action="LibraryProcessServlet" onsubmit="return validateLibrary()" method="POST" name="myForm" class="form-horizontal">
+                                            <form action="CenterServlet" onsubmit="return validateLibrary()" method="POST" name="myForm" class="form-horizontal">
 
                                                 <div class="form-group">
                                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Library Name (*) </label>

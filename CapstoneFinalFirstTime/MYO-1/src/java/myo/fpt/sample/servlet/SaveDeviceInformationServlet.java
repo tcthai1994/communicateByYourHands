@@ -19,8 +19,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import myo.fpt.sample.entity.Device;
-import myo.fpt.sample.entity.controller.DeviceJpaController;
-import myo.fpt.sample.entity.controller.LicenseJpaController;
+import myo.fpt.sample.entity.controller.staff.DeviceJpaController;
+import myo.fpt.sample.entity.controller.staff.LicenseJpaController;
 import org.json.simple.JSONObject;
 
 /**

@@ -308,7 +308,7 @@
                                     <div class="row">
                                         <div class="col-xs-12">
                                             <!-- PAGE CONTENT BEGINS -->
-                                            <form action="DictionaryProcessServlet" onsubmit="return validateDictionary()" method="POST" name="myForm" class="form-horizontal">
+                                            <form action="CenterServlet" onsubmit="return validateDictionary()" method="POST" name="myForm" class="form-horizontal">
 
                                                 <div class="form-group">
                                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Key Word (*) </label>

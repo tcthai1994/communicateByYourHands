@@ -260,7 +260,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <!-- PAGE CONTENT BEGINS -->
-                                    <form method="POST" action="SearchProcessServlet" onsubmit="return validateSearch()" name="myForm">
+                                    <form method="POST" action="CenterServlet" onsubmit="return validateSearch()" name="myForm">
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="input-group">

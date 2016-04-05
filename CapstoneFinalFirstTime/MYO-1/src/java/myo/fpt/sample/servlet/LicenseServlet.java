@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import myo.fpt.sample.entity.License;
-import myo.fpt.sample.entity.controller.LicenseJpaController;
+import myo.fpt.sample.entity.controller.staff.LicenseJpaController;
 
 /**
  *

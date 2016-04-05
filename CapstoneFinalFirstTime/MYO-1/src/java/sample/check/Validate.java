@@ -15,7 +15,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import myo.fpt.sample.entity.controller.AccountDetailJpaController;
+import myo.fpt.sample.entity.controller.staff.AccountDetailJpaController;
 
 /**
  *

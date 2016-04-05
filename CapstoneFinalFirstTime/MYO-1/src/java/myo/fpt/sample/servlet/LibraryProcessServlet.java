@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import myo.fpt.sample.entity.Library;
-import myo.fpt.sample.entity.controller.LibraryJpaController;
+import myo.fpt.sample.entity.controller.staff.LibraryJpaController;
 import sample.check.Validate;
 
 /**
@@ -56,8 +56,7 @@ public class LibraryProcessServlet extends HttpServlet {
                     Library lib = new Library(libraryName, status);
                     boolean checkAddLibrary = getJpaController().addNewLibrary(lib);
                     if (checkAddLibrary) {
-                        RequestDispatcher rd = request.getRequestDispatcher(LibraryServlet);
-                        rd.forward(request, response);
+                        response.sendRedirect(LibraryServlet);
                     }
                 } else {
                     System.out.println(listError);
@@ -78,8 +77,7 @@ public class LibraryProcessServlet extends HttpServlet {
                     Library lib = new Library(libraryName, status);
                     boolean checkUpdateLibrary = getJpaController().updateLibrary(libraryId, lib);
                     if (checkUpdateLibrary) {
-                        RequestDispatcher rd = request.getRequestDispatcher(LibraryServlet);
-                        rd.forward(request, response);
+                        response.sendRedirect(LibraryServlet);
                     }
                 } else {
                     System.out.println(listError);

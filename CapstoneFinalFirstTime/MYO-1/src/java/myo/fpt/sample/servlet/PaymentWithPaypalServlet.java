@@ -24,8 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import myo.fpt.sample.entity.AccountDetail;
 import myo.fpt.sample.entity.Recipt;
-import myo.fpt.sample.entity.controller.AccountDetailJpaController;
-import myo.fpt.sample.entity.controller.PaymentJpaController;
+import myo.fpt.sample.entity.controller.staff.AccountDetailJpaController;
+import myo.fpt.sample.entity.controller.payment.PaymentJpaController;
 
 /**
  *

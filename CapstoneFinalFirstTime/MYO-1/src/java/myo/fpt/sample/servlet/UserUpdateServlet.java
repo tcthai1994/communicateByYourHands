@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import myo.fpt.sample.entity.Account;
 import myo.fpt.sample.entity.AccountDetail;
-import myo.fpt.sample.entity.controller.AccountDetailJpaController;
+import myo.fpt.sample.entity.controller.staff.AccountDetailJpaController;
 import sample.check.Validate;
 import sample.dto.AccountManage;
 
@@ -48,7 +48,7 @@ public class UserUpdateServlet extends HttpServlet {
         try {
             /* TODO output your page here. You may use following sample code. */
             String action = request.getParameter("btAction");
-            if (action.equals("Update")) {
+            if (action.equals("UserUpdateProfile")) {
                 int detailId = Integer.parseInt(request.getParameter("txtDetailId"));
                 String username = request.getParameter("txtUsername");
                 String email = request.getParameter("txtEmail");
@@ -74,8 +74,7 @@ public class UserUpdateServlet extends HttpServlet {
                     if (checkUpdateAcc) {
                         boolean checkUpdateAccDt = getJpaController().userUpdateAccountDetail(detailId, accDetail);
                         if (checkUpdateAccDt) {
-                            RequestDispatcher rd = request.getRequestDispatcher("LoadDictionaryPageServlet");
-                            rd.forward(request, response);
+                            response.sendRedirect("LoadDictionaryPageServlet");
                         }
                     }
                 } else {

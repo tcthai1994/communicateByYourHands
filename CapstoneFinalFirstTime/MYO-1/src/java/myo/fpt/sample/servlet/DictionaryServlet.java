@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import myo.fpt.sample.entity.Dictionary;
-import myo.fpt.sample.entity.controller.DictionaryJpaController;
+import myo.fpt.sample.entity.controller.staff.DictionaryJpaController;
 
 /**
  *

@@ -19,7 +19,7 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import myo.fpt.sample.entity.Notification;
-import myo.fpt.sample.entity.controller.NotificationJpaController;
+import myo.fpt.sample.entity.controller.payment.NotificationJpaController;
 
 /**
  *
@@ -39,6 +39,7 @@ public class SendNotiToMobile implements Job {
 //        Object obj = map.get("abc");
         
         List<Notification> listNoti = getJpaController().findAllNewNotification();
+        System.out.println("Check new notifications to send...");
         if (listNoti != null) {
             for (int i = 0; i < listNoti.size(); i++) {
                 

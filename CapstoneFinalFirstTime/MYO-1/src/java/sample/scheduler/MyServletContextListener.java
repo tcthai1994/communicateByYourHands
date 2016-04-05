@@ -38,7 +38,7 @@ public class MyServletContextListener implements ServletContextListener {
             //  factory.initialize(sce.getServletContext().getResourceAsStream("/WEB-INF/quartz.properties"));
             Scheduler scheduler = factory.getScheduler();
             String schedulerTime = "";
-            InputStream in = getClass().getClassLoader().getResourceAsStream("..//TimeConfig.txt");
+            InputStream in = getClass().getClassLoader().getResourceAsStream("..//CheckExpiredDateConfig.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             if ((schedulerTime = br.readLine()) == null) {
                 schedulerTime = "0 0 0 * * ?";
@@ -89,12 +89,19 @@ public class MyServletContextListener implements ServletContextListener {
 //            trigger.setStartTime(startTime.getTime());
 //// 24 hours * 60(minutes per hour) * 60(seconds per minute) * 1000(milliseconds per second)
 //            trigger.setRepeatInterval(24L * 60L * 60L * 1000L);
+            String schedulerTime2 = "";
+            InputStream in2 = getClass().getClassLoader().getResourceAsStream("..//SendNotiToMobileConfig.txt");
+            BufferedReader br2 = new BufferedReader(new InputStreamReader(in2));
+            if ((schedulerTime2 = br2.readLine()) == null) {
+                schedulerTime2 = "0 0 0 * * ?";
+            }
+            System.out.println(schedulerTime2);
             JobDetail job2 = JobBuilder.newJob(SendNotiToMobile.class).withIdentity("JobName2", "group2").build();
             Trigger trigger2 = TriggerBuilder
                     .newTrigger()
                     .withIdentity("JobName2", "group2")
                     .withSchedule(
-                            CronScheduleBuilder.cronSchedule(schedulerTime))
+                            CronScheduleBuilder.cronSchedule(schedulerTime2))
                     .startAt(startTime.getTime())
                     .build();
 
