@@ -366,7 +366,7 @@
                                                                                 </td>
                                                                                 <td>
                                                                                     <label>
-                                                                                        <input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" <c:if test="${items.status=='true'}">checked="checked"</c:if>/>
+                                                                                        <input disabled="" name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" <c:if test="${items.status=='true'}">checked="checked"</c:if>/>
                                                                                             <span class="lbl"></span>
                                                                                         </label>
                                                                                     </td>
@@ -389,9 +389,9 @@
                                                                                             <c:param name="btAction" value="DeleteDictionary"/>
                                                                                             <c:param name="txtInstructionId" value="${items.instructionId}"/>
                                                                                         </c:url>
-                                                                                        <a class="red" href="${DelDic}">
+<!--                                                                                        <a class="red" href="${DelDic}">
                                                                                             <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                                                                                        </a>
+                                                                                        </a>-->
                                                                                     </div>
                                                                                 </td>
                                                                             </tr>

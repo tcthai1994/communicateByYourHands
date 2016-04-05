@@ -402,7 +402,7 @@
                                                                                 </td>
                                                                                 <td>
                                                                                     <label>
-                                                                                        <input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" id="checkstatus" <c:if test="${items.status=='true'}">checked="checked"</c:if>/>
+                                                                                        <input disabled="" name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" id="checkstatus" <c:if test="${items.status=='true'}">checked="checked"</c:if>/>
                                                                                             <span class="lbl"></span>
                                                                                         </label>
                                                                                     </td>
@@ -424,9 +424,9 @@
                                                                                             <c:param name="btAction" value="DeleteLibrary"/>
                                                                                             <c:param name="txtLibraryId" value="${items.libraryId}"/>
                                                                                         </c:url>
-                                                                                        <a class="red" href="${DelLib}">
+<!--                                                                                        <a class="red" href="${DelLib}">
                                                                                             <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                                                                                        </a>
+                                                                                        </a>-->
                                                                                     </div>
                                                                                 </td>
                                                                             </tr>

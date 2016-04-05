@@ -411,7 +411,7 @@
                                                                                 </td>
                                                                                 <td>
                                                                                     <label>
-                                                                                        <input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" <c:if test="${items.status=='true'}">checked="checked"</c:if>/>
+                                                                                        <input disabled="" name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" <c:if test="${items.status=='true'}">checked="checked"</c:if>/>
                                                                                             <span class="lbl"></span>
                                                                                         </label>
                                                                                     </td>
