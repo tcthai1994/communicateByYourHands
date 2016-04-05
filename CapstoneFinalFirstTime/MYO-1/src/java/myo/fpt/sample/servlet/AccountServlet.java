@@ -65,7 +65,7 @@ public class AccountServlet extends HttpServlet {
                 Date date = accdt.getExpiredDate();
                 String exDate = "";
                 if (date != null) {
-                    SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     exDate = ft.format(date);
                 }
                 

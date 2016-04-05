@@ -68,7 +68,7 @@ public class UpdateUserAccountServlet extends HttpServlet {
                 boolean status = ("ON".equals(active2));
 
                 String listError = Validate.validateUpdateUser(email, fullname, phone, date, licenseType);
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss",
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
                         Locale.ENGLISH);
                 if (listError.equals("")) {
                     try {
