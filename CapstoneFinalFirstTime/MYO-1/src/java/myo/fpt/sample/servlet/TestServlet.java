@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import myo.fpt.sample.entity.Account;
 import myo.fpt.sample.entity.controller.AccountJpaController;
-import myo.fpt.sample.entity.controller.TrainController;
+import myo.fpt.sample.entity.controller.train.TrainController;
 
 /**
  *

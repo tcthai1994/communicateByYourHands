@@ -15,7 +15,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.PathSegment;
 import myo.fpt.sample.entity.WordSignalPK;
 import javax.naming.InitialContext;
-import myo.fpt.sample.entity.controller.WordSignalJpaController;
+import myo.fpt.sample.entity.controller.download.WordSignalJpaController;
 import myo.fpt.sample.entity.WordSignal;
 import java.net.URI;
 import java.util.List;
@@ -29,8 +29,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import myo.fpt.sample.entity.controller.TrainController;
-import myo.fpt.sample.entity.controller.TranslateController;
+import myo.fpt.sample.entity.controller.train.TrainController;
+import myo.fpt.sample.entity.controller.detect.TranslateController;
 import com.google.gson.Gson;
 import fpt.myo.emg.EmgData;
 import java.io.File;
@@ -43,16 +43,19 @@ import myo.fpt.sample.entity.LeftSignal;
 import myo.fpt.sample.entity.WordSignal;
 import myo.fpt.sample.entity.DataContent;
 import myo.fpt.sample.entity.Download;
-import myo.fpt.sample.entity.controller.GetDataForMobileController;
+import myo.fpt.sample.entity.controller.download.GetDataForMobileController;
 import java.io.FileWriter;
 import java.io.IOException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 /*
  * @author Thai
  */
 
 @Path("DownloadAPI")
 public class GetDataForMobile {
+
+    private static final String FILE_PATH = "..//abc.json";
 
     private WordSignalPK getPrimaryKey(PathSegment pathSegment) {
         /*
@@ -89,14 +92,29 @@ public class GetDataForMobile {
 
     public GetDataForMobile() {
     }
+
     /**
      * Retrieves representation of an instance of com.app.api.TestAPI
      *
      * @return an instance of java.lang.String
      */
-    @POST
+    @GET
+    @Path("/get")
+    @Produces("text/plain")
+    public Response getFile2() {
+
+        File file = new File(FILE_PATH);
+
+        ResponseBuilder response = Response.ok((Object) file);
+        response.header("Content-Disposition",
+                "attachment; filename=\"download.json\"");
+        return response.build();
+
+    }
+
+    @GET
     @Path("/doDownload")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Produces("text/plain")
     public Response doDownload() throws IOException, NamingException {
         Gson gson = new Gson();
         List<MeaningLeft> ML = getJpaController().getAllML();
@@ -108,7 +126,7 @@ public class GetDataForMobile {
 
         Download DW = new Download(ML, MR, LS, RS, WS, DT);
         String result = gson.toJson(DW);
-        FileWriter file = new FileWriter("C:/JsonDownload/abc.json");
+        FileWriter file = new FileWriter(FILE_PATH);
         try {
             file.write(result);
         } catch (IOException e) {
@@ -117,9 +135,10 @@ public class GetDataForMobile {
             file.flush();
             file.close();
         }
-        File downFile = new File("C:/JsonDownload/abc.json");
-        return Response.ok(downFile, MediaType.APPLICATION_OCTET_STREAM)
-                .header("Content-Disposition", "attachment; filename=\"" + downFile.getName() + "\"") //optional
-                .build();
+        File downFile = new File(FILE_PATH);
+        ResponseBuilder response = Response.ok((Object) downFile);
+        response.header("Content-Disposition",
+                "attachment; filename=\"abc.json\"");
+        return response.build();
     }
 }

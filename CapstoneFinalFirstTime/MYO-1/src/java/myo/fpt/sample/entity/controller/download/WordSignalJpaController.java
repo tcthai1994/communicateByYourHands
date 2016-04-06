@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package myo.fpt.sample.entity.controller;
+package myo.fpt.sample.entity.controller.download;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,7 +13,8 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import myo.fpt.sample.entity.MeaningLeft;
+import myo.fpt.sample.entity.WordSignal;
+import myo.fpt.sample.entity.WordSignalPK;
 import myo.fpt.sample.entity.controller.exceptions.NonexistentEntityException;
 import myo.fpt.sample.entity.controller.exceptions.PreexistingEntityException;
 
@@ -21,9 +22,9 @@ import myo.fpt.sample.entity.controller.exceptions.PreexistingEntityException;
  *
  * @author nguyen
  */
-public class MeaningLeftJpaController implements Serializable {
+public class WordSignalJpaController implements Serializable {
 
-    public MeaningLeftJpaController(EntityManagerFactory emf) {
+    public WordSignalJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -32,16 +33,19 @@ public class MeaningLeftJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(MeaningLeft meaningLeft) throws PreexistingEntityException, Exception {
+    public void create(WordSignal wordSignal) throws PreexistingEntityException, Exception {
+        if (wordSignal.getWordSignalPK() == null) {
+            wordSignal.setWordSignalPK(new WordSignalPK());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(meaningLeft);
+            em.persist(wordSignal);
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findMeaningLeft(meaningLeft.getMeaningLeft()) != null) {
-                throw new PreexistingEntityException("MeaningLeft " + meaningLeft + " already exists.", ex);
+            if (findWordSignal(wordSignal.getWordSignalPK()) != null) {
+                throw new PreexistingEntityException("WordSignal " + wordSignal + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -51,19 +55,19 @@ public class MeaningLeftJpaController implements Serializable {
         }
     }
 
-    public void edit(MeaningLeft meaningLeft) throws NonexistentEntityException, Exception {
+    public void edit(WordSignal wordSignal) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            meaningLeft = em.merge(meaningLeft);
+            wordSignal = em.merge(wordSignal);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = meaningLeft.getMeaningLeft();
-                if (findMeaningLeft(id) == null) {
-                    throw new NonexistentEntityException("The meaningLeft with id " + id + " no longer exists.");
+                WordSignalPK id = wordSignal.getWordSignalPK();
+                if (findWordSignal(id) == null) {
+                    throw new NonexistentEntityException("The wordSignal with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -74,19 +78,19 @@ public class MeaningLeftJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(WordSignalPK id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            MeaningLeft meaningLeft;
+            WordSignal wordSignal;
             try {
-                meaningLeft = em.getReference(MeaningLeft.class, id);
-                meaningLeft.getMeaningLeft();
+                wordSignal = em.getReference(WordSignal.class, id);
+                wordSignal.getWordSignalPK();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The meaningLeft with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The wordSignal with id " + id + " no longer exists.", enfe);
             }
-            em.remove(meaningLeft);
+            em.remove(wordSignal);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -95,19 +99,19 @@ public class MeaningLeftJpaController implements Serializable {
         }
     }
 
-    public List<MeaningLeft> findMeaningLeftEntities() {
-        return findMeaningLeftEntities(true, -1, -1);
+    public List<WordSignal> findWordSignalEntities() {
+        return findWordSignalEntities(true, -1, -1);
     }
 
-    public List<MeaningLeft> findMeaningLeftEntities(int maxResults, int firstResult) {
-        return findMeaningLeftEntities(false, maxResults, firstResult);
+    public List<WordSignal> findWordSignalEntities(int maxResults, int firstResult) {
+        return findWordSignalEntities(false, maxResults, firstResult);
     }
 
-    private List<MeaningLeft> findMeaningLeftEntities(boolean all, int maxResults, int firstResult) {
+    private List<WordSignal> findWordSignalEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(MeaningLeft.class));
+            cq.select(cq.from(WordSignal.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -119,20 +123,20 @@ public class MeaningLeftJpaController implements Serializable {
         }
     }
 
-    public MeaningLeft findMeaningLeft(Integer id) {
+    public WordSignal findWordSignal(WordSignalPK id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(MeaningLeft.class, id);
+            return em.find(WordSignal.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getMeaningLeftCount() {
+    public int getWordSignalCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<MeaningLeft> rt = cq.from(MeaningLeft.class);
+            Root<WordSignal> rt = cq.from(WordSignal.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

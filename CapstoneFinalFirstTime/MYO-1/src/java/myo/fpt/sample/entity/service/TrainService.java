@@ -11,7 +11,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.PathSegment;
 import myo.fpt.sample.entity.WordSignalPK;
 import javax.naming.InitialContext;
-import myo.fpt.sample.entity.controller.WordSignalJpaController;
+import myo.fpt.sample.entity.controller.download.WordSignalJpaController;
 import myo.fpt.sample.entity.WordSignal;
 import java.net.URI;
 import java.util.List;
@@ -26,7 +26,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
-import myo.fpt.sample.entity.controller.TrainController;
+import myo.fpt.sample.entity.controller.train.TrainController;
 
 /**
  *

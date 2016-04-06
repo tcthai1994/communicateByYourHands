@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package myo.fpt.sample.entity.controller;
+package myo.fpt.sample.entity.controller.download;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,7 +13,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import myo.fpt.sample.entity.LeftSignal;
+import myo.fpt.sample.entity.DataContent;
 import myo.fpt.sample.entity.controller.exceptions.NonexistentEntityException;
 import myo.fpt.sample.entity.controller.exceptions.PreexistingEntityException;
 
@@ -21,9 +21,9 @@ import myo.fpt.sample.entity.controller.exceptions.PreexistingEntityException;
  *
  * @author nguyen
  */
-public class LeftSignalJpaController implements Serializable {
+public class DataContentJpaController implements Serializable {
 
-    public LeftSignalJpaController(EntityManagerFactory emf) {
+    public DataContentJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -32,16 +32,16 @@ public class LeftSignalJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(LeftSignal leftSignal) throws PreexistingEntityException, Exception {
+    public void create(DataContent dataContent) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(leftSignal);
+            em.persist(dataContent);
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findLeftSignal(leftSignal.getEmgCode()) != null) {
-                throw new PreexistingEntityException("LeftSignal " + leftSignal + " already exists.", ex);
+            if (findDataContent(dataContent.getMeaningCode()) != null) {
+                throw new PreexistingEntityException("DataContent " + dataContent + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -51,19 +51,19 @@ public class LeftSignalJpaController implements Serializable {
         }
     }
 
-    public void edit(LeftSignal leftSignal) throws NonexistentEntityException, Exception {
+    public void edit(DataContent dataContent) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            leftSignal = em.merge(leftSignal);
+            dataContent = em.merge(dataContent);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                String id = leftSignal.getEmgCode();
-                if (findLeftSignal(id) == null) {
-                    throw new NonexistentEntityException("The leftSignal with id " + id + " no longer exists.");
+                Integer id = dataContent.getMeaningCode();
+                if (findDataContent(id) == null) {
+                    throw new NonexistentEntityException("The dataContent with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -74,19 +74,19 @@ public class LeftSignalJpaController implements Serializable {
         }
     }
 
-    public void destroy(String id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            LeftSignal leftSignal;
+            DataContent dataContent;
             try {
-                leftSignal = em.getReference(LeftSignal.class, id);
-                leftSignal.getEmgCode();
+                dataContent = em.getReference(DataContent.class, id);
+                dataContent.getMeaningCode();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The leftSignal with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The dataContent with id " + id + " no longer exists.", enfe);
             }
-            em.remove(leftSignal);
+            em.remove(dataContent);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -95,19 +95,19 @@ public class LeftSignalJpaController implements Serializable {
         }
     }
 
-    public List<LeftSignal> findLeftSignalEntities() {
-        return findLeftSignalEntities(true, -1, -1);
+    public List<DataContent> findDataContentEntities() {
+        return findDataContentEntities(true, -1, -1);
     }
 
-    public List<LeftSignal> findLeftSignalEntities(int maxResults, int firstResult) {
-        return findLeftSignalEntities(false, maxResults, firstResult);
+    public List<DataContent> findDataContentEntities(int maxResults, int firstResult) {
+        return findDataContentEntities(false, maxResults, firstResult);
     }
 
-    private List<LeftSignal> findLeftSignalEntities(boolean all, int maxResults, int firstResult) {
+    private List<DataContent> findDataContentEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(LeftSignal.class));
+            cq.select(cq.from(DataContent.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -119,20 +119,20 @@ public class LeftSignalJpaController implements Serializable {
         }
     }
 
-    public LeftSignal findLeftSignal(String id) {
+    public DataContent findDataContent(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(LeftSignal.class, id);
+            return em.find(DataContent.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getLeftSignalCount() {
+    public int getDataContentCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<LeftSignal> rt = cq.from(LeftSignal.class);
+            Root<DataContent> rt = cq.from(DataContent.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

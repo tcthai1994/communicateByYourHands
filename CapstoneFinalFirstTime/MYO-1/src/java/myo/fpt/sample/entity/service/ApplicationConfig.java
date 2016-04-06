@@ -28,21 +28,8 @@ public class ApplicationConfig  extends Application {
      * out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(myo.fpt.sample.entity.service.AccountRESTFacade.class);
-        resources.add(myo.fpt.sample.entity.service.CustomContentRESTFacade.class);
-        resources.add(myo.fpt.sample.entity.service.CustomSignalRESTFacade.class);
-        resources.add(myo.fpt.sample.entity.service.DataContentRESTFacade.class);
         resources.add(myo.fpt.sample.entity.service.GetDataForMobile.class);
-        resources.add(myo.fpt.sample.entity.service.LeftSignalRESTFacade.class);
-        resources.add(myo.fpt.sample.entity.service.MeaningLeftRESTFacade.class);
-        resources.add(myo.fpt.sample.entity.service.MeaningRigntRESTFacade.class);
-        resources.add(myo.fpt.sample.entity.service.NotiListRESTFacade.class);
-        resources.add(myo.fpt.sample.entity.service.ReciptRESTFacade.class);
-        resources.add(myo.fpt.sample.entity.service.RightSignalRESTFacade.class);
-        resources.add(myo.fpt.sample.entity.service.SysdiagramsRESTFacade.class);
-        resources.add(myo.fpt.sample.entity.service.TesttableRESTFacade.class);
         resources.add(myo.fpt.sample.entity.service.TrainService.class);
         resources.add(myo.fpt.sample.entity.service.TranslateService.class);
-        resources.add(myo.fpt.sample.entity.service.WordSignalRESTFacade.class);
     }
 }

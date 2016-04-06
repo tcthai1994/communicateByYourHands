@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package myo.fpt.sample.entity.controller;
+package myo.fpt.sample.entity.controller.detect;
 
 import fpt.myo.emg.EmgData;
 import java.io.Serializable;
@@ -12,6 +12,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import myo.fpt.sample.entity.controller.matching.MatchingController;
 
 /**
  *
@@ -19,9 +20,7 @@ import javax.persistence.Query;
  */
 public class TranslateController implements Serializable {
 
-    private final static Double THRESHOLD = 0.005;
-    //private final static Double THRESHOLD = 0.005;
-    private Double detect_distance;
+
     private final int cnt = 50;
 
     public TranslateController(EntityManagerFactory emf) {
@@ -33,10 +32,7 @@ public class TranslateController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public double distanceCalculation(EmgData streamData, EmgData compareData) {
-        double return_val = streamData.getDistanceFrom(compareData) / streamData.getNorm() / compareData.getNorm();
-        return return_val;
-    }
+
 
     public ArrayList<EmgData> convert(ArrayList emgList) {
         ArrayList<EmgData> dataList = new ArrayList<EmgData>();
@@ -49,9 +45,7 @@ public class TranslateController implements Serializable {
         return dataList;
     }
 
-    public String reConvert(EmgData dataList) {
-        return dataList.toString();
-    }
+
 
     public ArrayList<String> getAllRightEmg() {
         EntityManager em = getEntityManager();
@@ -177,33 +171,7 @@ public class TranslateController implements Serializable {
         }
     }
 
-    public ArrayList findMatching(ArrayList<EmgData> Base, ArrayList<EmgData> Compare) {
-        ArrayList result = new ArrayList();
-        String match = "";
-        EmgData tmpEmg = new EmgData();
-        for (int i = 0; i < Compare.size(); i++) {
 
-            detect_distance = THRESHOLD;
-            tmpEmg = null;
-            for (int j = 0; j < Base.size(); j++) {
-                double Distance = distanceCalculation(Compare.get(i), Base.get(j));
-                if (Distance < detect_distance) {
-                    detect_distance = Distance;
-                    tmpEmg = Base.get(j);
-                }
-                if (!(tmpEmg == null)) {
-                    match = reConvert(tmpEmg);
-                }
-                if (Distance == 0) {
-                    break;
-                }
-            }
-            if (match != null) {
-                result.add(match);
-            }
-        }
-        return result;
-    }
 
     public ArrayList getMeaningCodeSide(ArrayList listMatch) {
         int meaning = 0;
@@ -245,8 +213,8 @@ public class TranslateController implements Serializable {
         leftBase = convert(StrLeftEmg);
         System.out.println("Convert done");
 
-        listMatchLeft = findMatching(leftBase, leftCompare);
-        listMatchRight = findMatching(rightBase, rightBase);
+        listMatchLeft = MatchingController.findMatching(leftBase, leftCompare);
+        listMatchRight = MatchingController.findMatching(rightBase, rightBase);
         System.out.println("Mathching raw ges!!");
         //Find meaningRight
         listMeaningRight = getMeaningCodeSide(listMatchRight);
