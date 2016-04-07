@@ -187,5 +187,20 @@ public class NotificationJpaController implements Serializable {
         }
     }
     
+    public boolean isOnline(String deviceId){
+        EntityManager em = getEntityManager();
+        try{
+            String jnql= "SELECT a.isOnline From Device a WHERE a.deviceId = :deviceId";
+            Query query = em.createQuery(jnql);
+            query.setParameter("deviceId", deviceId);
+            if((boolean) query.getSingleResult()){
+                return true;
+            }else{
+                return false;
+            }
+        }finally{
+            em.close();
+        }
+    }
 
 }

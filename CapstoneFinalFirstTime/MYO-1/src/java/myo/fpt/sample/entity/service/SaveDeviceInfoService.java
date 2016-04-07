@@ -81,7 +81,7 @@ public class SaveDeviceInfoService {
             @QueryParam("regId") String regId) {
         boolean checkDeviceId = getJpaController().isDeviceIdExist(deviceId);
             if (!checkDeviceId) {
-                Device device = new Device(deviceId, regId);
+                Device device = new Device(deviceId, regId, false);
                 getJpaController().addDevice(device);
                 JSONObject status = new JSONObject();
                 status.put("status", 1);

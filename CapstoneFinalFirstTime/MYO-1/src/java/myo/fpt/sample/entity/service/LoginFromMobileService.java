@@ -102,6 +102,7 @@ public class LoginFromMobileService {
             if (isActive) {
                 Account account = new Account(deviceId);
                 getJpaController().addDeviceIdToAccount(custId, account);
+                getJpaController().updateLogin(deviceId);
                 JSONObject status = new JSONObject();
                 status.put("status", 1);
                 status.put("custId", custId);
@@ -118,5 +119,19 @@ public class LoginFromMobileService {
             status.put("custId", 0);
             return status.toJSONString();
         }
+    }
+    
+    
+    @POST
+    @Path("/doLogOutFromMobile")
+    @Produces("application/json")
+    public String doLogoutFromMobile(
+            @QueryParam("deviceId") String deviceId) {
+        
+             getJpaController().updateLogout(deviceId);;
+                JSONObject status = new JSONObject();
+                status.put("status", 1);
+                return status.toJSONString();
+
     }
 }

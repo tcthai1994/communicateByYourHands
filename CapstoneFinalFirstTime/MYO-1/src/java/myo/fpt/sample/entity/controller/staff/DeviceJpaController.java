@@ -164,4 +164,30 @@ public class DeviceJpaController implements Serializable {
         }
 
     }
+    
+    public void updateLogin(String deviceId){
+        EntityManager em = getEntityManager();
+        try{
+            em.getTransaction().begin();
+            Device device = em.find(Device.class, deviceId);
+            device.setIsOnline(true);
+            em.merge(device);
+            em.getTransaction().commit();
+        }finally{
+            em.close();
+        }
+    }
+    
+        public void updateLogout(String deviceId){
+        EntityManager em = getEntityManager();
+        try{
+            em.getTransaction().begin();
+            Device device = em.find(Device.class, deviceId);
+            device.setIsOnline(false);
+            em.merge(device);
+            em.getTransaction().commit();
+        }finally{
+            em.close();
+        }
+    }
 }

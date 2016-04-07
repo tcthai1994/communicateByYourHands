@@ -45,6 +45,9 @@ public class SendNotiToMobile implements Job {
                 
                 String userMessage = listNoti.get(i).getNotiContent();
                 String deviceId = listNoti.get(i).getDeviceId();
+                Boolean isOnline = false;
+                isOnline = getJpaController().isOnline(deviceId);
+                if(isOnline = true){
                 String regId = getJpaController().findRegIdByDeviceId(deviceId);
                 int notiId = listNoti.get(i).getNotiId();
                 Sender sender = new Sender(GOOGLE_SERVER_KEY);
@@ -57,6 +60,7 @@ public class SendNotiToMobile implements Job {
                     Logger.getLogger(SendNotiToMobile.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 getJpaController().updateIsSentNotification(notiId, true);
+                }
             }
 
         }
