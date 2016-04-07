@@ -283,114 +283,118 @@
                                     <div class="col-xs-12">
                                         <!-- PAGE CONTENT BEGINS -->
                                         <form class="form-horizontal" action="CenterServlet" onsubmit="return validateUpdate();" method="POST" name="myForm">
-                                            <c:set var="profile" value="${requestScope.userProfile}"/>
-                                            <div class="tabbable">
-                                                <ul class="nav nav-tabs padding-16">
-                                                    <li class="active">
-                                                        <a data-toggle="tab" href="#edit-basic" aria-expanded="true">
-                                                            <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
-                                                            Basic Info
-                                                        </a>
-                                                    </li>
-                                                    <li class="">
-                                                        <a data-toggle="tab" href="#edit-password" aria-expanded="false">
-                                                            <i class="blue ace-icon fa fa-key bigger-125"></i>
-                                                            Password
-                                                        </a>
-                                                    </li>
-                                                </ul>
+                                            <c:set var="item" value="${requestScope.userProfile}"/>
+                                            <c:forEach var="profile" items="${item}">
+                                                <div class="tabbable">
+                                                    <ul class="nav nav-tabs padding-16">
+                                                        <li class="active">
+                                                            <a data-toggle="tab" href="#edit-basic" aria-expanded="true">
+                                                                <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
+                                                                Basic Info
+                                                            </a>
+                                                        </li>
+                                                        <li class="">
+                                                            <a data-toggle="tab" href="#edit-password" aria-expanded="false">
+                                                                <i class="blue ace-icon fa fa-key bigger-125"></i>
+                                                                Password
+                                                            </a>
+                                                        </li>
+                                                    </ul>
 
-                                                <div class="tab-content profile-edit-tab-content">
-                                                    <div id="edit-basic" class="tab-pane active">
-                                                        <h4 class="header blue bolder smaller">General</h4>
+                                                    <div class="tab-content profile-edit-tab-content">
 
-                                                        <input type="hidden" name="txtDetailId" value="${profile.detailId}" readonly=""/>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1">User name</label>
+                                                        <div id="edit-basic" class="tab-pane active">
+                                                            <h4 class="header blue bolder smaller">General</h4>
 
-                                                            <div class="col-sm-9">
-                                                                <input class="col-sm-3" id="form-field-1" type="text" name="txtUsername" readonly="" value="${profile.username}"/>
+                                                            <input type="hidden" name="txtDetailId" value="${profile.value.detailId}" readonly=""/>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1">User name</label>
+
+                                                                <div class="col-sm-9">
+                                                                    <input class="col-sm-3" id="form-field-1" type="text" name="txtUsername" readonly="" value="${profile.key.username}"/>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="space-4"></div>
+
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-2">Email(*)</label>
+
+                                                                <div class="col-sm-9">
+                                                                    <input class="col-sm-5" id="form-field-2" type="text" name="txtEmail" value="${profile.value.email}" required/>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="space-4"></div>
+
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-3">Full name(*)</label>
+
+                                                                <div class="col-sm-9">
+                                                                    <input class="col-sm-4" id="form-field-3" type="text" name="txtFullname" value="${profile.value.fullname}" required/>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="space-4"></div>
+
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-4">License Type</label>
+
+                                                                <div class="col-sm-9">
+                                                                    <input class="col-sm-4" id="form-field-4" readonly="" type="text" name="txtLicenseType" value="${profile.key.licenseType}" required/>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="space-4"></div>
+
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-5">Expiration Date</label>
+
+                                                                <div class="col-sm-9">
+                                                                    <input class="col-sm-4" id="form-field-5" readonly="" type="text" name="dtExpiredDate" value="${profile.key.expiredDate}" required/>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="space-4"></div>
+
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-6">Phone(*)</label>
+
+                                                                <div class="col-sm-9">
+                                                                    <input class="col-sm-2" id="form-field-6" type="text" name="txtPhone" value="${profile.value.phone}" required/>
+                                                                </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="space-4"></div>
+                                                        <div id="edit-password" class="tab-pane">
+                                                            <div class="space-10"></div>
 
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-2">Email(*)</label>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label no-padding-right" for="password">New Password</label>
 
-                                                            <div class="col-sm-9">
-                                                                <input class="col-sm-5" id="form-field-2" type="text" name="txtEmail" value="${profile.email}" required/>
+                                                                <div class="col-sm-9">
+                                                                    <input type="password" name="txtPassword" id="password">
+                                                                </div>
+                                                                <input type="hidden" name="txtPasswordOld" value="${profile.key.password}" readonly=""/>
+                                                            </div>
+
+                                                            <div class="space-4"></div>
+
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label no-padding-right" for="confirm_password">Confirm Password</label>
+
+                                                                <div class="col-sm-9">
+                                                                    <input type="password" name="txtRepeatpassword" id="confirm_password">
+                                                                    <span id="message"></span>
+                                                                </div>
+
                                                             </div>
                                                         </div>
 
-                                                        <div class="space-4"></div>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-3">Full name(*)</label>
-
-                                                            <div class="col-sm-9">
-                                                                <input class="col-sm-4" id="form-field-3" type="text" name="txtFullname" value="${profile.fullname}" required/>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="space-4"></div>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-4">License Type</label>
-
-                                                            <div class="col-sm-9">
-                                                                <input class="col-sm-4" id="form-field-4" readonly="" type="text" name="txtLicenseType" value="${profile.licenseType}" required/>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="space-4"></div>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-5">Expiration Date</label>
-
-                                                            <div class="col-sm-9">
-                                                                <input class="col-sm-4" id="form-field-5" readonly="" type="text" name="dtExpiredDate" value="${profile.expiredDate}" required/>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="space-4"></div>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-6">Phone(*)</label>
-
-                                                            <div class="col-sm-9">
-                                                                <input class="col-sm-2" id="form-field-6" type="text" name="txtPhone" value="${profile.phone}" required/>
-                                                            </div>
-                                                        </div>
                                                     </div>
 
-                                                    <div id="edit-password" class="tab-pane">
-                                                        <div class="space-10"></div>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label no-padding-right" for="password">New Password</label>
-
-                                                            <div class="col-sm-9">
-                                                                <input type="password" name="txtPassword" id="password">
-                                                            </div>
-                                                            <input type="hidden" name="txtPasswordOld" value="${profile.password}" readonly=""/>
-                                                        </div>
-
-                                                        <div class="space-4"></div>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label no-padding-right" for="confirm_password">Confirm Password</label>
-
-                                                            <div class="col-sm-9">
-                                                                <input type="password" name="txtRepeatpassword" id="confirm_password">
-                                                                <span id="message"></span>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
                                                 </div>
-                                            </div>
-
+                                            </c:forEach>
                                             <div class="clearfix form-actions">
                                                 <div class="col-md-offset-3 col-md-9">
                                                     <button class="btn btn-info" type="submit" value="UserUpdateProfile" name="btAction">

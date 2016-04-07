@@ -401,40 +401,40 @@
                                                                                     ${counter.count}
                                                                                 </td>
                                                                                 <td>
-                                                                                    ${items.username}
+                                                                                    ${items.key.username}
                                                                                 </td>
-                                                                                <td>${items.email}</td>
-                                                                                <td class="hidden-480">${items.fullname}</td>
-                                                                                <td>${items.licenseType}</td>
+                                                                                <td>${items.value.email}</td>
+                                                                                <td class="hidden-480">${items.value.fullname}</td>
+                                                                                <td>${items.key.licenseType}</td>
 
                                                                                 <td>
-                                                                                    ${items.expiredDate}
+                                                                                    ${items.key.expiredDate}
                                                                                 </td>
 
                                                                                 <td>
                                                                                     <label>
-                                                                                        <input disabled="" name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" id="checkstatus" <c:if test="${items.status=='true'}">checked="checked"</c:if>/>
+                                                                                        <input disabled="" name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" id="checkstatus" <c:if test="${items.value.status=='true'}">checked="checked"</c:if>/>
                                                                                             <span class="lbl" ></span>
                                                                                         </label>
                                                                                     </td>
                                                                                     <td>
                                                                                         <label>
-                                                                                            <input disabled="" name="switch-field-2" class="ace ace-switch ace-switch-6" type="checkbox" id="checkisStaff" <c:if test="${items.isStaff=='true'}">checked="checked"</c:if>/>
+                                                                                            <input disabled="" name="switch-field-2" class="ace ace-switch ace-switch-6" type="checkbox" id="checkisStaff" <c:if test="${items.key.isStaff=='true'}">checked="checked"</c:if>/>
                                                                                             <span class="lbl" ></span>
                                                                                         </label>
                                                                                     </td>
                                                                                     <td>
                                                                                         <div class="action-buttons">
                                                                                             <form method="POST" action="update-user.jsp" class="blue">
-                                                                                                <input type="hidden" name="txtDetailId" value="${items.detailId}" />
-                                                                                            <input type="hidden" name="txtUsername" value="${items.username}"/>
-                                                                                            <input type="hidden" name="txtEmail" value="${items.email}"/>
-                                                                                            <input type="hidden" name="txtFullname" value="${items.fullname}"/>
-                                                                                            <input type="hidden" name="txtPhone" value="${items.phone}"/>
-                                                                                            <input type="hidden" name="txtLicenseType" value="${items.licenseType}"/>
-                                                                                            <input type="hidden" name="dtExpiredDate" value="${items.expiredDate}"/>
-                                                                                            <input type="hidden" name="chbStatus" value="${items.status}"/>
-                                                                                            <input type="hidden" name="chbIsStaff" value="${items.isStaff}"/>
+                                                                                                <input type="hidden" name="txtDetailId" value="${items.value.detailId}" />
+                                                                                            <input type="hidden" name="txtUsername" value="${items.key.username}"/>
+                                                                                            <input type="hidden" name="txtEmail" value="${items.value.email}"/>
+                                                                                            <input type="hidden" name="txtFullname" value="${items.value.fullname}"/>
+                                                                                            <input type="hidden" name="txtPhone" value="${items.value.phone}"/>
+                                                                                            <input type="hidden" name="txtLicenseType" value="${items.key.licenseType}"/>
+                                                                                            <input type="hidden" name="dtExpiredDate" value="${items.key.expiredDate}"/>
+                                                                                            <input type="hidden" name="chbStatus" value="${items.value.status}"/>
+                                                                                            <input type="hidden" name="chbIsStaff" value="${items.key.isStaff}"/>
                                                                                             <!--                                                                                            <input type="image" alt="" name="submit" value="" class="ace-icon fa fa-pencil bigger-130 blue"/>-->
                                                                                             <button type="submit" name="submit" value="" style="border:none;background-color: transparent">
                                                                                                 <i class="ace-icon fa fa-pencil bigger-130"></i>
