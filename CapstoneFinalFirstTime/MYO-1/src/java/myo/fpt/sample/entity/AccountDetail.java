@@ -31,9 +31,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "AccountDetail.findByEmail", query = "SELECT a FROM AccountDetail a WHERE a.email = :email"),
     @NamedQuery(name = "AccountDetail.findByFullname", query = "SELECT a FROM AccountDetail a WHERE a.fullname = :fullname"),
     @NamedQuery(name = "AccountDetail.findByPhone", query = "SELECT a FROM AccountDetail a WHERE a.phone = :phone"),
-    @NamedQuery(name = "AccountDetail.findByIsStaff", query = "SELECT a FROM AccountDetail a WHERE a.isStaff = :isStaff"),
-    @NamedQuery(name = "AccountDetail.findByLicenseType", query = "SELECT a FROM AccountDetail a WHERE a.licenseType = :licenseType"),
-    @NamedQuery(name = "AccountDetail.findByExpiredDate", query = "SELECT a FROM AccountDetail a WHERE a.expiredDate = :expiredDate"),
     @NamedQuery(name = "AccountDetail.findByStatus", query = "SELECT a FROM AccountDetail a WHERE a.status = :status")})
 public class AccountDetail implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -50,15 +47,6 @@ public class AccountDetail implements Serializable {
     @Column(name = "phone")
     private String phone;
     @Basic(optional = false)
-    @Column(name = "isStaff")
-    private boolean isStaff;
-    @Basic(optional = false)
-    @Column(name = "licenseType")
-    private String licenseType;
-    @Column(name = "expiredDate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date expiredDate;
-    @Basic(optional = false)
     @Column(name = "status")
     private boolean status;
 
@@ -69,29 +57,19 @@ public class AccountDetail implements Serializable {
         this.detailId = detailId;
     }
 
-    public AccountDetail(Integer detailId, String email, String fullname, boolean isStaff, String licenseType, boolean status) {
+    public AccountDetail(Integer detailId, String email, String fullname, boolean status) {
         this.detailId = detailId;
         this.email = email;
         this.fullname = fullname;
-        this.isStaff = isStaff;
-        this.licenseType = licenseType;
         this.status = status;
     }
     
-    public AccountDetail(Integer detailId, String email, String fullname, String phone, boolean isStaff, String licenseType, Date expiredDate, boolean status) {
+    public AccountDetail(int detailId, String email, String fullname, String phone, boolean status) {
         this.detailId = detailId;
         this.email = email;
         this.fullname = fullname;
         this.phone = phone;
-        this.expiredDate = expiredDate;
-        this.isStaff = isStaff;
-        this.licenseType = licenseType;
         this.status = status;
-    }
-    
-    public AccountDetail(String licenseType, Date expiredDate){
-        this.licenseType = licenseType;
-        this.expiredDate = expiredDate;
     }
     
     public AccountDetail(String email, String fullname, String phone){
@@ -130,30 +108,6 @@ public class AccountDetail implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public boolean getIsStaff() {
-        return isStaff;
-    }
-
-    public void setIsStaff(boolean isStaff) {
-        this.isStaff = isStaff;
-    }
-
-    public String getLicenseType() {
-        return licenseType;
-    }
-
-    public void setLicenseType(String licenseType) {
-        this.licenseType = licenseType;
-    }
-
-    public Date getExpiredDate() {
-        return expiredDate;
-    }
-
-    public void setExpiredDate(Date expiredDate) {
-        this.expiredDate = expiredDate;
     }
 
     public boolean getStatus() {

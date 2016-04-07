@@ -23,11 +23,10 @@ import javax.servlet.http.HttpSession;
 import myo.fpt.sample.entity.Account;
 import myo.fpt.sample.entity.AccountDetail;
 import myo.fpt.sample.entity.controller.staff.AccountDetailJpaController;
-import sample.check.Validate;
-import sample.dto.AccountManage;
+import sample.check.Validation;
 
 /**
- *
+ * 
  * @author AnhND
  */
 public class UserUpdateServlet extends HttpServlet {
@@ -60,7 +59,7 @@ public class UserUpdateServlet extends HttpServlet {
                 System.out.println("old password " + password_old);
                 System.out.println("new password " + password_new);
                 String password = "";
-                String listError = Validate.validateUserUpdate(email, fullname, phone, password_new, re_password);
+                String listError = Validation.validateUserUpdate(email, fullname, phone, password_new, re_password);
                 if (listError.equals("")) {
                     if (!password_new.equals("") && password_new != null) {
                         password = password_new;
@@ -70,7 +69,7 @@ public class UserUpdateServlet extends HttpServlet {
                     int custid = getJpaController().getCustIdByUsername(username);
                     Account acc = new Account(username, password);
                     AccountDetail accDetail = new AccountDetail(email, fullname, phone);
-                    boolean checkUpdateAcc = getJpaController().updateAccount(custid, acc);
+                    boolean checkUpdateAcc = getJpaController().userUpdateAccount(custid, acc);
                     if (checkUpdateAcc) {
                         boolean checkUpdateAccDt = getJpaController().userUpdateAccountDetail(detailId, accDetail);
                         if (checkUpdateAccDt) {

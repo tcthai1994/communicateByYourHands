@@ -33,31 +33,19 @@ import myo.fpt.sample.entity.controller.train.TrainController;
 import myo.fpt.sample.entity.controller.detect.TranslateController;
 import com.google.gson.Gson;
 import fpt.myo.emg.EmgData;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import javax.persistence.Persistence;
-import myo.fpt.sample.entity.MeaningRignt;
-import myo.fpt.sample.entity.MeaningLeft;
-import myo.fpt.sample.entity.RightSignal;
-import myo.fpt.sample.entity.LeftSignal;
-import myo.fpt.sample.entity.WordSignal;
-import myo.fpt.sample.entity.DataContent;
-import myo.fpt.sample.entity.Download;
-import myo.fpt.sample.entity.controller.download.GetDataForMobileController;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-/*
+import javax.ws.rs.QueryParam;
+import myo.fpt.sample.entity.Account;
+import myo.fpt.sample.entity.controller.staff.DeviceJpaController;
+import org.json.simple.JSONObject;
+
+/**
+ *
  * @author Thai
  */
-
-@Path("DownloadAPI")
-public class GetDataForMobile {
-
-    private static final String FILE_PATH = "..//abc.json";
+@Path("LoginFromMobileAPI")
+public class LoginFromMobileService {
 
     private WordSignalPK getPrimaryKey(PathSegment pathSegment) {
         /*
@@ -84,15 +72,15 @@ public class GetDataForMobile {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private GetDataForMobileController getJpaController() {
+    private DeviceJpaController getJpaController() {
         try {
-            return new GetDataForMobileController(getEntityManagerFactory());
+            return new DeviceJpaController(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }
     }
 
-    public GetDataForMobile() {
+    public LoginFromMobileService() {
     }
 
     /**
@@ -100,49 +88,35 @@ public class GetDataForMobile {
      *
      * @return an instance of java.lang.String
      */
-    @GET
-    @Path("/get")
-    @Produces("text/plain")
-    public Response getFile2() {
-
-        File file = new File(FILE_PATH);
-
-        ResponseBuilder response = Response.ok((Object) file);
-        response.header("Content-Disposition",
-                "attachment; filename=\"download.json\"");
-        return response.build();
-
-    }
-
-    @GET
-    @Path("/doDownload")
-    @Produces("text/plain")
-    public Response doDownload() throws IOException, NamingException {
-        Gson gson = new Gson();
-        List<MeaningLeft> ML = getJpaController().getAllML();
-        List<MeaningRignt> MR = getJpaController().getAllMR();
-        List<LeftSignal> LS = getJpaController().getAllLS();
-        List<RightSignal> RS = getJpaController().getAllRS();
-        List<WordSignal> WS = getJpaController().getAllWS();
-        List<DataContent> DT = getJpaController().getAllDT();
-
-        Download DW = new Download(ML, MR, LS, RS, WS, DT);
-        String result = gson.toJson(DW);
-        //FileWriter file = new FileWriter(FILE_PATH);
-        FileOutputStream fileStream = new FileOutputStream(new File(FILE_PATH));
-        OutputStreamWriter writer = new OutputStreamWriter(fileStream, "UTF-8");
-        try {
-            writer.write(result);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            writer.flush();
-            writer.close();
+    @POST
+    @Path("/doLoginFromMobile")
+    @Produces("application/json")
+    public String doLoginFromMobile(@QueryParam("username") String username,
+            @QueryParam("password") String password,
+            @QueryParam("deviceId") String deviceId) {
+        boolean checkLogin = getJpaController().checkLogin(username, password);
+        if (checkLogin) {
+            int detailId = getJpaController().getDetailIdByUsername(username);
+            int custId = getJpaController().getCustIdByUsername(username);
+            boolean isActive = getJpaController().isActive(detailId);
+            if (isActive) {
+                Account account = new Account(deviceId);
+                getJpaController().addDeviceIdToAccount(custId, account);
+                JSONObject status = new JSONObject();
+                status.put("status", 1);
+                status.put("custId", custId);
+                return status.toJSONString();
+            } else {
+                JSONObject status = new JSONObject();
+                status.put("status", 0);
+                status.put("custId", 0);
+                return status.toJSONString();
+            }
+        } else {
+            JSONObject status = new JSONObject();
+            status.put("status", 0);
+            status.put("custId", 0);
+            return status.toJSONString();
         }
-        File downFile = new File(FILE_PATH);
-        ResponseBuilder response = Response.ok((Object) downFile);
-        response.header("Content-Disposition",
-                "attachment; filename=\"abc.json\"");
-        return response.build();
     }
 }

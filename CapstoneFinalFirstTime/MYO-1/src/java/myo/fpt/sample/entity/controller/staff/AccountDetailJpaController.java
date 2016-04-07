@@ -8,7 +8,9 @@ package myo.fpt.sample.entity.controller.staff;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
@@ -19,7 +21,6 @@ import myo.fpt.sample.entity.Account;
 import myo.fpt.sample.entity.AccountDetail;
 import myo.fpt.sample.entity.controller.exceptions.NonexistentEntityException;
 import myo.fpt.sample.entity.controller.exceptions.PreexistingEntityException;
-import sample.dto.AccountManage;
 
 /**
  *
@@ -68,11 +69,9 @@ public class AccountDetailJpaController implements Serializable {
             em.getTransaction().begin();
             em.persist(Acc);
             em.getTransaction().commit();
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             return false;
-        }
-        finally {
+        } finally {
             if (em != null) {
                 em.close();
             }
@@ -87,10 +86,9 @@ public class AccountDetailJpaController implements Serializable {
             em.getTransaction().begin();
             em.persist(AccDetail);
             em.getTransaction().commit();
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             return false;
-        }finally {
+        } finally {
             if (em != null) {
                 em.close();
             }
@@ -131,20 +129,20 @@ public class AccountDetailJpaController implements Serializable {
         try {
             em.getTransaction().begin();
             Account Acc = em.find(Account.class, custId);
-            Acc.setUsername(AccUpdate.getUsername());
-            Acc.setPassword(AccUpdate.getPassword());
+            Acc.setIsStaff(AccUpdate.getIsStaff());
+            Acc.setExpiredDate(AccUpdate.getExpiredDate());
+            Acc.setLicenseType(AccUpdate.getLicenseType());
             em.merge(Acc);
             em.getTransaction().commit();
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             return false;
-        }finally {
+        } finally {
             em.close();
         }
         return true;
     }
 
-    public boolean UpdateAccountDetail(int detailid, AccountDetail AccDetailUpdate) {
+    public boolean updateAccountDetail(int detailid, AccountDetail AccDetailUpdate) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
@@ -152,17 +150,12 @@ public class AccountDetailJpaController implements Serializable {
             AccDetail.setEmail(AccDetailUpdate.getEmail());
             AccDetail.setFullname(AccDetailUpdate.getFullname());
             AccDetail.setPhone(AccDetailUpdate.getPhone());
-            AccDetail.setIsStaff(AccDetailUpdate.getIsStaff());
-            AccDetail.setLicenseType(AccDetailUpdate.getLicenseType());
-            AccDetail.setExpiredDate(AccDetailUpdate.getExpiredDate());
             AccDetail.setStatus(AccDetailUpdate.getStatus());
             em.merge(AccDetail);
             em.getTransaction().commit();
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             return false;
-        }
-        finally {
+        } finally {
             em.close();
         }
         return true;
@@ -224,14 +217,14 @@ public class AccountDetailJpaController implements Serializable {
         }
     }
 
-    public void updateExpiredDate(int detailId, AccountDetail accDetailUpdate) {
+    public void updateExpiredDate(int detailId, Account accUpdate) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            AccountDetail accDetail = em.find(AccountDetail.class, detailId);
-            accDetail.setLicenseType(accDetailUpdate.getLicenseType());
-            accDetail.setExpiredDate(accDetailUpdate.getExpiredDate());
-            em.merge(accDetail);
+            Account acc = em.find(Account.class, detailId);
+            acc.setLicenseType(accUpdate.getLicenseType());
+            acc.setExpiredDate(accUpdate.getExpiredDate());
+            em.merge(acc);
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -260,10 +253,26 @@ public class AccountDetailJpaController implements Serializable {
             AccDetail.setPhone(AccDetailUpdate.getPhone());
             em.merge(AccDetail);
             em.getTransaction().commit();
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             return false;
-        }finally {
+        } finally {
+            em.close();
+        }
+        return true;
+    }
+
+    public boolean userUpdateAccount(int custId, Account AccUpdate) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Account Acc = em.find(Account.class, custId);
+            Acc.setUsername(AccUpdate.getUsername());
+            Acc.setPassword(AccUpdate.getPassword());
+            em.merge(Acc);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            return false;
+        } finally {
             em.close();
         }
         return true;
@@ -280,19 +289,21 @@ public class AccountDetailJpaController implements Serializable {
         }
     }
 
-    public AccountManage getAccMng(String username) {
+    public Map<Account, AccountDetail> getAccMng(String username) {
         EntityManager em = getEntityManager();
         try {
             Account acc = findByUsername(username);
             AccountDetail accDt = getACdetailByDetailId(acc.getDetailId());
-            Date date = accDt.getExpiredDate();
+            Date date = acc.getExpiredDate();
+            Map<Account, AccountDetail> hm = new HashMap();
             String exDate = "";
             if (date != null) {
                 SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 exDate = ft.format(date);
             }
-            AccountManage accTmp = new AccountManage(username, acc.getPassword(), accDt.getDetailId(), accDt.getEmail(), accDt.getFullname(), accDt.getPhone(), accDt.getLicenseType(), exDate);
-            return accTmp;
+            //AccountManage accTmp = new AccountManage(username, acc.getPassword(), accDt.getDetailId(), accDt.getEmail(), accDt.getFullname(), accDt.getPhone(), accDt.getLicenseType(), exDate);
+            hm.put(acc, accDt);
+            return hm;
         } finally {
             em.close();
         }

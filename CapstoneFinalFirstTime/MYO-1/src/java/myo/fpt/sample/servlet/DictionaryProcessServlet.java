@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import myo.fpt.sample.entity.Dictionary;
 import myo.fpt.sample.entity.controller.staff.DictionaryJpaController;
-import sample.check.Validate;
+import sample.check.Validation;
 
 /**
  *
@@ -53,7 +53,7 @@ public class DictionaryProcessServlet extends HttpServlet {
                 String videoURL = request.getParameter("txtVideoURL");
                 String active2 = request.getParameter("chbStatus");
                 boolean status = ("ON".equals(active2));
-                String listError = Validate.validateDictionary(keyword, description, videoURL);
+                String listError = Validation.validateDictionary(keyword, description, videoURL);
                 if (listError.equals("")) {
 
                     Dictionary dictionary = new Dictionary(keyword, description, videoURL, status);
@@ -77,7 +77,7 @@ public class DictionaryProcessServlet extends HttpServlet {
                 String videoURL = request.getParameter("txtVideoURL");
                 String active2 = request.getParameter("chbStatus");
                 boolean status = ("ON".equals(active2));
-                String listError = Validate.validateUpdateDictionary(keyword, description, videoURL);
+                String listError = Validation.validateUpdateDictionary(keyword, description, videoURL);
                 if (listError.equals("")) {
                     Dictionary dictionary = new Dictionary(keyword, description, videoURL, status);
                     boolean checkUpdateDictionary = getJpaController().updateDictionary(dictionaryId, dictionary);

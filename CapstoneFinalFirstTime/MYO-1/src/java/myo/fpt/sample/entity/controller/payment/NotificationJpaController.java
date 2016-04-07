@@ -125,14 +125,14 @@ public class NotificationJpaController implements Serializable {
         }
     }
 
-    public void updateOverExpiredDate(int detailId, AccountDetail accDetailUpdate) {
+    public void updateOverExpiredDate(int detailId, Account accDetailUpdate) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            AccountDetail AccDetail = em.find(AccountDetail.class, detailId);
-            AccDetail.setLicenseType(accDetailUpdate.getLicenseType());
-            AccDetail.setExpiredDate(accDetailUpdate.getExpiredDate());
-            em.merge(AccDetail);
+            Account Acc = em.find(Account.class, detailId);
+            Acc.setLicenseType(accDetailUpdate.getLicenseType());
+            Acc.setExpiredDate(accDetailUpdate.getExpiredDate());
+            em.merge(Acc);
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -186,5 +186,6 @@ public class NotificationJpaController implements Serializable {
             em.close();
         }
     }
+    
 
 }

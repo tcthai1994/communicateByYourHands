@@ -42,7 +42,7 @@ public class SearchJpaController implements Serializable {
         try {
             String jnql = "SELECT d FROM Dictionary d WHERE d.keyword LIKE :keywordparam AND d.status = :status";
             Query query = em.createQuery(jnql);
-            query.setParameter("keywordparam", "%" + keyword + "%");
+            query.setParameter("keywordparam", "%"+keyword+"%");
             query.setParameter("status", true);
             List<Dictionary> listWord = query.getResultList();
             return listWord;
@@ -54,8 +54,9 @@ public class SearchJpaController implements Serializable {
     public List<Dictionary> getAllDictionary() {
         EntityManager em = getEntityManager();
         try {
-            String jnql = "SELECT d FROM Dictionary d";
+            String jnql = "SELECT d FROM Dictionary d WHERE d.status = :status";
             Query query = em.createQuery(jnql);
+            query.setParameter("status", true);
             List<Dictionary> listDic = query.getResultList();
             return listDic;
         } finally {

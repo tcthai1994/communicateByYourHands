@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import myo.fpt.sample.entity.Account;
 import myo.fpt.sample.entity.AccountDetail;
 import myo.fpt.sample.entity.controller.staff.AccountDetailJpaController;
-import sample.check.Validate;
+import sample.check.Validation;
 
 /**
  *
@@ -55,7 +55,7 @@ public class RegisterServlet extends HttpServlet {
             String re_password = request.getParameter("txtRepeatPassword");
             String phone = request.getParameter("txtPhone");
             System.out.println("password: " + password + "re password " + re_password);
-            String listError = Validate.validateRegister(email, fullname, username, password, re_password, phone);//validate
+            String listError = Validation.validateRegister(email, fullname, username, password, re_password, phone);//validate
             if (listError.equals("")) {
                 int detailId;
 
@@ -66,8 +66,8 @@ public class RegisterServlet extends HttpServlet {
                 Date expiredDate = null;
                 boolean status = true;
                 String deviceId = "";
-                Account Acc = new Account(username, password, detailId, deviceId);
-                AccountDetail AccDetail = new AccountDetail(detailId, email, fullname, phone, isStaff, licenseType, expiredDate, status);
+                Account Acc = new Account(username, password, detailId, isStaff, expiredDate, licenseType, deviceId);
+                AccountDetail AccDetail = new AccountDetail(detailId, email, fullname, phone, status);
                 boolean checkReg = getJpaController().RegistertoAccount(Acc);
                 if (checkReg) {
                     boolean checkRegDt = getJpaController().RegistertoAccountDetail(AccDetail);

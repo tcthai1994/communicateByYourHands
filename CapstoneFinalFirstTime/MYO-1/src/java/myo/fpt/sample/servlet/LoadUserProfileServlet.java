@@ -7,6 +7,8 @@ package myo.fpt.sample.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
@@ -21,8 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import myo.fpt.sample.entity.Account;
+import myo.fpt.sample.entity.AccountDetail;
 import myo.fpt.sample.entity.controller.staff.AccountDetailJpaController;
-import sample.dto.AccountManage;
 
 /**
  *
@@ -47,8 +49,12 @@ public class LoadUserProfileServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession();
             String username = session.getAttribute("USER").toString();
-            AccountManage acc = getJpaController().getAccMng(username);
-            request.setAttribute("userProfile", acc);
+            Account acc = getJpaController().findByUsername(username);
+            AccountDetail accDt = getJpaController().getACdetailByDetailId(acc.getDetailId());
+            Map<Account, AccountDetail> hm = new HashMap();
+            hm.put(acc, accDt);
+            System.out.println(hm);
+            request.setAttribute("userProfile", hm);
             RequestDispatcher rd = request.getRequestDispatcher("user-profile.jsp");
                     rd.forward(request, response);
         } finally {

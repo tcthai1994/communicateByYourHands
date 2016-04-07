@@ -25,10 +25,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import myo.fpt.sample.entity.Account;
 import myo.fpt.sample.entity.AccountDetail;
 import myo.fpt.sample.entity.controller.staff.AccountDetailJpaController;
 import static myo.fpt.sample.servlet.PaymentWithPaypalServlet.ONE_DATE;
-import sample.check.Validate;
+import sample.check.Validation;
 
 /**
  *
@@ -67,8 +68,8 @@ public class UpdateUserAccountServlet extends HttpServlet {
                 String active2 = request.getParameter("chbStatus");
                 boolean status = ("ON".equals(active2));
 
-                String listError = Validate.validateUpdateUser(email, fullname, phone, date, licenseType);
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+                String listError = Validation.validateUpdateUser(email, fullname, phone, date, licenseType);
+                SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy",
                         Locale.ENGLISH);
                 if (listError.equals("")) {
                     try {
@@ -95,9 +96,12 @@ public class UpdateUserAccountServlet extends HttpServlet {
                             long real = millisecondNow + (ONE_DATE * 30);
                             dateNew = new Date(real);
                         }
-                        AccountDetail AccDetail = new AccountDetail(detailId, email, fullname, phone, isStaff, licenseTypeNew, dateNew, status);
-                        boolean checkUpdateAccDt = getJpaController().UpdateAccountDetail(detailId, AccDetail);
+                        AccountDetail AccDetail = new AccountDetail(detailId, email, fullname, phone, status);
+                        Account Acc = new Account(isStaff, dateNew, licenseTypeNew);
+                        boolean checkUpdateAccDt = getJpaController().updateAccountDetail(detailId, AccDetail);
+                        boolean checkUpdateAcc = getJpaController().updateAccount(detailId, Acc);
                         if(checkUpdateAccDt){
+                            if(checkUpdateAcc)
                             response.sendRedirect(AccountServlet);
                         }
                     } catch (ParseException e) {

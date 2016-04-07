@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import myo.fpt.sample.entity.Account;
 import myo.fpt.sample.entity.AccountDetail;
 import myo.fpt.sample.entity.Recipt;
 import myo.fpt.sample.entity.controller.staff.AccountDetailJpaController;
@@ -74,7 +75,7 @@ public class PaymentWithPaypalServlet extends HttpServlet {
                     long millisecondNow = calendarNow.getTimeInMillis();
                     long real = millisecondNow + (ONE_DATE * 30);
                     Date expiredDate = new Date(real);
-                    AccountDetail updated = new AccountDetail(licenseType, expiredDate);
+                    Account updated = new Account(licenseType, expiredDate);
                     checkUpdate = getPaymentJpaController().updateAfterPayment(detailId, updated);
                 } else {
                     Calendar calendar = Calendar.getInstance();
@@ -82,7 +83,7 @@ public class PaymentWithPaypalServlet extends HttpServlet {
                     long millisecond = calendar.getTimeInMillis();
                     long real = millisecond + (ONE_DATE * 30);
                     Date expiredDate = new Date(real);
-                    AccountDetail updated = new AccountDetail(licenseType, expiredDate);
+                    Account updated = new Account(licenseType, expiredDate);
                     checkUpdate = getPaymentJpaController().updateAfterPayment(detailId, updated);
                 }
                 if(checkUpdate){

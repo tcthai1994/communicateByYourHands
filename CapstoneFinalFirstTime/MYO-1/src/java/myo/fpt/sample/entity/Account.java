@@ -6,6 +6,7 @@
 package myo.fpt.sample.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,10 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import myo.fpt.sample.entity.AccountDetail;
 
@@ -33,6 +38,18 @@ import myo.fpt.sample.entity.AccountDetail;
     @NamedQuery(name = "Account.findByDetailId", query = "SELECT a FROM Account a WHERE a.detailId = :detailId"),
     @NamedQuery(name = "Account.findByDeviceId", query = "SELECT a FROM Account a WHERE a.deviceId = :deviceId")})
 public class Account implements Serializable {
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "isStaff")
+    private boolean isStaff;
+    @Column(name = "expiredDate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date expiredDate;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 20)
+    @Column(name = "licenseType")
+    private String licenseType;
     private static final long serialVersionUID = 1L;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -78,15 +95,29 @@ public class Account implements Serializable {
         this.password = password;
     }
     
-    public Account(String username, String password, int detailId, String deviceId) {
+    public Account(String username, String password, int detailId, boolean isStaff, Date expiredDate, String licenseType, String deviceId) {
         this.username = username;
         this.password = password;
         this.detailId = detailId;
+        this.isStaff = isStaff;
+        this.expiredDate = expiredDate;
+        this.licenseType = licenseType;
         this.deviceId = deviceId;
     }
     
     public Account(String deviceId){
         this.deviceId = deviceId;
+    }
+    
+    public Account(boolean isStaff, Date expiredDate, String licenseType){
+        this.isStaff = isStaff;
+        this.expiredDate = expiredDate;
+        this.licenseType = licenseType;
+    }
+    
+    public Account(String licenseType, Date expiredDate){
+        this.licenseType = licenseType;
+        this.expiredDate = expiredDate;
     }
     
 //    public Account(String username, AccountDetail accountDetail){
@@ -163,6 +194,30 @@ public class Account implements Serializable {
     @Override
     public String toString() {
         return "myo.fpt.sample.entity.Account[ custId=" + custId + " ]";
+    }
+
+    public boolean getIsStaff() {
+        return isStaff;
+    }
+
+    public void setIsStaff(boolean isStaff) {
+        this.isStaff = isStaff;
+    }
+
+    public Date getExpiredDate() {
+        return expiredDate;
+    }
+
+    public void setExpiredDate(Date expiredDate) {
+        this.expiredDate = expiredDate;
+    }
+
+    public String getLicenseType() {
+        return licenseType;
+    }
+
+    public void setLicenseType(String licenseType) {
+        this.licenseType = licenseType;
     }
     
 }

@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -27,6 +28,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Device.findByDeviceId", query = "SELECT d FROM Device d WHERE d.deviceId = :deviceId"),
     @NamedQuery(name = "Device.findByRegistrationId", query = "SELECT d FROM Device d WHERE d.registrationId = :registrationId")})
 public class Device implements Serializable {
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "isOnline")
+    private boolean isOnline;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -46,6 +52,12 @@ public class Device implements Serializable {
     public Device(String deviceId, String registrationId) {
         this.deviceId = deviceId;
         this.registrationId = registrationId;
+    }
+
+    public Device(String deviceId, String registrationId, boolean isOnline) {
+        this.deviceId = deviceId;
+        this.registrationId = registrationId;
+        this.isOnline = isOnline;
     }
 
     public String getDeviceId() {
@@ -88,5 +100,13 @@ public class Device implements Serializable {
     public String toString() {
         return "myo.fpt.sample.entity.Device[ deviceId=" + deviceId + " ]";
     }
-    
+
+    public boolean getIsOnline() {
+        return isOnline;
+    }
+
+    public void setIsOnline(boolean isOnline) {
+        this.isOnline = isOnline;
+    }
+
 }

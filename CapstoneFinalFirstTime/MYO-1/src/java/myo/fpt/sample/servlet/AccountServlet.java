@@ -7,12 +7,15 @@ package myo.fpt.sample.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
@@ -24,7 +27,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import sample.dto.AccountManage;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import myo.fpt.sample.entity.Account;
@@ -55,28 +57,45 @@ public class AccountServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            
-            List<Account> result = getJpaController().getAllAccount();
+
+            List<Account> acc = getJpaController().getAllAccount();
             AccountDetail accdt = null;
-            AccountManage accTmp = null;
-            List<AccountManage> resultmalayboratrangjspne = new ArrayList<AccountManage>();
-            for (int i = 0; i < result.size(); i++) {
-                accdt = getJpaController().getACdetailByDetailId(result.get(i).getDetailId());
-                Date date = accdt.getExpiredDate();
-                String exDate = "";
-                if (date != null) {
-                    SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    exDate = ft.format(date);
-                }
+            //AccountManage accTmp = null;
+            int accountListSize = acc.size();
+            Map<Account, AccountDetail> hm = new HashMap();
+
+            for (int i = 0; i < accountListSize; i++) {
+                accdt = getJpaController().getACdetailByDetailId(acc.get(i).getDetailId());
+
+//                Date exDate;
+//                String date;
+//                Date expiredDate = acc.get(i).getExpiredDate();
+//                if (expiredDate == null) {
+//                    exDate = null;
+//                } else {
+//                    SimpleDateFormat sft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa");
+//                    date = sft.format(expiredDate);
+//                    System.out.println("Date to string: " + date);
+//                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+//                    try {
+//                        exDate = sdf.parse(date);
+//                        System.out.println("String to date: "+exDate);
+//                        acc.get(i).setExpiredDate(exDate);
+//
+//                    } catch (ParseException e) {
+//                        e.printStackTrace();
+//                    }
+
                 
-                accTmp = new AccountManage(result.get(i).getUsername(), accdt.getDetailId(), accdt.getEmail(), accdt.getFullname(), accdt.getPhone(), accdt.getIsStaff(), accdt.getLicenseType(), exDate, accdt.getStatus());
-                resultmalayboratrangjspne.add(accTmp);
+                hm.put(acc.get(i), accdt);
+//                accTmp = new AccountManage(result.get(i).getUsername(), accdt.getDetailId(), accdt.getEmail(), accdt.getFullname(), accdt.getPhone(), accdt.getIsStaff(), accdt.getLicenseType(), exDate, accdt.getStatus());
+//                resultmalayboratrangjspne.add(accTmp);
             }
-            if (result != null ) {
-                request.setAttribute("INFO", resultmalayboratrangjspne);
-                RequestDispatcher rd = request.getRequestDispatcher(ManageUser);
-                rd.forward(request, response);
-            }
+
+            request.setAttribute("INFO", hm);
+            RequestDispatcher rd = request.getRequestDispatcher(ManageUser);
+            rd.forward(request, response);
+
         } finally {
             out.close();
         }

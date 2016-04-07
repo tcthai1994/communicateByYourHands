@@ -78,14 +78,14 @@ public class PaymentJpaController implements Serializable {
         }
     }
 
-    public boolean updateAfterPayment(int detailId, AccountDetail accDetailUpdate) {
+    public boolean updateAfterPayment(int detailId, Account accUpdate) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            AccountDetail accDetail = em.find(AccountDetail.class, detailId);
-            accDetail.setLicenseType(accDetailUpdate.getLicenseType());
-            accDetail.setExpiredDate(accDetailUpdate.getExpiredDate());
-            em.merge(accDetail);
+            Account acc = em.find(Account.class, detailId);
+            acc.setLicenseType(accUpdate.getLicenseType());
+            acc.setExpiredDate(accUpdate.getExpiredDate());
+            em.merge(acc);
             em.getTransaction().commit();
         }
         catch(Exception ex){
@@ -111,7 +111,7 @@ public class PaymentJpaController implements Serializable {
     public Date findExpiredDateByDetailId(int detailId) {
         EntityManager em = getEntityManager();
         try {
-            String jnql = "SELECT a.expiredDate FROM AccountDetail a WHERE a.detailId = :detailIdparam";
+            String jnql = "SELECT a.expiredDate FROM Account a WHERE a.detailId = :detailIdparam";
             Query query = em.createQuery(jnql);
             query.setParameter("detailIdparam", detailId);
             Date expiredDate = (Date) query.getSingleResult();

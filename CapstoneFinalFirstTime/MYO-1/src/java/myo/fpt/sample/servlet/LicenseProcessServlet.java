@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import myo.fpt.sample.entity.License;
 import myo.fpt.sample.entity.controller.staff.LicenseJpaController;
-import sample.check.Validate;
+import sample.check.Validation;
 
 /**
  *
@@ -52,7 +52,7 @@ public class LicenseProcessServlet extends HttpServlet {
                 String description = request.getParameter("txtDescription");
                 String active2 = request.getParameter("chbStatus");
                 boolean status = ("ON".equals(active2));
-                String listError = Validate.validateLicense(licenseName, value, description);
+                String listError = Validation.validateLicense(licenseName, value, description);
                 if (listError.equals("")) {
 
                     License license = new License(licenseName, price, description, status);
@@ -77,7 +77,7 @@ public class LicenseProcessServlet extends HttpServlet {
                 String description = request.getParameter("txtDescription");
                 String active2 = request.getParameter("chbStatus");
                 boolean status = ("ON".equals(active2));
-                String listError = Validate.validateUpdateLicense(licenseName, value, description);
+                String listError = Validation.validateUpdateLicense(licenseName, value, description);
                 if (listError.equals("")) {
 
                     License license = new License(licenseName, price, description, status);

@@ -13,6 +13,7 @@ import java.util.List;
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import myo.fpt.sample.entity.Account;
 import myo.fpt.sample.entity.AccountDetail;
 import myo.fpt.sample.entity.Notification;
 import myo.fpt.sample.entity.controller.payment.NotificationJpaController;
@@ -36,9 +37,9 @@ public class MyJob implements Job {
         List<Date> result = getJpaController().getExpiredDate();
         System.out.println("Scheduler has started....");
         if (result != null) {
+            Date now = new Date();
             for (int i = 0; i < result.size(); i++) {
                 Date date = result.get(i);
-                Date now = new Date();
                 if (date != null) {
                     //convert expiration date and now date to Millisecond and calculate
                     List<Integer> listdetailId = getJpaController().getDetailId();
@@ -61,7 +62,6 @@ public class MyJob implements Job {
                         //check expiration date less than 5 days and create notification
                         System.out.println("custId " + custId);
                         String deviceId = getJpaController().findDeviceIdByCustId(custId);
-
                         System.out.println("Gan het han");
                         System.out.println("Detail ID " + detailId);
                         String notiContent = "Your account is about to expire. " +'\n' + "Expiration date: " + date;
@@ -70,7 +70,6 @@ public class MyJob implements Job {
                     } else if (diffMinutes < 0) {
                         //Update license type to "basic" and delete expiration date
                         String deviceId = getJpaController().findDeviceIdByCustId(custId);
-
                         String licenseType = "basic";
                         Date expiredDate = null;
                         String notiContent = "Your license is overdate.";
@@ -78,8 +77,8 @@ public class MyJob implements Job {
                         System.out.println("Detail ID " + detailId);
                         Notification noti = new Notification(notiId, notiDate, custId, isSent, notiContent, deviceId);
                         getJpaController().createNotification(noti);
-                        AccountDetail AccDetailUpdate = new AccountDetail(licenseType, expiredDate);
-                        getJpaController().updateOverExpiredDate(detailId, AccDetailUpdate);
+                        Account AccUpdate = new Account(licenseType, expiredDate);
+                        getJpaController().updateOverExpiredDate(detailId, AccUpdate);
                     } else {
                         System.out.println("Con xai duoc");
                         System.out.println("Detail ID " + detailId);

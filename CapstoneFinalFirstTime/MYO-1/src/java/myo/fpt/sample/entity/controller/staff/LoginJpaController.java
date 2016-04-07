@@ -84,7 +84,7 @@ public class LoginJpaController implements Serializable {
     public boolean isAdmin(int detailId) {
         EntityManager em = getEntityManager();
         try {
-            String jnql = "SELECT a.isStaff FROM AccountDetail a WHERE a.detailId = :detailIdparam";
+            String jnql = "SELECT a.isStaff FROM Account a WHERE a.detailId = :detailIdparam";
             Query query = em.createQuery(jnql);
             query.setParameter("detailIdparam", detailId);
             boolean isStaff = true;

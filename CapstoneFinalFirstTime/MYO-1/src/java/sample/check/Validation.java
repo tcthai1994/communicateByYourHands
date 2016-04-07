@@ -21,7 +21,7 @@ import myo.fpt.sample.entity.controller.staff.AccountDetailJpaController;
  *
  * @author AnhND
  */
-public class Validate {
+public class Validation {
 
     private static String listError;
     private static Pattern pattern;

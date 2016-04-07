@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import myo.fpt.sample.entity.Library;
 import myo.fpt.sample.entity.controller.staff.LibraryJpaController;
-import sample.check.Validate;
+import sample.check.Validation;
 
 /**
  *
@@ -51,7 +51,7 @@ public class LibraryProcessServlet extends HttpServlet {
                 String libraryName = request.getParameter("txtLibraryname");
                 String active2 = request.getParameter("chbStatus");
                 boolean status = ("ON".equals(active2));
-                String listError = Validate.validateLibrary(libraryName);
+                String listError = Validation.validateLibrary(libraryName);
                 if (listError.equals("")) {
                     Library lib = new Library(libraryName, status);
                     boolean checkAddLibrary = getJpaController().addNewLibrary(lib);
@@ -72,7 +72,7 @@ public class LibraryProcessServlet extends HttpServlet {
                 String libraryName = request.getParameter("txtLibraryname");
                 String active2 = request.getParameter("chbStatus");
                 boolean status = ("ON".equals(active2));
-                String listError = Validate.validateUpdateLibrary(libraryName);
+                String listError = Validation.validateUpdateLibrary(libraryName);
                 if (listError.equals("")) {
                     Library lib = new Library(libraryName, status);
                     boolean checkUpdateLibrary = getJpaController().updateLibrary(libraryId, lib);
