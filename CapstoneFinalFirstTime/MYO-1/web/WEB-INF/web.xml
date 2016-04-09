@@ -257,7 +257,7 @@
     </servlet>
     <listener>
         <listener-class>
-            sample.scheduler.MyServletContextListener 
+            sample.scheduler.ContextListener
         </listener-class>
     </listener>
     <session-config>

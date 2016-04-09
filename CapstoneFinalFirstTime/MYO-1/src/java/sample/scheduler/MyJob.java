@@ -5,8 +5,6 @@
  */
 package sample.scheduler;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -14,11 +12,9 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import myo.fpt.sample.entity.Account;
-import myo.fpt.sample.entity.AccountDetail;
 import myo.fpt.sample.entity.Notification;
 import myo.fpt.sample.entity.model.payment.NotificationDAO;
 import org.quartz.Job;
-import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
@@ -31,9 +27,6 @@ public class MyJob implements Job {
     public void execute(JobExecutionContext context)
             throws JobExecutionException {
 
-//        JobDataMap map = context.getMergedJobDataMap();
-//        Object obj = map.get("abc");
-        
         List<Date> result = getJpaController().getExpiredDate();
         System.out.println("Scheduler has started....");
         if (result != null) {

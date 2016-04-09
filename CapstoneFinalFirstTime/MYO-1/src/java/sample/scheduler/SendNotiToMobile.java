@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.quartz.Job;
-import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
@@ -35,8 +34,6 @@ public class SendNotiToMobile implements Job {
 
     public void execute(JobExecutionContext context) {
         Result result = null;
-//        JobDataMap map = context.getMergedJobDataMap();
-//        Object obj = map.get("abc");
         
         List<Notification> listNoti = getJpaController().findAllNewNotification();
         System.out.println("Check new notifications to send...");
@@ -51,8 +48,7 @@ public class SendNotiToMobile implements Job {
                 String regId = getJpaController().findRegIdByDeviceId(deviceId);
                 int notiId = listNoti.get(i).getNotiId();
                 Sender sender = new Sender(GOOGLE_SERVER_KEY);
-                Message message = new Message.Builder().timeToLive(30)
-                        .delayWhileIdle(true).addData(MESSAGE_KEY, userMessage).build();
+                Message message = new Message.Builder().addData(MESSAGE_KEY, userMessage).build();
                 System.out.println("regId: " + regId);
                 try {
                     result = sender.send(message, regId, 1);
@@ -62,9 +58,7 @@ public class SendNotiToMobile implements Job {
                 getJpaController().updateIsSentNotification(notiId, true);
                 }
             }
-
         }
-
     }
     
     private EntityManagerFactory getEntityManagerFactory() throws NamingException {
