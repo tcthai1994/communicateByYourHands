@@ -25,8 +25,8 @@ import javax.servlet.http.HttpSession;
 import myo.fpt.sample.entity.Account;
 import myo.fpt.sample.entity.AccountDetail;
 import myo.fpt.sample.entity.Recipt;
-import myo.fpt.sample.entity.controller.staff.AccountDetailJpaController;
-import myo.fpt.sample.entity.controller.payment.PaymentJpaController;
+import myo.fpt.sample.entity.model.staff.AccountDetailDAO;
+import myo.fpt.sample.entity.model.payment.PaymentDAO;
 
 /**
  *
@@ -99,17 +99,17 @@ public class PaymentWithPaypalServlet extends HttpServlet {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private AccountDetailJpaController getAccountDetailJpaController() {
+    private AccountDetailDAO getAccountDetailJpaController() {
         try {
-            return new AccountDetailJpaController(getEntityManagerFactory());
+            return new AccountDetailDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }
     }
 
-    private PaymentJpaController getPaymentJpaController() {
+    private PaymentDAO getPaymentJpaController() {
         try {
-            return new PaymentJpaController(getEntityManagerFactory());
+            return new PaymentDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

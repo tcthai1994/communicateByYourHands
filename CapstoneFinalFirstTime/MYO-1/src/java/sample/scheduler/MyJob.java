@@ -16,7 +16,7 @@ import javax.persistence.Persistence;
 import myo.fpt.sample.entity.Account;
 import myo.fpt.sample.entity.AccountDetail;
 import myo.fpt.sample.entity.Notification;
-import myo.fpt.sample.entity.controller.payment.NotificationJpaController;
+import myo.fpt.sample.entity.model.payment.NotificationDAO;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -96,9 +96,9 @@ public class MyJob implements Job {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
     
-    private NotificationJpaController getJpaController() {
+    private NotificationDAO getJpaController() {
         try {
-            return new NotificationJpaController(getEntityManagerFactory());
+            return new NotificationDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

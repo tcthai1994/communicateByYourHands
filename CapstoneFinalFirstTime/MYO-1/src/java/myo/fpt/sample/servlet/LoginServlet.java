@@ -23,9 +23,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import myo.fpt.sample.entity.Account;
 import myo.fpt.sample.entity.Notification;
-import myo.fpt.sample.entity.controller.staff.AccountDetailJpaController;
-import myo.fpt.sample.entity.controller.staff.LoginJpaController;
-import myo.fpt.sample.entity.controller.payment.NotificationJpaController;
+import myo.fpt.sample.entity.model.staff.AccountDetailDAO;
+import myo.fpt.sample.entity.model.staff.LoginDAO;
+import myo.fpt.sample.entity.model.payment.NotificationDAO;
 
 /**
  *
@@ -100,25 +100,25 @@ public class LoginServlet extends HttpServlet {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private LoginJpaController getLoginJpaController() {
+    private LoginDAO getLoginJpaController() {
         try {
-            return new LoginJpaController(getEntityManagerFactory());
+            return new LoginDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }
     }
     
-    private AccountDetailJpaController getAccountDetailJpaController() {
+    private AccountDetailDAO getAccountDetailJpaController() {
         try {
-            return new AccountDetailJpaController(getEntityManagerFactory());
+            return new AccountDetailDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }
     }
     
-    private NotificationJpaController getNotificationJpaController() {
+    private NotificationDAO getNotificationJpaController() {
         try {
-            return new NotificationJpaController(getEntityManagerFactory());
+            return new NotificationDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

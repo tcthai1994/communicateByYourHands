@@ -31,8 +31,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import myo.fpt.sample.entity.Account;
 import myo.fpt.sample.entity.AccountDetail;
-import myo.fpt.sample.entity.controller.staff.AccountDetailJpaController;
-import myo.fpt.sample.entity.controller.AccountJpaController;
+import myo.fpt.sample.entity.model.staff.AccountDetailDAO;
+import myo.fpt.sample.entity.model.AccountDAO;
 
 /**
  *
@@ -105,9 +105,9 @@ public class AccountServlet extends HttpServlet {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private AccountDetailJpaController getJpaController() {
+    private AccountDetailDAO getJpaController() {
         try {
-            return new AccountDetailJpaController(getEntityManagerFactory());
+            return new AccountDetailDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

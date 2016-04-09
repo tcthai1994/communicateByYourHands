@@ -29,7 +29,7 @@ public class ApplicationConfig  extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(myo.fpt.sample.entity.service.DeviceRESTFacade.class);
-        resources.add(myo.fpt.sample.entity.service.GetDataForMobile.class);
+        resources.add(myo.fpt.sample.entity.service.GetDataForMobileService.class);
         resources.add(myo.fpt.sample.entity.service.LoginFromMobileService.class);
         resources.add(myo.fpt.sample.entity.service.SaveDeviceInfoService.class);
         resources.add(myo.fpt.sample.entity.service.TrainService.class);

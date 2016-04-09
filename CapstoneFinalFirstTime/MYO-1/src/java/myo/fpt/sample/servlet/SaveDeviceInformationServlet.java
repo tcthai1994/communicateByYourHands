@@ -19,8 +19,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import myo.fpt.sample.entity.Device;
-import myo.fpt.sample.entity.controller.staff.DeviceJpaController;
-import myo.fpt.sample.entity.controller.staff.LicenseJpaController;
+import myo.fpt.sample.entity.model.staff.DeviceDAO;
+import myo.fpt.sample.entity.model.staff.LicenseDAO;
 import org.json.simple.JSONObject;
 
 /**
@@ -75,9 +75,9 @@ public class SaveDeviceInformationServlet extends HttpServlet {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private DeviceJpaController getJpaController() {
+    private DeviceDAO getJpaController() {
         try {
-            return new DeviceJpaController(getEntityManagerFactory());
+            return new DeviceDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

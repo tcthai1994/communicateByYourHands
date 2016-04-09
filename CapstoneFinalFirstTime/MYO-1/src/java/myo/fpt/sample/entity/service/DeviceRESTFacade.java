@@ -8,7 +8,7 @@ package myo.fpt.sample.entity.service;
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.naming.InitialContext;
-import myo.fpt.sample.entity.controller.DeviceJpaController;
+import myo.fpt.sample.entity.model.DeviceDAO;
 import myo.fpt.sample.entity.Device;
 import java.net.URI;
 import java.util.List;
@@ -33,9 +33,9 @@ public class DeviceRESTFacade {
         return (EntityManagerFactory) new InitialContext().lookup("java:comp/env/persistence-factory");
     }
 
-    private DeviceJpaController getJpaController() {
+    private DeviceDAO getJpaController() {
         try {
-            return new DeviceJpaController(getEntityManagerFactory());
+            return new DeviceDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

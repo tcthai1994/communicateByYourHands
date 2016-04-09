@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import myo.fpt.sample.entity.Notification;
-import myo.fpt.sample.entity.controller.staff.DeviceJpaController;
-import myo.fpt.sample.entity.controller.payment.NotificationJpaController;
+import myo.fpt.sample.entity.model.staff.DeviceDAO;
+import myo.fpt.sample.entity.model.payment.NotificationDAO;
 
 /**
  *
@@ -72,9 +72,9 @@ public class NotificationServlet extends HttpServlet {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
     
-    private NotificationJpaController getJpaController() {
+    private NotificationDAO getJpaController() {
         try {
-            return new NotificationJpaController(getEntityManagerFactory());
+            return new NotificationDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

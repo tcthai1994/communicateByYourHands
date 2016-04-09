@@ -15,7 +15,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.PathSegment;
 import myo.fpt.sample.entity.WordSignalPK;
 import javax.naming.InitialContext;
-import myo.fpt.sample.entity.controller.download.WordSignalJpaController;
+import myo.fpt.sample.entity.model.download.WordSignalDAO;
 import myo.fpt.sample.entity.WordSignal;
 import java.net.URI;
 import java.util.List;
@@ -29,8 +29,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import myo.fpt.sample.entity.controller.train.TrainController;
-import myo.fpt.sample.entity.controller.detect.TranslateController;
+import myo.fpt.sample.entity.model.train.TrainDAO;
+import myo.fpt.sample.entity.model.detect.TranslateDAO;
 import com.google.gson.Gson;
 import fpt.myo.emg.EmgData;
 import java.util.ArrayList;
@@ -68,9 +68,9 @@ public class TranslateService {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private TranslateController getJpaController() {
+    private TranslateDAO getJpaController() {
         try {
-            return new TranslateController(getEntityManagerFactory());
+            return new TranslateDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

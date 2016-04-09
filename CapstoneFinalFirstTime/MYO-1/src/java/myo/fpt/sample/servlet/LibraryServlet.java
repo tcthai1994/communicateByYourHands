@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import myo.fpt.sample.entity.Library;
-import myo.fpt.sample.entity.controller.staff.LibraryJpaController;
+import myo.fpt.sample.entity.model.staff.LibraryDAO;
 
 /**
  *
@@ -67,9 +67,9 @@ public class LibraryServlet extends HttpServlet {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private LibraryJpaController getJpaController() {
+    private LibraryDAO getJpaController() {
         try {
-            return new LibraryJpaController(getEntityManagerFactory());
+            return new LibraryDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

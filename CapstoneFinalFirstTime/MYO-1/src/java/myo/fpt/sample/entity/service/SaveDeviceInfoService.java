@@ -11,7 +11,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.PathSegment;
 import myo.fpt.sample.entity.WordSignalPK;
 import javax.naming.InitialContext;
-import myo.fpt.sample.entity.controller.download.WordSignalJpaController;
+import myo.fpt.sample.entity.model.download.WordSignalDAO;
 import myo.fpt.sample.entity.WordSignal;
 import java.net.URI;
 import java.util.List;
@@ -27,8 +27,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import myo.fpt.sample.entity.Device;
-import myo.fpt.sample.entity.controller.staff.DeviceJpaController;
-import myo.fpt.sample.entity.controller.train.TrainController;
+import myo.fpt.sample.entity.model.staff.DeviceDAO;
+import myo.fpt.sample.entity.model.train.TrainDAO;
 import org.json.simple.JSONObject;
 
 /**
@@ -63,9 +63,9 @@ public class SaveDeviceInfoService {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private DeviceJpaController getJpaController() {
+    private DeviceDAO getJpaController() {
         try {
-            return new DeviceJpaController(getEntityManagerFactory());
+            return new DeviceDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

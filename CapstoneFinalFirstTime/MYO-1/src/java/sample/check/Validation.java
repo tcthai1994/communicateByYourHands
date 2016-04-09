@@ -15,7 +15,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import myo.fpt.sample.entity.controller.staff.AccountDetailJpaController;
+import myo.fpt.sample.entity.model.staff.AccountDetailDAO;
 
 /**
  *
@@ -41,9 +41,9 @@ public class Validation {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private static AccountDetailJpaController getJpaController() {
+    private static AccountDetailDAO getJpaController() {
         try {
-            return new AccountDetailJpaController(getEntityManagerFactory());
+            return new AccountDetailDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

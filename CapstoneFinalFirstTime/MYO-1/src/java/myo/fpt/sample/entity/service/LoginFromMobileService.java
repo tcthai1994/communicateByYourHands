@@ -15,7 +15,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.PathSegment;
 import myo.fpt.sample.entity.WordSignalPK;
 import javax.naming.InitialContext;
-import myo.fpt.sample.entity.controller.download.WordSignalJpaController;
+import myo.fpt.sample.entity.model.download.WordSignalDAO;
 import myo.fpt.sample.entity.WordSignal;
 import java.net.URI;
 import java.util.List;
@@ -29,15 +29,15 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import myo.fpt.sample.entity.controller.train.TrainController;
-import myo.fpt.sample.entity.controller.detect.TranslateController;
+import myo.fpt.sample.entity.model.train.TrainDAO;
+import myo.fpt.sample.entity.model.detect.TranslateDAO;
 import com.google.gson.Gson;
 import fpt.myo.emg.EmgData;
 import java.util.ArrayList;
 import javax.persistence.Persistence;
 import javax.ws.rs.QueryParam;
 import myo.fpt.sample.entity.Account;
-import myo.fpt.sample.entity.controller.staff.DeviceJpaController;
+import myo.fpt.sample.entity.model.staff.DeviceDAO;
 import org.json.simple.JSONObject;
 
 /**
@@ -72,9 +72,9 @@ public class LoginFromMobileService {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private DeviceJpaController getJpaController() {
+    private DeviceDAO getJpaController() {
         try {
-            return new DeviceJpaController(getEntityManagerFactory());
+            return new DeviceDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }
@@ -97,41 +97,51 @@ public class LoginFromMobileService {
         boolean checkLogin = getJpaController().checkLogin(username, password);
         if (checkLogin) {
             int detailId = getJpaController().getDetailIdByUsername(username);
-            int custId = getJpaController().getCustIdByUsername(username);
+            Account Acc = getJpaController().getCustIdByUsername(username);
             boolean isActive = getJpaController().isActive(detailId);
             if (isActive) {
                 Account account = new Account(deviceId);
-                getJpaController().addDeviceIdToAccount(custId, account);
+                getJpaController().addDeviceIdToAccount(Acc.getCustId(), account);
                 getJpaController().updateLogin(deviceId);
                 JSONObject status = new JSONObject();
                 status.put("status", 1);
-                status.put("custId", custId);
+                status.put("custId", Acc.getCustId());
+                if (Acc.getExpiredDate()!=null) {
+                     status.put("expiredDate", Acc.getExpiredDate().getTime());
+                } else{
+                     status.put("expiredDate", 0);
+                }
+               
+                status.put("isStaff", Acc.getIsStaff());
                 return status.toJSONString();
             } else {
                 JSONObject status = new JSONObject();
                 status.put("status", 0);
                 status.put("custId", 0);
+                status.put("expiredDate", 0);
+                status.put("isStaff", 0);
                 return status.toJSONString();
             }
         } else {
             JSONObject status = new JSONObject();
             status.put("status", 0);
             status.put("custId", 0);
+            status.put("expiredDate", 0);
+            status.put("isStaff", 0);
             return status.toJSONString();
         }
     }
-    
-    
+
     @POST
     @Path("/doLogOutFromMobile")
     @Produces("application/json")
     public String doLogoutFromMobile(
             @QueryParam("deviceId") String deviceId) {
-        
-             getJpaController().updateLogout(deviceId);;
-                JSONObject status = new JSONObject();
-                status.put("status", 1);
-                return status.toJSONString();
+
+        getJpaController().updateLogout(deviceId);;
+        JSONObject status = new JSONObject();
+        status.put("status", 1);
+        return status.toJSONString();
 
     }
 }

@@ -19,7 +19,7 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import myo.fpt.sample.entity.Notification;
-import myo.fpt.sample.entity.controller.payment.NotificationJpaController;
+import myo.fpt.sample.entity.model.payment.NotificationDAO;
 
 /**
  *
@@ -71,9 +71,9 @@ public class SendNotiToMobile implements Job {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
     
-    private NotificationJpaController getJpaController() {
+    private NotificationDAO getJpaController() {
         try {
-            return new NotificationJpaController(getEntityManagerFactory());
+            return new NotificationDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

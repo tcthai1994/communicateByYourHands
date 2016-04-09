@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import myo.fpt.sample.entity.Dictionary;
-import myo.fpt.sample.entity.controller.staff.DictionaryJpaController;
+import myo.fpt.sample.entity.model.staff.DictionaryDAO;
 
 /**
  *
@@ -67,9 +67,9 @@ public class DictionaryServlet extends HttpServlet {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private DictionaryJpaController getJpaController() {
+    private DictionaryDAO getJpaController() {
         try {
-            return new DictionaryJpaController(getEntityManagerFactory());
+            return new DictionaryDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

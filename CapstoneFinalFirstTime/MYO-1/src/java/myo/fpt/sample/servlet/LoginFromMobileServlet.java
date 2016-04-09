@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import myo.fpt.sample.entity.Account;
-import myo.fpt.sample.entity.controller.staff.DeviceJpaController;
+import myo.fpt.sample.entity.model.staff.DeviceDAO;
 import org.json.simple.JSONObject;
 
 /**
@@ -51,15 +51,15 @@ public class LoginFromMobileServlet extends HttpServlet {
             
             boolean checkLogin = getJpaController().checkLogin(username, password);
             int detailId = getJpaController().getDetailIdByUsername(username);
-            int custId = getJpaController().getCustIdByUsername(username);
+            Account Acc = getJpaController().getCustIdByUsername(username);
             boolean isActive = getJpaController().isActive(detailId);
             if (checkLogin) {
                 if (isActive) {
                     Account account = new Account(deviceId);
-                    getJpaController().addDeviceIdToAccount(custId, account);
+                    getJpaController().addDeviceIdToAccount(Acc.getCustId(), account);
                     JSONObject status = new JSONObject();
                     status.put("status",1);
-                    status.put("custId",custId);
+                    status.put("custId",Acc.getCustId());
                     response.getWriter().write(status.toJSONString());
                 } else {
                     JSONObject status = new JSONObject();
@@ -80,9 +80,9 @@ public class LoginFromMobileServlet extends HttpServlet {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private DeviceJpaController getJpaController() {
+    private DeviceDAO getJpaController() {
         try {
-            return new DeviceJpaController(getEntityManagerFactory());
+            return new DeviceDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

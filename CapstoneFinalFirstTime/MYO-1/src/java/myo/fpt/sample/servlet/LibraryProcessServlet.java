@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import myo.fpt.sample.entity.Library;
-import myo.fpt.sample.entity.controller.staff.LibraryJpaController;
+import myo.fpt.sample.entity.model.staff.LibraryDAO;
 import sample.check.Validation;
 
 /**
@@ -101,9 +101,9 @@ public class LibraryProcessServlet extends HttpServlet {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private LibraryJpaController getJpaController() {
+    private LibraryDAO getJpaController() {
         try {
-            return new LibraryJpaController(getEntityManagerFactory());
+            return new LibraryDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

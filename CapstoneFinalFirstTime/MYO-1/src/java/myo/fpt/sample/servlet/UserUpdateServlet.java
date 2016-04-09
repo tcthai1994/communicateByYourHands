@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import myo.fpt.sample.entity.Account;
 import myo.fpt.sample.entity.AccountDetail;
-import myo.fpt.sample.entity.controller.staff.AccountDetailJpaController;
+import myo.fpt.sample.entity.model.staff.AccountDetailDAO;
 import sample.check.Validation;
 
 /**
@@ -94,9 +94,9 @@ public class UserUpdateServlet extends HttpServlet {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private AccountDetailJpaController getJpaController() {
+    private AccountDetailDAO getJpaController() {
         try {
-            return new AccountDetailJpaController(getEntityManagerFactory());
+            return new AccountDetailDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

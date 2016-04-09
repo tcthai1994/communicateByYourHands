@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import myo.fpt.sample.entity.License;
-import myo.fpt.sample.entity.controller.staff.LicenseJpaController;
+import myo.fpt.sample.entity.model.staff.LicenseDAO;
 import sample.check.Validation;
 
 /**
@@ -108,9 +108,9 @@ public class LicenseProcessServlet extends HttpServlet {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private LicenseJpaController getJpaController() {
+    private LicenseDAO getJpaController() {
         try {
-            return new LicenseJpaController(getEntityManagerFactory());
+            return new LicenseDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

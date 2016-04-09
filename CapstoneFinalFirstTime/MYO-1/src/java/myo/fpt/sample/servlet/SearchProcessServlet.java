@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import myo.fpt.sample.entity.Dictionary;
-import myo.fpt.sample.entity.controller.staff.DeviceJpaController;
-import myo.fpt.sample.entity.controller.user.SearchJpaController;
+import myo.fpt.sample.entity.model.staff.DeviceDAO;
+import myo.fpt.sample.entity.model.user.SearchDAO;
 
 /**
  *
@@ -77,9 +77,9 @@ public class SearchProcessServlet extends HttpServlet {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private SearchJpaController getJpaController() {
+    private SearchDAO getJpaController() {
         try {
-            return new SearchJpaController(getEntityManagerFactory());
+            return new SearchDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

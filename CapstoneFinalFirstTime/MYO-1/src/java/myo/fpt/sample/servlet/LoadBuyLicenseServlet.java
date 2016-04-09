@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import myo.fpt.sample.entity.controller.payment.PaymentJpaController;
+import myo.fpt.sample.entity.model.payment.PaymentDAO;
 
 /**
  *
@@ -59,9 +59,9 @@ public class LoadBuyLicenseServlet extends HttpServlet {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private PaymentJpaController getJpaController() {
+    private PaymentDAO getJpaController() {
         try {
-            return new PaymentJpaController(getEntityManagerFactory());
+            return new PaymentDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }

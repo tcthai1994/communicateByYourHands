@@ -37,6 +37,7 @@ public class MyServletContextListener implements ServletContextListener {
             StdSchedulerFactory factory = new StdSchedulerFactory();
             //  factory.initialize(sce.getServletContext().getResourceAsStream("/WEB-INF/quartz.properties"));
             Scheduler scheduler = factory.getScheduler();
+            Scheduler scheduler2 = factory.getScheduler();
             String schedulerTime = "";
             InputStream in = getClass().getClassLoader().getResourceAsStream("..//CheckExpiredDateConfig.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -107,9 +108,10 @@ public class MyServletContextListener implements ServletContextListener {
 
             // Tell quartz to schedule the job using our trigger
             scheduler.scheduleJob(job, trigger);
-            scheduler.scheduleJob(job2, trigger2);
+            scheduler2.scheduleJob(job2, trigger2);
             // and start it off
             scheduler.start();
+            scheduler2.start();
 
         } catch (Exception e) {
             e.printStackTrace();

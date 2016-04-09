@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import myo.fpt.sample.entity.Dictionary;
-import myo.fpt.sample.entity.controller.user.SearchJpaController;
+import myo.fpt.sample.entity.model.user.SearchDAO;
 
 /**
  *
@@ -60,9 +60,9 @@ public class LoadGuestPageServlet extends HttpServlet {
         return Persistence.createEntityManagerFactory("MYO-1PU");
     }
 
-    private SearchJpaController getJpaController() {
+    private SearchDAO getJpaController() {
         try {
-            return new SearchJpaController(getEntityManagerFactory());
+            return new SearchDAO(getEntityManagerFactory());
         } catch (NamingException ex) {
             throw new RuntimeException(ex);
         }
